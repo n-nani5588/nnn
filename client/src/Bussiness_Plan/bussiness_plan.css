@@ -1,0 +1,25 @@
+#table_01 {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  #table_01 td, #table_01 th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+
+  #table_01 th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    text-transform:uppercase;
+    background-color: #4CAF50;
+    color: white;
+  }
+  #table_01 tr {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+   
+  }

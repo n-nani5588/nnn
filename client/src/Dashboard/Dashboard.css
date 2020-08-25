@@ -1,0 +1,205 @@
+/* .menu {
+    width: 300px;
+    border-radius: 2px;
+    overflow: hidden;
+    list-style: none;
+    text-decoration: none;
+} */
+
+/* .item1 {
+   border-top: 1px solid #2980b9;
+   overflow: hidden;
+} */
+
+/* .btn1 {
+    background: #3498db;
+    display: block;
+    padding: 16px 20px;
+    color: white;
+} */
+
+/* .btn1:before {
+    content:"";
+    /* position: absolute; 
+    width:14px;
+    height: 14px;
+    background: #3498db;
+    left:'20px';
+    bottom: -7px;
+    transform: rotate(45deg);
+
+} */
+
+/* .btn1 i {
+    margin-right: 10px;
+} */
+
+/* .smenu {
+    background: #333;
+    overflow: hidden;
+    transition: max-height 0.3s;
+    max-height: 0;
+} */
+
+/* .smenu a {
+    display: block;
+    padding: 16px 26px;
+    color: white;
+    font-size: 14px;
+    margin:4px 0;
+    position: relative;
+} */
+
+/* .smenu a:before {
+    content: '';
+    position:absolute;
+    width: 6px;
+    height:100%;
+    background: #3498db;
+    left: 0;
+    top: 0;
+    transition: 0.3s;
+    opacity: 0;
+
+} */
+
+/* .smenu a:hover:before {
+    opacity: 1;
+} */
+
+/* .item1:target .smenu {
+    max-height: 20em;
+} */
+
+/* Fixed sidenav, full height */
+.sidenav {
+    /* height: 100%;
+    width: 200px; */
+    /* position: fixed;
+    z-index: 1; */
+    /* top: 0;
+    left: 0; */
+    background-color: black;
+    overflow-x: hidden;
+    
+  }
+  
+  /* Style the sidenav links and the dropdown button */
+  /* .sidenav a, .dropdown-btn {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    display: block;
+    border: none;
+    background: none;
+    width:100%;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+  } */
+  
+  /* On mouse-over */
+  /* .sidenav a:hover, .dropdown-btn:hover {
+    color: #f1f1f1;
+  } */
+  
+  /* Main content */
+  .main {
+    margin-left: 200px; /* Same as the width of the sidenav */
+    font-size: 20px; /* Increased text to enable scrolling */
+    padding: 0px 10px;
+  }
+  
+  /* Add an active class to the active dropdown button */
+  /* .active {
+    background-color: green;
+    color: white;
+  } */
+  
+  /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+  .dropdown-container {
+    display: none;
+    background-color: #262626;
+    padding-left: 8px;
+    transition: 0.5s  ;
+    color:white
+    
+  }
+  
+  /* Optional: Style the caret down icon */
+  .fa-caret-down {
+    float: right;
+    padding-right: 8px;
+  }
+
+
+
+
+  /* New slide bar */
+
+  .div_tag{
+    color:#006B94;
+    display: block;
+    width:100%;
+    line-height: 60px;
+    text-decoration: none;
+    padding-left: 20%;
+    box-sizing: border-box;
+    transition: 0.5s;
+    transition-property: background;
+  }
+
+  .bodder_left_1 {
+    border-left :8px solid #ffe400 ;
+   
+  }
+  .bodder_left_2 {
+    border-left :8px solid #86c232;
+  }
+  .bodder_left_3 {
+    border-left :8px solid #0d19a3 ;
+  }
+  .bodder_left_4 {
+    border-left :8px solid #e1b382 ;
+  }
+  .bodder_left_5 {
+    border-left :8px solid green ;
+  }
+  .bodder_left_6 {
+    border-left :8px solid green ;
+  }
+
+  /* .div_tag1:hover {
+    background: #ffe400;
+  }
+  .div_tag2:hover {
+    background: #86c232;
+  }
+  .div_tag3:hover {
+    background: #0d19a3;
+  }
+  .div_tag4:hover {
+    background: #19b3d3;
+  }
+  .div_tag5:hover {
+    background: #19b3d3;
+  }
+  .div_tag6:hover {
+    background: #19b3d3;
+  } */
+
+  .side_bar i {
+    padding-right:20%;
+  }
+
+
+
+
+
+
+
+
+
+
+  
