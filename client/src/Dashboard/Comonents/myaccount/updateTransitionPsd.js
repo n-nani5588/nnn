@@ -77,6 +77,21 @@ class UpdateTransitionPassword extends React.Component {
           if(parseInt(res.data.status) === parseInt(1)){
            const msg=  document.getElementById('Update_Msg');
            msg.innerHTML = "Update Succesfull !"
+           this.setState({
+            viewpass: false,
+            oldPassword: {
+              value: "",
+              valid: false
+            },
+            newPassword: {
+              value: "",
+              valid: false
+            },
+            confirm: {
+              value: "",
+              valid: false
+            },
+           })
            msg.style.display = "block"
             interval = setTimeout(() => {
               msg.style.display = "none"
@@ -114,7 +129,7 @@ handleConfirm = (e) => {
 }
     render(){
       return(
-        <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",backgroundColor:"#494949",color:"white"}}>
+        <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",backgroundColor:"#ffffff",color:"white",textTransform:"uppercase"}}>
             
     
         <Container maxWidth="lg" >
@@ -205,9 +220,10 @@ handleConfirm = (e) => {
             </MDBCol>
           </MDBRow>
          
-          <MDBCol md="4" className="mb-3">
-            <div className="custom-control custom-checkbox pl-3">
+         
+            <div style={{display:"flex",justifyContent:"flex-end"}}>
             <button 
+            type="button"
             className="btn btn-link"
             onMouseOver={() => this.handleViewPassword()}
             onMouseOut={() => this.handleViewPassword()}
@@ -215,7 +231,7 @@ handleConfirm = (e) => {
             </button>
               
             </div>
-          </MDBCol>
+      
           <MDBBtn color="primary" type="submit">
             Update
           </MDBBtn>

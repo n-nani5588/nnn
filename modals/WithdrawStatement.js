@@ -29,9 +29,13 @@ const WithdrawStatementSchema = new newSchema({
     },
     RequestedDate: {
         type:Date,
-        default:  Date.now()
+        default:  new Date()
     },
     Amount: {
+        type: mongoose.Schema.Types.Decimal128,
+        required:true
+    },
+    Total: {
         type: mongoose.Schema.Types.Decimal128,
         required:true
     },

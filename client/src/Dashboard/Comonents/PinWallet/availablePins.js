@@ -37,7 +37,7 @@ const classes = makeStyles((theme) => ({
     );
   }
   
-  const data = {
+  let data = {
     columns: [
       {
         label: 'Sno',
@@ -59,6 +59,13 @@ const classes = makeStyles((theme) => ({
 
 class AvailablePins extends React.Component {
 
+  constructor(){
+    super();
+    this.state = {
+      data1:{} 
+    }
+  }
+
 
   componentDidMount(){
 
@@ -68,7 +75,7 @@ class AvailablePins extends React.Component {
 
   createTable= (members)=> {
     let i = 0;
-   
+    data.rows = [];
   members.map(Direct => {
           i++
           const obj = {
@@ -78,12 +85,14 @@ class AvailablePins extends React.Component {
   
            data.rows.push(obj)
   } )
+
+  this.setState({
+    data1: data
+  })
   
   }
 
-  componentWillUnmount(){
-    data.rows = [];
- }
+  
 
     render(){
       return(   <div style={{margin:"0px",padding:"2% 10%"}}>
@@ -109,8 +118,7 @@ class AvailablePins extends React.Component {
                               noBottomColumns
                               responsiveSm
                               responsiveMd
-                              
-                              data={data}
+                              data={this.state.data1}
                               />
                               {/* <div className={classes.seeMore}>
                               

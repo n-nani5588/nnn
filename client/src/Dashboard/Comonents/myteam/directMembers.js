@@ -143,7 +143,7 @@ class DirectMembers extends React.Component {
 
     render(){
       return(
-        <div style={{margin:"0px",padding:"0px",backgroundColor:"#fff",color:"black"}}>
+        <div style={{margin:"0px",padding:"0px",backgroundColor:"#fff",textTransform:"uppercase",color:"black"}}>
         <Container maxWidth="lg" className={classes.container}>
              <div style={{margin:"30px",fontSize:"30px",fontWeight:"600",letterSpacing:"2px"}}>
                  Direct Team

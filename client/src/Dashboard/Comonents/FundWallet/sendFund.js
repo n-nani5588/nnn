@@ -214,7 +214,7 @@ class SendFund extends React.Component{
 
                    <div className="Send_Fund_body">
                        
-                       <Grid  container xs={12} spacing={2}>
+                       <Grid  container xs={12} >
                             <div  >
                             <p style={{fontSize:"10px"}}>*Be aware of spaces while entering 
                                         member id</p>
@@ -228,10 +228,11 @@ class SendFund extends React.Component{
                                         <p> Member details :</p>
                                             <input id="Member_Name" type="text" disabled value={this.state.memberName} className="form-control"></input>
                                         </Grid>
-                                        <Grid item xs={12} justify="left" sm={6} >
+                                        <Grid item xs={12} sm={6} >
+                                        <div style={{display:"flex",justifyContent:"flex-start",padding:"10px"}}>
                                             <button
                                             type="submit"
-                                            className="btn btn-link sm"
+                                            className="btn  btn-sm"
                                             disabled={this.state.buttondisablemember}
                                             >
                                                 Get Details
@@ -240,10 +241,11 @@ class SendFund extends React.Component{
                                             <button
                                              onClick={() => this.handleCancel()}
                                             disabled={this.state.disableCanclebutton}
-                                            className="btn btn-link sm"
+                                            className="btn btn-sm"
                                             >
-                                               cancel
+                                               change id
                                             </button>
+                                        </div>
                                         </Grid>
                           </form>
                             </div>
@@ -256,21 +258,21 @@ class SendFund extends React.Component{
                                 <div className="Send_Fund_body_ID" >
                                     <div className="Send_Fund_body_wallet">
 
-                                    <input type="text" disabled value="Level Income" className="form-control"></input>
+                                    <input type="text" disabled value="LEVEL INCOME" className="form-control"></input>
                                     <input type="text" readOnly value={this.state.levelIncome} className="form-control"></input>
                                     <input type="number" required min="0" step="any" max={this.state.levelIncome} name="_level" onChange={(e) => this.handleChange(e)} value={this.state._level} className="form-control"></input>
 
                                     </div >
                                     <div className="Send_Fund_body_wallet">
 
-                                    <input type="text" readOnly value="Autopool Income" className="form-control"></input>
+                                    <input type="text" readOnly value="AUTOPOOL INCOME" className="form-control"></input>
                                     <input type="text" readOnly value={this.state.autoPoolIncome} className="form-control"></input>
                                     <input type="number" required min="0" step="any" max={this.state.autoPoolIncome} name="_autopool" onChange={(e) => this.handleChange(e)} value={this.state._autopool} className="form-control"></input>
 
                                     </div>
                                     <div className="Send_Fund_body_wallet">
 
-                                    <input type="text" readOnly value="Fund sharing Income" className="form-control"></input>
+                                    <input type="text" readOnly value="FSI" className="form-control"></input>
                                     <input type="text" readOnly value={this.state.fundSharingIncome} className="form-control"></input>
                                     <input type="number" required min="0" step="any" max={this.state.fundSharingIncome} name="_fund" onChange={(e) => this.handleChange(e)} value={this.state._fund} className="form-control"></input>
 
@@ -278,7 +280,7 @@ class SendFund extends React.Component{
 
                                     <div className="Send_Fund_body_wallet">
 
-                                    <input type="text" readOnly value="Wallet Income" className="form-control"></input>
+                                    <input type="text" readOnly value="WALLET INCOME" className="form-control"></input>
                                     <input type="text" readOnly value={this.state.recievedIncome} className="form-control"></input>
                                     <input type="number" required min="0" step="any" max={this.state.recievedIncome} name="_recieved" onChange={(e) => this.handleChange(e)} value={this.state._recieved} className="form-control"></input>
 
@@ -286,7 +288,7 @@ class SendFund extends React.Component{
 
                                     <div className="Send_Fund_body_Total">
 
-                                    <input type="text" readOnly value="Available Fund" className="form-control"></input>
+                                    <input type="text" readOnly value="AVAILBLE FUND" className="form-control"></input>
                                     <input type="text" name="_Available" id="Available_Balance" value={(parseFloat(this.state.recievedIncome)+parseFloat(this.state.fundSharingIncome)+parseFloat(this.state.levelIncome)+parseFloat(this.state.autoPoolIncome))} disabled className="form-control"></input>
                                   
 
@@ -294,7 +296,7 @@ class SendFund extends React.Component{
                                     <div id="ERR_MSG"></div>
                                     <div className="Send_Fund_body_Total">
 
-                                    <input type="text" readOnly value="send Fund" className="form-control"></input>
+                                    <input type="text" readOnly value="TRANSFER FUND" className="form-control"></input>
                                     <input type="text" readOnly name="_Send" value={parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._level)+parseFloat(this.state._autopool)} className="form-control"></input>
 
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const path = require('path');
 const app = express();
 
 const userRoute = require('./routes/api/users');
@@ -21,6 +21,18 @@ app.use('/api/users',userRoute);
 app.use('/api/Admin',adminRoute);
 app.use('/api/Statement',statementRoute);
 
+//Server static assests if in production
+if(process.env.NODE_ENV === 'production'){
+  //Set static foldr
+  app.use(express.static('client/build'));
+
+  app.get('*',(req,res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  })
+}
+
+const port = process.env.PORT || 5000;
+
 //Connect to mongodb
 mongoose.connect('mongodb+srv://Admin:Savechanges%40%40123@democluster.8nsdo.gcp.mongodb.net/Demobase?retryWrites=true&w=majority',
 {useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex: true})
@@ -30,7 +42,6 @@ db.once('open', function() {
   // we're connected!
   console.log('mongoose connected');
 });
-  const port = process.env.PORT || 5000;
 
 
   app.listen(port, ()=>{

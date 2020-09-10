@@ -31,9 +31,18 @@ class Admin extends React.Component {
                 console.log("Display");
                 sessionStorage.setItem('LOGIN',JSON.stringify(true))
             this.setState({
-                Display: <Home ></Home>
+                Display: <Home logout={() => this.handleLogout()}></Home>
             })
         }
+
+    handleLogout = () => {
+
+        sessionStorage.setItem('LOGIN',JSON.stringify(false))
+        this.setState({
+            Display: <Login login={() => this.handleLogin()}></Login>
+        })
+
+    }
 
     render(){
         return(

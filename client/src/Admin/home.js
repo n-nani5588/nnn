@@ -5,19 +5,27 @@ import Totaljoingings from './totalJoinings';
 import Dailjoingings from './dailyJoinings';
 import Updatenew from './UpdateNews';
 import Tickets from './AdminTikets';
+import DailyReport from './dailyRport';
 import './admin.css';
+import Mainautopool from './Mainautopool';
+import DepositRequests from './Deposit';
+import axios from 'axios';
 
 class Home extends React.Component{
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             Display : "",
         }
     }
 
     render(){
-        return(  
+        return( 
+            <div>
+                 <div style={{width:"100%",display:"block"}}>
+                        <button className="btn btn-primary btn-small" onClick={() => this.props.logout()}>Logout</button>
+                </div>
             <div className="Home_Main_div">
 
                 <div>
@@ -40,12 +48,11 @@ class Home extends React.Component{
                             Total Members
                         </button>
 
-
                         <button 
                         type="button" 
                         onClick={() => this.setState({Display: <Dailjoingings></Dailjoingings>})}
                         className="btn btn-secondary">
-                            Daily Members
+                            Fund sharing
                         </button>
 
                         <button 
@@ -62,15 +69,53 @@ class Home extends React.Component{
                              Tickets
                         </button>
 
+                        <button 
+                        type="button" 
+                        onClick={() => this.setState({Display: <Mainautopool></Mainautopool>})}
+                        className="btn btn-secondary">
+                             Autopool
+                        </button>
+
+                        <button
+                        className="btn btn-secondary"
+                        onClick={() => {
+                            this.setState({
+                                Display: <DailyReport></DailyReport>
+                            })
+                        }}
+                        >
+                       Daily Report
+                        </button>
+
+                        <button
+                        className="btn btn-secondary"
+                        onClick={() => {
+                            this.setState({
+                                Display: <DepositRequests></DepositRequests>
+                            })
+                        }}
+                        >
+                         Deposit
+                        </button>
+
                         </div>
                         {
                             this.state.Display
                         }
+{/* 
+<button
+ onClick ={() => {
+     axios.post('/api/Admin/CreateDailyRepot')
+ }}>
+    click
+</button> */}
+
 
                 </div>
 
             
             </div>
+            </div> 
         )
     }
 }

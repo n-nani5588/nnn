@@ -94,7 +94,7 @@ export default class Daily_Joinings extends React.Component{
     constructor(){
         super();
         this.state ={
-            data:"",
+            data1:{},
             totaljoingingsCount:0,
             totalactives:0,
             shareFundUserId: "",
@@ -145,10 +145,11 @@ export default class Daily_Joinings extends React.Component{
 
                 this.createTable(res.data.users);
                 this.setState({
-                    data: data,
+                    data1: data,
                     totaljoingingsCount: data.rows.length,
                     totalactives : active
                 })
+               console.log(this.state.data1);
 
             }
             else{
@@ -172,7 +173,8 @@ export default class Daily_Joinings extends React.Component{
         let i = 0;
         active= 0;
         data.rows= [];
-    console.log(members);
+        Eligible= [];
+        console.log(members);
    { members &&   members.map(Direct => {
 
               const details = Direct
@@ -201,6 +203,7 @@ export default class Daily_Joinings extends React.Component{
               }
               if(Direct.Active.toLowerCase() === "true")
               {
+                 
                   active++
                   Eligible.push(Direct.referedBy)
 
@@ -228,6 +231,7 @@ export default class Daily_Joinings extends React.Component{
               this.setState({
                 shareFundUserId: "",
                 fundAmount:0,
+                confirm: false
               })
 
             }else{
@@ -245,6 +249,7 @@ export default class Daily_Joinings extends React.Component{
   
 
     render(){
+      console.log("inside of");
         return(
             <div>
                 
@@ -297,7 +302,7 @@ export default class Daily_Joinings extends React.Component{
                                 noBottomColumns
                                 responsiveSm
                                 responsiveMd
-                                data={this.state.data}
+                                data={this.state.data1}
                                 />
                 </div>
 
@@ -317,7 +322,7 @@ export default class Daily_Joinings extends React.Component{
                           <tbody>
                              <tr>
                                 {Eligible && Eligible.map(user => 
-                                  <td>{user}</td>
+                                  <tr>{user}</tr>
                                 )}
                              </tr>
                           </tbody>

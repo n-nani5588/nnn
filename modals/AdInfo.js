@@ -4,6 +4,7 @@ const newSchema = mongoose.Schema;
 //create Schema
 const adinfo = new newSchema({
   
+    
     withdrawRequests:{
         type:Array,
         required:true
@@ -15,6 +16,13 @@ const adinfo = new newSchema({
     dashboardTable:{
         type:Array,
         required:true
+    },
+    QRimage : {
+        type: Array,
+        required : true,
+    },
+    Balance : {
+        type: mongoose.Schema.Types.Decimal128,
     }
 
 

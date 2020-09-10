@@ -39,7 +39,7 @@ const userSchema = new newSchema({
     },
     joiningDate:{
         type: Date,
-        default: Date.now()
+        default:  new Date()
        
     },
     Active:{
@@ -73,6 +73,86 @@ const userSchema = new newSchema({
     pinBalance:{
         type: mongoose.Schema.Types.Decimal128,
         required: true
+    },
+    poolOne: {
+        type:Boolean,
+        required: true
+    },
+    poolTwo: {
+        type:Boolean,
+        required: true
+    },
+    poolThree: {
+        type:Boolean,
+        required: true
+    },
+    poolFour: {
+        type:Boolean,
+        required: true
+    },
+    poolFive: {
+        type:Boolean,
+        required: true
+    },
+    poolSix: {
+        type:Boolean,
+        required: true
+    },
+    poolSeven: {
+        type:Boolean,
+        required: true
+    },
+    poolEight: {
+        type:Boolean,
+        required: true
+    },
+    poolNine: {
+        type:Boolean,
+        required: true
+    },
+    poolTen: {
+        type:Boolean,
+        required: true
+    },
+    poolOnePins: {
+        type:Array,
+        required:true
+    },
+    poolTwoPins: {
+        type:Array,
+        required:true
+    },
+    poolThreePins: {
+        type:Array,
+        required:true
+    },
+    poolFourPins: {
+        type:Array,
+        required:true
+    },
+    poolFivePins: {
+        type:Array,
+        required:true
+    },
+    poolSixPins: {
+        type:Array,
+        required:true
+    },
+    poolSevenPins: {
+        type:Array,
+        required:true
+    },
+    poolEightPins: {
+        type:Array,
+        required:true
+    },
+    poolNinePins: {
+        type:Array,
+        required:true
+    },
+    poolTenPins: {
+        type:Array,
+        required:true
     },
     bitAddress:String,
 

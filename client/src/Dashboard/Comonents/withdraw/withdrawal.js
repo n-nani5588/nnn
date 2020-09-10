@@ -47,9 +47,7 @@ class Withdrawal extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-
         if(parseFloat(e.target.Send_fund.value) >  parseFloat(1)){
-
 
             if(parseFloat(e.target.Send_fund.value) <= parseFloat(e.target.Available_fund.value) ){
 
@@ -65,6 +63,7 @@ class Withdrawal extends React.Component {
                     userId: this.userdata.userId,
                     Amount: e.target.Send_fund.value,
                     Address: this.userdata.bitAddress,
+                    total: e.target._total.value
 
                 }).then(res =>{
                     console.log(res.data.user);
@@ -127,35 +126,35 @@ class Withdrawal extends React.Component {
                                     <div className="Send_Fund_body_ID" >
                                         <div className="Send_Fund_body_wallet">
     
-                                        <input type="text" disabled value="Level Income" className="form-control"></input>
+                                        <input type="text" disabled value="LEVEL INCOME" className="form-control"></input>
                                         <input type="text"  value={this.state.levelIncome} disabled className="form-control"></input>
                                         <input type="number" value={this.state._level} onChange={(e)=> this.handleChange(e)} required name="_level" min="0" step="any" max={this.state.levelIncome}  className="form-control"></input>
     
                                         </div >
                                         <div className="Send_Fund_body_wallet">
     
-                                        <input type="text" readOnly value="Autopool Income" className="form-control"></input>
+                                        <input type="text" readOnly value="AUTOPOOL INCOME" className="form-control"></input>
                                         <input type="text"  value={this.state.autoPoolIncome} disabled className="form-control"></input>
                                         <input type="number" value={this.state._autopool} onChange={(e)=> this.handleChange(e)} required name="_autopool" min="0" step="any" max={this.state.autoPoolIncome}  className="form-control"></input>
     
                                         </div>
                                         <div className="Send_Fund_body_wallet">
     
-                                        <input type="text" readOnly value="Fund sharing Income" className="form-control"></input>
+                                        <input type="text" readOnly value="FUND SHARING INCOME" className="form-control"></input>
                                         <input type="text"  value={this.state.fundSharingIncome} disabled className="form-control"></input>
                                         <input type="number" value={this.state._fund} onChange={(e)=> this.handleChange(e)} required name="_fund" min="0" step="any" max={this.state.fundSharingIncome}  className="form-control"></input>
     
                                         </div>
                                         <div className="Send_Fund_body_wallet">
     
-                                        <input type="text" readOnly value="Recieved Income" className="form-control"></input>
+                                        <input type="text" readOnly value="RECIEVED INCOME" className="form-control"></input>
                                         <input type="text"  value={this.state.recievedIncome} disabled className="form-control"></input>
                                         <input type="number" value={this.state._recieved} onChange={(e)=> this.handleChange(e)} required name="_recieved" min="0" step="any" max={this.state.recievedIncome}  className="form-control"></input>
 
                                         </div>
                                         <div className="Send_Fund_body_Total">
     
-                                        <input type="text" readOnly value="Available Fund" className="form-control"></input>
+                                        <input type="text" readOnly value="AVAILABLE INCOME" className="form-control"></input>
                                         <input type="text"
                                          value={(this.state.recievedIncome+this.state.fundSharingIncome+this.state.autoPoolIncome+this.state.levelIncome)}
                                         disabled 
@@ -163,15 +162,31 @@ class Withdrawal extends React.Component {
                                         className="form-control"></input>
     
                                         </div>
+
+
                                         <div className="Send_Fund_body_Total">
-    
-                                        <input type="text" readOnly value="Send Fund" className="form-control"></input>
+                                     
+                                        <input type="text" readOnly value="TRANSFER FUND" className="form-control"></input>
                                         <input type="text"
                                          name="Send_fund"
                                          value={parseFloat(this.state._level)+parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._autopool)}
                                          disabled
                                          className="form-control"></input>
                                         </div>
+
+                                        
+                                        <div>*15% DEDUCT FROM WITHDRAW AMOUNT</div>
+
+                                        <div className="Send_Fund_body_Total">
+                                     
+                                        <input type="text" readOnly value="TOTAL" className="form-control"></input>
+                                        <input type="text"
+                                         name="_total"
+                                         value={(parseFloat(this.state._level)+parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._autopool))-parseFloat((parseFloat(this.state._level)+parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._autopool))*0.15)}
+                                         disabled
+                                         className="form-control"></input>
+                                        </div>
+
 
                                         <div className="Send_Fund_body_Total">
                                             <button 

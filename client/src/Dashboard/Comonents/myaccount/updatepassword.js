@@ -114,7 +114,7 @@ handleConfirm = (e) => {
 }
     render(){
       return(
-        <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",backgroundColor:"#494949",color:"white"}}>
+        <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",backgroundColor:"#fffff",color:"white",textTransform:"uppercase"}}>
             
     
         <Container maxWidth="lg" >
@@ -139,8 +139,8 @@ handleConfirm = (e) => {
               <Grid item xs={12}>
                 <Paper className={paper}>
                     <div style={{padding:"20px"}}>
-                        <h3>Update Password</h3>
-                        <div style={{border:"2px solid blue",margin:"30px 0px"}}>  </div>
+                        <h3>UPDATE PASSWORD</h3>
+                        <div style={{border:"2px solid blue",margin:"30px 0px",backgroundColor:"blue"}}>  </div>
                         <div >
 
           <form onSubmit={(e) => this.handleSubmit(e)}>
@@ -184,12 +184,15 @@ handleConfirm = (e) => {
               <div className="valid-feedback">Looks good!</div>
             </MDBCol>
             <MDBCol md="4" className="mb-3">
+              
               <label
                 htmlFor="defaultFormRegisterConfirmEx3"
                 className="grey-text"
               >
                 Confirm Password
               </label>
+             
+       
               <input
                 
                 className={this.state.confirm.valid ? "form-control is-valid" : "form-control is-invalid"}
@@ -205,17 +208,17 @@ handleConfirm = (e) => {
             </MDBCol>
           </MDBRow>
          
-          <MDBCol md="4" className="mb-3">
-            <div className="custom-control custom-checkbox pl-3">
+          
+          <div style={{display:"flex",justifyContent:"flex-end"}}>
             <button 
-            className="btn btn-link"
-            onMouseOver={() => this.handleViewPassword()}
-            onMouseOut={() => this.handleViewPassword()}
-            >view password 
+                type="button"
+                className="btn btn-link"
+                onMouseOver={() => this.handleViewPassword()}
+                onMouseOut={() => this.handleViewPassword()}
+                >show 
             </button>
-              
             </div>
-          </MDBCol>
+        
           <MDBBtn color="primary" type="submit">
             Update
           </MDBBtn>

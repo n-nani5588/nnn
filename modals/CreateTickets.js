@@ -17,7 +17,7 @@ const TicketSchema = new newSchema({
      },
      RequestedDate:{
         type: Date,
-        default: Date.now()
+        default:  new Date()
        
     },
     status: {

@@ -21,6 +21,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from '../Dashboard/listItems';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MoreIcon from '@material-ui/icons/MoreVert';
@@ -31,7 +32,7 @@ import LastItemTwo from './listitem_two';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
-
+import { useHistory } from 'react-router-dom';
 
 import Profile from './Comonents/myaccount/profile_component';
 import UpdatePassword from './Comonents/myaccount/updatepassword';
@@ -179,7 +180,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
-
+  let history = useHistory();
   
   // ---------------------------------------------
  // --------- START MENU OPTIONS -----------------
@@ -310,11 +311,18 @@ export default function Dashboard(props) {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              onClick={ () =>
+                  {
+                    console.log("logout");
+                    sessionStorage.setItem("LOGIN",JSON.stringify(false));
+                    history.push('/')
+                    window.location.reload()
+                  }
+              }
               color="inherit"
             >
-              <AccountCircle />
-            
+              < ExitToAppIcon  />
+              <Typography>LOGOUT</Typography>
             
             </IconButton>
             <i className="fa fa-logout"></i>
@@ -390,7 +398,14 @@ export default function Dashboard(props) {
         <List>{secondaryListItems}</List> */}
        
         <LastItemTwo
-        
+        click={() =>{
+
+          console.log("logout");
+          sessionStorage.setItem("LOGIN",JSON.stringify(false));
+          history.push('/')
+          window.location.reload()
+
+        }}
         
         ></LastItemTwo>
        

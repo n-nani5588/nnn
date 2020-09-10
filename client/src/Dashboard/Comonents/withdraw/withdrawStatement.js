@@ -67,8 +67,12 @@ const classes = makeStyles((theme) => ({
         field: 'recieved',
       },
       {
-        label: 'Total',
+        label: 'Amount',
         field: 'amount',
+      },
+      {
+        label: 'Total',
+        field: 'total',
       },
       {
         label: 'Status',
@@ -111,7 +115,7 @@ class WithdrawStatement extends React.Component {
       {
         this.createTable(res.data.user);
         console.log(data);
-        this.setState({data1:data})
+       
       }
 
     })
@@ -142,13 +146,14 @@ class WithdrawStatement extends React.Component {
             recieved: Direct.recievedIncome.$numberDecimal,
             autopool: Direct.autopoolIncome.$numberDecimal,
             amount: Direct.Amount.$numberDecimal,
+            total: Direct.Total.$numberDecimal,
             status: Direct.Status
           }
   
            data.rows.push(obj)
  
           } )
-  
+          this.setState({data1:data})
   }
   
   // componentWillUnmount(){

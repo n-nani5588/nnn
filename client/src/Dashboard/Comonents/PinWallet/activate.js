@@ -16,12 +16,14 @@ export default class Activate extends React.Component{
            _id: this.userdata._id,
            Active: this.userdata.Active,
            pins: this.userdata.availablePins,
+           pinslength: this.userdata.availablePins.length > 0?false:true,
            memberId:"",
            memberUserId:"",
            disablebutton:true,
            disableCanclebutton:true,
            diasablememberfield: false,
         }
+        console.log(this.userdata.availablePins.length);
     }
 
     handleMemberId = async (e) => {
@@ -40,8 +42,10 @@ export default class Activate extends React.Component{
                 memberName: "Self",
                 memberId: this.state._id,
                 disableCanclebutton:false,
-                diasablememberfield: true
+                diasablememberfield: true,
+                disablebutton:false,
             })
+            console.log(this.state.pinslength,this.state.disablebutton,this.state.pins,);
 
           }
 
@@ -62,6 +66,7 @@ export default class Activate extends React.Component{
                               disableCanclebutton:false,
                               diasablememberfield: true
                   })
+                  console.log(this.state.pinslength,this.state.disablebutton,this.state.pins,);
                   document.getElementById('Update_Msg').innerHTML = "Enter Pin"
                   }
                   else{
@@ -79,14 +84,15 @@ export default class Activate extends React.Component{
 
   handleSubmit = async () => {
 
-    const memberID = document.getElementById('Member_Id').value
-    
-    if(this.state.memberUserId !== memberID){console.log(this.state.memberUserId,memberID);
+    // const memberID = document.getElementById('Member_Id').value
+    // console.log(memberID);
+    // if(this.state.memberUserId !== document.getElementById('Member_Id').value){
+      
+    //      console.log(this.state.memberUserId,memberID);
+    //      document.getElementById('Err_Msg').innerHTML = "Member Id changed"
 
-         document.getElementById('Err_Msg').innerHTML = "Member Id changed"
-
-    }
-    else{
+    // }
+    // else{
 
         axios.post('/api/users/Activate_account',{
           pin: document.getElementById('Select_Pin').value ,
@@ -100,16 +106,18 @@ export default class Activate extends React.Component{
                memberId:"",
                memberName:"",
                pins: res.data.user.availablePins,
+               pinslength: res.data.user.availablePins.length > 0?false:true,
                memberUserId:"",
                disablebutton:true,
                disableCanclebutton:true,
                diasablememberfield: false,
 
              })
+             console.log(this.state.pinslength,this.state.disablebutton,this.state.pins,);
           }
         })
 
-    }
+    //}
 
   }
 
@@ -187,7 +195,7 @@ render(){
                                     <p> Enter Pin:</p>
                                         {/* <input type="text"  value="jdvsn" className="form-control"></input> */}
                                         <select id="Select_Pin" className="form-control">
-                                                <option value="select">select</option>
+                                              
                                                 {this.state.pins && this.state.pins.map(pin => 
                                                   <option value={pin}>{pin}</option>
                                                 )}
@@ -207,7 +215,7 @@ render(){
                             <div id="Err_Msg"></div>
                             <button 
                             type="button" 
-                            disabled={this.state.disablebutton} 
+                            disabled={this.state.disablebutton || this.state.pinslength} 
                             className="btn btn-success" 
                             onClick={() => this.handleSubmit()}
                             >Activate</button>

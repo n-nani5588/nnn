@@ -55,6 +55,11 @@ let data = {
         
       },
       {
+        label: 'Total',
+        field: 'total',
+        
+      },
+      {
         label: 'Status',
         field: 'status',
         
@@ -87,7 +92,6 @@ export default class WithdrawRequests extends React.Component {
                 console.log(res.data);
                 if(parseInt(res.data.status) === parseInt(1)){
                    this.createTable(res.data.request);
-                   this.setState({data1: data});
                    console.log(this.state.data1);
                 }
             })
@@ -101,6 +105,8 @@ await axios.post('/api/Admin/Adinfo/withdrawDone',{
             userId: data1.userId,
             _id: data1._id,
             statement_id: data1.Statement_ID,
+            Amount: data1.Amount,
+            Total: data1.total,
             date: data1.RequestedDate,
             status: "Done"
         })
@@ -132,6 +138,7 @@ await axios.post('/api/Admin/Adinfo/withdrawDone',{
                         recieve: Direct.recievedincome,
                         Date: "ds",
                         Amount: Direct.Amount,
+                        total: Direct.total,
                         Address: Direct.BitAddress,
                         status: Direct.Status,
                         button: <BtnComponent data={details} onclick={(data) => this.handleDone(data)}></BtnComponent>
@@ -140,7 +147,7 @@ await axios.post('/api/Admin/Adinfo/withdrawDone',{
       
                data.rows.push(obj)
       } )}
-      
+      this.setState({data1: data});
       }
 
     render(){

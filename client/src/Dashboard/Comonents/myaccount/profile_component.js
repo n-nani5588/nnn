@@ -117,7 +117,7 @@ class Profile extends React.Component {
 
     render(){
       return(
-        <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",backgroundColor:"#494949",color:"white"}}>
+        <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",backgroundColor:"#fffff",color:"white",textTransform:"uppercase"}}>
         
         <Container maxWidth="lg" >
             <Grid container spacing={3}>

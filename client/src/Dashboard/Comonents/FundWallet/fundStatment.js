@@ -55,6 +55,10 @@ const classes = makeStyles((theme) => ({
         field: 'sendto',
       },
       {
+        label: 'Recieved from',
+        field: 'recfrom',
+      },
+      {
         label: 'Name',
         field: 'Name',
       },
@@ -123,6 +127,7 @@ members.map(Direct => {
           Sno: i,
           userId:Direct.userId,
           sendto: Direct.Sendto,
+          recfrom : Direct.RecievedFrom,
           Name: Direct.firstName+Direct.lastName,
           Mail: Direct.mailId,
           Date: new Date(Direct.joiningDate).toLocaleDateString(),
@@ -143,7 +148,7 @@ componentWillUnmount(){
         return(   <div style={{margin:"0px",padding:"2% 10%"}}>
                     <div className="Send_Fund_Container">
                             <div className="Send_Fund_header" >
-                                Fund transfer History
+                                Fund statement
                             </div>
                             <div className="Send_Fund_body">
                               {/* Recent Orders */}

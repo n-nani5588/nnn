@@ -9,12 +9,20 @@ import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import AccountBalanceWalletRoundedIcon from '@material-ui/icons/AccountBalanceWalletRounded';
-import Divider from '@material-ui/core/Divider'
+import Divider from '@material-ui/core/Divider';
 import { colors } from '@material-ui/core';
+
+
+
 
 export default class ListItem_Two extends React.Component {
 
+  constructor(props){
+    super(props);
+  }
+
 componentDidMount(){
+  
     var dropdown = document.getElementsByClassName("dropdown-btn");
     var i;
 
@@ -42,7 +50,7 @@ componentDidMount(){
 
 render (){
     return(
-        <div style={{width:"100%",height:"70vh"}}>
+        <div style={{width:"100%",height:"70vh",textTransform:"uppercase"}}>
          
           {/* Slide start */}
           <div className="side_bar"> 
@@ -78,7 +86,7 @@ render (){
              <div className="dropdown-container ">
                           <Link to="/App/Direct_members">  <span className="div_tag">Direct Team</span></Link>
                           <Link to="/App/All_members">     <span className="div_tag">All Team</span></Link>
-                          <Link to="/App/Pool_team">  <span className="div_tag">Pool Team</span></Link>
+                          <Link to="/App/Pool_team">  <span className="div_tag">Treasure </span></Link>
                           </div>
              <Divider/>
 
@@ -166,10 +174,12 @@ render (){
               <Divider/>
             
              {/* Logout */}
-             <div  className="div_tag bodder_left_2" onClick={() => this.handleLogout()}>
+{/*              
+              <div  className="div_tag bodder_left_2" onClick={() => this.props.click()}>
               <span style={{color:"#006B94"}}><DashboardRoundedIcon fontSize="large"/></span> 
               <span style={{textAlign:"center",paddingLeft:"22px",fontSize:"16px",fontWeight:"500"}}>Logout</span>
-             </div>
+             </div> */}
+            
              
             <Divider/>
          

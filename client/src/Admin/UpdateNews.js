@@ -9,6 +9,8 @@ export default class Updatenews extends React.Component{
         this.state={
             currentNews:[],
             text:"",
+            qrImage : '',
+            addressText: ""
         }
     }
 
@@ -20,7 +22,9 @@ export default class Updatenews extends React.Component{
             if(parseInt(res.data.status) === parseInt(1)){
                 console.log(res.data.news);
                 this.setState({
-                    currentNews: res.data.news[0].news
+                    currentNews: res.data.news[0].news,
+                    imagePreviewUrl: res.data.news[0].QRimage[0].img,
+                    addressText: res.data.news[0].QRimage[0].btcAddress
                 })
                 console.log(this.state.currentNews);
             }
@@ -86,6 +90,41 @@ export default class Updatenews extends React.Component{
 
     }
 
+    handleFileChange = (e) => {
+        let reader = new FileReader();
+        let file = e.target.files[0];
+    
+        reader.onloadend = () => {
+          this.setState({
+            file: file,
+            imagePreviewUrl: reader.result
+          });
+        }
+    
+        reader.readAsDataURL(file)
+      }
+
+    handleImageUpdate = () => {
+        Axios.post('/api/Admin/ImageUpload',{
+            imagefile : this.state.imagePreviewUrl,
+            text: this.state.addressText
+        }).then(res => {
+            if(parseInt(res.data.status) === parseInt(1)){
+                console.log(res.data.Img);
+            this.setState({
+                qrImage: res.data.Img.QRimage[0].img,
+                addressText:res.data.Img.QRimage[0].btcAddress,
+            })
+            document.getElementById('Up_MSG1').innerHTML = "Update Successful"
+
+        }else{
+
+            document.getElementById('Up_MSG1').innerHTML = "Not Updated"
+
+        }
+        })
+    }
+
     render(){
         return(
             <div>
@@ -146,6 +185,36 @@ export default class Updatenews extends React.Component{
                              Update
                          </button>
                      </div>
+
+                   
+                   {/* Upload Image and Url-Address */}
+                     <div className="">
+                         
+                      <div id="Up_MSG1">
+               
+               </div>
+
+
+                     <div style={{width:"100%",padding:"10px",backgroundColor:"#cfccfc"}}>
+                        Update QR-IMG
+                     </div>
+                            
+                        <input type="text" value={this.state.addressText} onChange={(e) => {
+                            this.setState({
+                                addressText : e.target.value
+                            })
+                        }}></input>
+                        <input type="file" onChange={(e) => this.handleFileChange(e)}></input>
+                        <img src={this.state.imagePreviewUrl} style={{height:"200px" , width:"200px"}}></img>
+
+                        <button
+                         className="btn btn-primary"
+                         onClick={() => this.handleImageUpdate()}
+                         >
+                             Update QR-iMG 
+                         </button>
+
+                  </div>
                       
 
             </div>

@@ -1,15 +1,17 @@
-.Send_Fund_Container{
+.Send_Fund_Container_deposit{
   
     height:100%;
+    width: 60%;
     margin: 10px auto;
     border: 2px solid #ddd;
     box-shadow: 1px 3px 5px rgba(0,0,0,0.05);
     border-radius: 10px;
     font-size: small;
+    text-transform: uppercase;
   
   }
 
-  .Send_Fund_header {
+  .Send_Fund_header_deposit {
       height: 8vh;
       display: flex;
       align-items: center;
@@ -21,11 +23,11 @@
       font-weight: 700;
   }
 
-  .Send_Fund_body {
-      padding:3%
+  .Send_Fund_body_deposit {
+      padding:3%;
   }
 
-  .Send_Fund_body_ID {
+  .Send_Fund_body_ID_deposit {
       width: 100%;
     display: flex;
     justify-content: space-around;
@@ -36,7 +38,7 @@
   }
  
 
-  .Send_Fund_body_wallet {
+  .Send_Fund_body_wallet_deposit {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
@@ -45,7 +47,7 @@
     border:1px solid #ddd;
 
   }
-  .Send_Fund_body_Total {
+  .Send_Fund_body_Total_deposit {
     width: 100%;
     display: flex;
     justify-content: space-evenly;

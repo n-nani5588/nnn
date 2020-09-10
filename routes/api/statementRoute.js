@@ -37,13 +37,14 @@ router.post('/withdraw', (req,res) => {
         recievedincome: req.body.recieve, 
         RequestedDate: new Date,
         Amount: req.body.Amount,
+        total: req.body.total,
         BitAddress: req.body.Address,
         Status: "requested"
 
 
     }
 
-    AdInfo.findByIdAndUpdate({_id: '5f3909d8e89b9e6578150dec'},{
+    AdInfo.findByIdAndUpdate({_id: '5f55298f801fd918d8463f4f'},{
         $push: { 
             withdrawRequests: w_statement
         }
@@ -61,6 +62,7 @@ router.post('/withdraw', (req,res) => {
         recievedIncome: req.body.recieve,
         userId: req.body.userId,
         Amount: req.body.Amount,
+        Total: req.body.total,        
         BitAddress: req.body.Address,
         Status: "requested"
 

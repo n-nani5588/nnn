@@ -96,7 +96,7 @@ class UpdateWalletAddress extends React.Component {
 
     render(){
       return(
-        <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",color:"white"}}>
+        <div style={{margin:"0px",display:"flex",textTransform:"uppercase",justifyContent:"center",padding:"100px 0px",color:"white"}}>
             
     
         <Container maxWidth="lg" >
@@ -190,8 +190,8 @@ class UpdateWalletAddress extends React.Component {
             </MDBCol>
           
           </MDBRow>
-          <MDBCol md="4" className="mb-3">
-            <div className="custom-control custom-checkbox pl-3">
+          
+            <div style={{display:"flex",justifyContent:"flex-end"}}>
             <button 
             className="btn btn-link"
             onMouseOver={() => this.handleViewPassword()}
@@ -199,7 +199,7 @@ class UpdateWalletAddress extends React.Component {
             >view password </button>
           
             </div>
-          </MDBCol>
+         
          
           <MDBBtn color="primary" type="submit">
             Update Wallet Address

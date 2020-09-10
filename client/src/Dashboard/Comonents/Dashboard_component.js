@@ -97,7 +97,7 @@ let newsnew ;
           style={{width:"100%",paddingBottom:"30px",display:"flex",justifyContent:"flex-end"}}>
             <i className="fa fa-circle" style={{color:"green",fontSize:"10px",paddingRight:"5px",paddingTop:"4px"}} aria-hidden="true"></i>Online</div>
           <h2 className="mb-4">
-            Welcome, John !
+            Welcome, {userdata.firstName} !
           </h2>
           <p className="mb-4">
           YOU ARE IN :  Rank #2
@@ -110,7 +110,7 @@ let newsnew ;
      
      <Grid container spacing={2}>
        <Grid item xs={12} justify="center" sm={11}>
-           <input className="_input_class form-control " value="http://gmail1234454.com/signup/543435" id="myInput"/>
+           <input className="_input_class form-control sm" value="http://gmail1234454.com/signup/543435" id="myInput"/>
        </Grid>
        <Grid item xs={12} sm={1}>
        <span> <button className="btn btn-sm" onClick={() => Copy_function()}>Copy</button></span>
@@ -118,12 +118,12 @@ let newsnew ;
      </Grid>
      
       <Grid container spacing={2}> 
-      <Grid item xs={12} sm={4} md={4} lg={3}>
+                          <Grid item xs={12} sm={4} md={4} lg={3}>
       <div class="card bg-c-blue order-card">
                               <div className="card-block">
                                   <h6 className="m-b-20">Wallet Income</h6>
                                   <h2 className="text-right"><i  className="fa fa-user f-left"></i><span>{userdata.recievedIncome.$numberDecimal}</span></h2>
-                                  <p className="m-b-0">Completed Orders<span class="f-right">351</span></p>
+                                  {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
                           </Grid>
@@ -132,7 +132,7 @@ let newsnew ;
                               <div className="card-block">
                                   <h6 className="m-b-20">Level Income</h6>
                                   <h2 className="text-right"><i className="fa fa-users f-left"></i><span>{userdata.levelIncome.$numberDecimal}</span></h2>
-                                  <p className="m-b-0">Completed Orders<span class="f-right">351</span></p>
+                                  {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
                           </Grid>
@@ -141,7 +141,7 @@ let newsnew ;
                               <div className="card-block">
                                   <h6 className="m-b-20">Treasure Income</h6>
                                   <h2 className="text-right"><i class="fa fa-money-bill-wave f-left"></i><span>{userdata.autoPoolIncome.$numberDecimal}</span></h2>
-                                  <p className="m-b-0">Completed Orders<span class="f-right">351</span></p>
+                                  {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
                           </Grid>
@@ -151,7 +151,7 @@ let newsnew ;
                               <div className="card-block">
                                   <h6 className="m-b-20">Fund Sharing Income</h6>
                                   <h2 className="text-right"><i class="fa fa-cart-plus f-left"></i><span>{userdata.fundSharingIncome.$numberDecimal}</span></h2>
-                                  <p className="m-b-0">Completed Orders<span class="f-right">351</span></p>
+                                  {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
                           </Grid>
@@ -239,7 +239,7 @@ let newsnew ;
             <Grid item xs={12}>
               <Paper className={classes.paper}>
               
-                <Orders />
+                   <Orders />
               </Paper>
             </Grid>
           {/* </Grid> */}

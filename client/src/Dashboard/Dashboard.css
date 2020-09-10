@@ -120,10 +120,10 @@
   /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
   .dropdown-container {
     display: none;
-    background-color: #262626;
+    background-color: #ffff;
     padding-left: 8px;
     transition: 0.5s  ;
-    color:white
+    color:rgba(5, 5, 5, 0.822)
     
   }
   

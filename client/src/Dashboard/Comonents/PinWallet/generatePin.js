@@ -55,9 +55,18 @@ class GeneratePin extends React.Component {
      passwordVisible:false,
      pinBalance:this.userdata.pinBalance.$numberDecimal,
      quantity:0,
-     Total:0
+     Total:0,
+     multiplyWith:15,
+     quantity1:0,
    }
 
+ }
+
+ treasure= (e) =>{
+   console.log(e.target.value);
+   this.setState({
+     multiplyWith: e.target.value
+   })
  }
 
  changehandle= (e) => {
@@ -68,9 +77,17 @@ class GeneratePin extends React.Component {
 
  }
 
+ changehandle1= (e) => {
+    console.log(e.target.value);
+  this.setState({
+         quantity1: e.target.value,
+  })
+
+}
 
 
- handleSubmit= (e)=> {
+
+ handleSubmit=  async (e)=> {
 
   e.preventDefault();
   
@@ -82,7 +99,7 @@ class GeneratePin extends React.Component {
 
     if( parseInt(total) <=  parseInt(e.target.Pin_Balance.value)){
 
-         Axios.post('/api/users/generatePin',{
+        await Axios.post('/api/users/generatePin',{
 
             pins: this.userdata.availablePins,
             quantity:e.target._Quantity.value,
@@ -120,6 +137,58 @@ class GeneratePin extends React.Component {
   else{
     console.log("1");
         document.getElementById('ERR_MSG').innerHTML = "invalid Amount"
+  }
+
+ }
+
+ handleTreasureSubmit = (e) => {
+
+  e.preventDefault();
+  
+  console.log(e.target._Quantity1.value,e.target.Pin_Balance1.value,e.target._Password1.value);
+  const selectvalue = document.getElementById('Select_Treasure').value
+  const total = ((selectvalue)*(e.target._Quantity1.value))
+  console.log(total);
+ 
+  if(parseInt(0) < parseInt(total)){
+
+    if( parseInt(total) <=  parseInt(e.target.Pin_Balance1.value)){
+
+         Axios.post('/api/users/generateTreasurePin',{
+           
+            quantity:e.target._Quantity1.value,
+            _id: this.userdata._id,
+            _Password: e.target._Password1.value,
+            total: total,
+            treasureValue:selectvalue,
+
+         }).then(res => {
+            if(parseInt(res.data.status) === parseInt(1)){
+              sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.userdetails));
+              console.log(res.data.userdetails);
+              this.setState({
+                passwordVisible:false,
+                pinBalance:res.data.userdetails.pinBalance.$numberDecimal,
+                quantity1:0,
+                Total:0
+              })
+             console.log("success");
+            }else { 
+              document.getElementById('ERR_MSG1').innerHTML = "Wrong Password"
+            }
+            
+         })
+
+    }else{
+    console.log("2");
+
+      document.getElementById('ERR_MSG1').innerHTML = "Does not have Enough Balance to Buy!"
+    }
+
+  }
+  else{
+    console.log("1");
+        document.getElementById('ERR_MSG1').innerHTML = "invalid Amount"
   }
 
  }
@@ -164,7 +233,7 @@ class GeneratePin extends React.Component {
                             <p className="btn btn-link" 
                               onMouseOver={()=> this.setState({passwordVisible:true})}
                               onMouseOut={() => this.setState({passwordVisible:false})}>View Password</p>
-                                 <h6>Total : {15*this.state.quantity}</h6>
+                                 <h6>Total : {"$"+(15*this.state.quantity)}</h6>
                             </div>
                             <div id="ERR_MSG"></div>
                         <button
@@ -185,6 +254,83 @@ class GeneratePin extends React.Component {
                     </Box>
             </div>
     </div>
+
+    <div className="Send_Fund_Container">
+            <div className="Send_Fund_header" >
+               Generate Treasure pins
+            </div>
+            <div className="Send_Fund_body">
+              {/* Recent Orders */}
+                        <Grid item xs={12}>
+                        <Paper className={classes.paper} elevate={3}>
+                        <div style={{padding:"3%"}}>
+                    
+
+                      <div >
+                      <form onSubmit={(e)=> this.handleTreasureSubmit(e) }>
+                          <div style={{display:"flex",flexDirection:"column",margin:"2%"}}>
+                             <h2>Pin Balance:</h2>
+                              <input className="form-control" name="Pin_Balance1" readOnly value={this.state.pinBalance}></input>
+                          </div>
+
+                          <div style={{display:"flex",margin:"2%"}}>
+                                <input className="form-control" value="select Treasure" disabled></input>
+                                <select onChange={(e) => this.treasure(e)} className="form-control" id="Select_Treasure">
+                                  <option value="15">Rising-Treasure</option>
+                                  <option value="30">Wonder-Treasure</option>
+                                  <option value="50">Master-Treasure</option>
+                                  <option value="100">Expert-Treasure</option>
+                                  <option value="150">Billionaire-Treasure</option>
+                                  <option value="200">Legend-Treasure</option>
+                                  <option value="300">Fasttrack-Treasure</option>
+                                  <option value="500">Diamond-Treasure</option>
+                                  <option value="750">Double-Diamond-Treasure</option>
+                                  <option value="1000">Triple-Diamond-Treasure</option>
+                                </select>
+                          </div>
+
+                          <div style={{display:"flex",margin:"2%"}}>
+                           
+                             <input  className="form-control"  value="Quantity" disabled></input>
+                            <input className="form-control" value={this.state.quantity1} required name="_Quantity1" min='0' max="5" type="number" onChange={(e)=> this.changehandle1(e)}></input>
+                          </div>
+                         
+                             
+
+                          <div style={{display:"flex",margin:"2%"}}>
+                           
+                           <input  className="form-control" readOnly value="Transition Password" disabled></input>
+                          <input className="form-control" required name="_Password1" type={this.state.passwordVisible?"text":"password"}  ></input>
+
+                        </div>
+
+                            <div>
+                              
+                            <p className="btn btn-link" 
+                              onMouseOver={()=> this.setState({passwordVisible:true})}
+                              onMouseOut={() => this.setState({passwordVisible:false})}>View Password</p>
+                                 <h6>Total : {"$"+(this.state.multiplyWith*this.state.quantity1)}</h6>
+                            </div>
+                            <div id="ERR_MSG1"></div>
+                        <button
+                        type="submit"
+                        className="btn btn-success"
+                        >
+                          Generate Pin
+                        </button>
+                    </form>
+                      </div>
+
+                        </div>
+                        </Paper>
+                        </Grid>
+                    {/* </Grid> */}
+                    <Box pt={4}>
+                        <Copyright />
+                    </Box>
+            </div>
+    </div>
+
 </div>)
 
   }
