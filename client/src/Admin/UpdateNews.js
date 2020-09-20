@@ -10,12 +10,16 @@ export default class Updatenews extends React.Component{
             currentNews:[],
             text:"",
             qrImage : '',
-            addressText: ""
+            addressText: "",
+            Loading_AD : false,
+            Loading_UP : false,
+            Loading_QR : false,
         }
     }
 
     componentDidMount(){
 
+    try{
         Axios.get('/api/Admin/getNews')
         .then(res => {
             console.log(res.data);
@@ -28,12 +32,20 @@ export default class Updatenews extends React.Component{
                 })
                 console.log(this.state.currentNews);
             }
+        }).catch(err => {
+            console.log(err);
         })
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
 
     }
 
     handleAddNews= () =>{
 
+        this.setState({ Loading_AD: true})
         console.log("handle add news")
 
         const news = document.getElementById('Add_News').value;
@@ -42,6 +54,7 @@ export default class Updatenews extends React.Component{
         this.setState({
             currentNews: newsarray,
             text:"",
+            Loading_AD : false
         })
 
         console.log(this.state.currentNews);
@@ -69,6 +82,7 @@ export default class Updatenews extends React.Component{
 
     handleUpdateNews= () =>{
 
+        this.setState({Loading_UP: true})
         Axios.post('/api/Admin/UpdateNews',{
             news: this.state.currentNews
         })
@@ -78,14 +92,18 @@ export default class Updatenews extends React.Component{
                 this.setState({
                     currentNews: res.data.news.news,
                     text:"",
+                    Loading_UP: false
                 })
                 document.getElementById('Up_MSG').innerHTML = "Update Successful"
 
             }else{
 
                 document.getElementById('Up_MSG').innerHTML = "Not Updated"
+                this.setState({Loading_UP: false})
 
             }
+        }).catch(err => {
+            this.setState({Loading_UP: false})
         })
 
     }
@@ -105,6 +123,9 @@ export default class Updatenews extends React.Component{
       }
 
     handleImageUpdate = () => {
+
+        this.setState({Loading_QR : true})
+
         Axios.post('/api/Admin/ImageUpload',{
             imagefile : this.state.imagePreviewUrl,
             text: this.state.addressText
@@ -114,14 +135,19 @@ export default class Updatenews extends React.Component{
             this.setState({
                 qrImage: res.data.Img.QRimage[0].img,
                 addressText:res.data.Img.QRimage[0].btcAddress,
+                Loading_QR: false
             })
             document.getElementById('Up_MSG1').innerHTML = "Update Successful"
 
         }else{
 
             document.getElementById('Up_MSG1').innerHTML = "Not Updated"
+            this.setState({Loading_QR: false})
 
         }
+        }).catch(err => {
+            console.log(err);
+            this.setState({Loading_QR: false})
         })
     }
 
@@ -174,15 +200,18 @@ export default class Updatenews extends React.Component{
                          <button
                          onClick={() => this.handleAddNews()}
                          className="btn btn-primary"
+                         disabled ={this.state.Loading_AD}
                          >
-                             Add News
+                            {this.state.Loading_AD?"Loading...":"Add News"}
                          </button>
 
                          <button
                          className="btn btn-primary"
                          onClick={() => this.handleUpdateNews()}
+                         disabled={this.state.Loading_UP}
                          >
-                             Update
+                             {this.state.Loading_UP?"Loading...":"Update"}
+
                          </button>
                      </div>
 
@@ -210,8 +239,9 @@ export default class Updatenews extends React.Component{
                         <button
                          className="btn btn-primary"
                          onClick={() => this.handleImageUpdate()}
+                         disabled={this.state.Loading_QR}
                          >
-                             Update QR-iMG 
+                             {this.state.Loading_QR?"Loading...":"Update QR-iMG" }
                          </button>
 
                   </div>

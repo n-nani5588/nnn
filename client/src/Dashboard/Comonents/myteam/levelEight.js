@@ -56,7 +56,7 @@ const classes = makeStyles((theme) => ({
         
       },
       {
-        label: 'Mail',
+        label: 'Email',
         field: 'Mail',
         
       },
@@ -80,61 +80,95 @@ class LevelEight extends React.Component {
         super();
         this.state={
           data1:{},
-    
+          Loading : false
         }
          
       }
 
 
       async componentDidMount(){
+        this.setState({
+          Loading : true
+        })
 
         const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
         console.log(this.props.data);
-      
-        if(this.props.data.length > 0){
-          await Axios.post('/api/users/getLevelArrayDetails',
+        
+          try
           {
-              useridsArray: this.props.data
-          })
-          .then(res => {
-            console.log(res.data.users);
+                          
+                if(this.props.data.length > 0){
 
-           if(parseInt(res.data.status) === 1)
-           {
-             this.createTable(res.data.users);
-               console.log(data);
-              
-           }
-           
-         })
-       } 
-       else
-       {
-         this.setState({
-           data1: data
-         })
-       }
+                    await Axios.post('/api/users/getLevelArrayDetails',
+                            {
+                                useridsArray: this.props.data
+                            })
+                            .then(res => {
+
+                                                  console.log(res.data.users);
+
+                                                  if(parseInt(res.data.status) === parseInt(1))
+                                                  {
+
+                                                          this.createTable(res.data.users);
+                                                          console.log(data);
+                                                      
+                                                  }
+                                                  else
+                                                  {
+                                                    this.setState({Loading : false, data1: data})
+                                                  }
+                  
+                  
+                            }).catch(err => {
+
+                                                  console.log(" ");
+                                                  this.setState({
+                                                    data1: data,
+                                                    Loading : false
+                                                  })
+                            })
+                    
+                      } 
+                      else
+                      {
+                                      this.setState({
+                                        data1: data,
+                                        Loading : false
+                                      })
+                      }
+              }
+                catch(err)
+              {
+                      console.log(" ");
+                      this.setState({
+                        data1: data,
+                        Loading : false
+                      })
+              }
     
     }
 
     createTable = (members)=> {
-      let i = 0;
-      console.log(members);
-    {members && members.map(Direct => {
-            i++
-            const obj = {
-              Sno: i,
-              userId:Direct.userId,
-              Name: Direct.firstName+Direct.lastName,
-              Mail: Direct.mailId,
-              Date: new Date(Direct.joiningDate).toLocaleDateString(),
-              status: Direct.Active === "true"?"Active":"Inactive"
-            }
-    
-             data.rows.push(obj);
-    } )
-    }
-    this.setState({data1:data})
+
+                let i = 0;
+                console.log(members);
+                data.rows = [];
+              {members && members.map(Direct => {
+                      i++
+                      const obj = {
+                        Sno: i,
+                        userId:Direct.userId,
+                        Name: Direct.firstName+Direct.lastName,
+                        Mail: Direct.mailId,
+                        Date: new Date(Direct.joiningDate).toLocaleDateString(),
+                        status: Direct.Active === "true"?"Active":"Inactive"
+                      }
+              
+                      data.rows.push(obj);
+              } )
+              }
+              this.setState({data1:data , Loading: false})
     }
 
     render(){
@@ -158,6 +192,19 @@ class LevelEight extends React.Component {
                   <React.Fragment>
         
   
+                  {this.state.Loading ? (
+                      <div style={{
+                        width:"100%",
+                        display: "flex",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        padding: "2% 0%",
+
+                      }}>
+                          Loading...
+                      </div>
+                    )
+                  :
                       <MDBDataTable
                       striped
                       bordered
@@ -171,6 +218,8 @@ class LevelEight extends React.Component {
                       
                       data={this.state.data1}
                       />
+                      
+                  }
                       {/* <div className={classes.seeMore}>
                       
                           <Link color="primary" href="#" >

@@ -17,6 +17,7 @@ let interval;
     this.state = {
       login :"",
       forgotpassword:false,
+      Loading: false
     }
   }
   
@@ -46,33 +47,57 @@ submitLogin = async (e) => {
 
   e.preventDefault();
 
- 
-  await axios.post('/api/users/login', { userid: e.target.login.value , password: e.target.password.value})
-    .then(res => {
-      if(parseInt(res.data.status) === parseInt(200)){
+  this.setState({
+    Loading : true
+  })
+ try{
+          await axios.post('/api/users/login', { userid: e.target.login.value.toUpperCase() , password: e.target.password.value})
+            .then(res => {
+                      if(parseInt(res.data.status) === parseInt(200)){
 
-         console.log(res.data.userdetails);
-        sessionStorage.setItem('LOGIN',JSON.stringify(true));
-        sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.userdetails));
-        window.location.reload()
+                              console.log(res.data.userdetails);
+                              sessionStorage.setItem('LOGIN',JSON.stringify(true));
+                              sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.userdetails));
+                              this.setState({
+                                Loading : false
+                              })
+                              window.location.reload()
 
-      }else if(parseInt(res.data.status) === 100){
-        document.getElementById('ERR_MSG').innerHTML = res.data.msg
+                      }else if(parseInt(res.data.status) === parseInt(101)){
+                                document.getElementById('ERR_MSG').innerHTML = res.data.msg
 
-        interval = setTimeout(() => {
-          document.getElementById('ERR_MSG').innerHTML = ""
-        }, 3000);
+                                this.setState({
+                                  Loading : false
+                                })
 
-        console.log(res.data.status);
-      }else{
-        document.getElementById('ERR_MSG').innerHTML = res.data.msg
-        interval = setTimeout(() => {
-          document.getElementById('ERR_MSG').innerHTML = ""
-        }, 3000);
-        console.log(res.data.status);
-      }
-    } )
+                                interval = setTimeout(() => {
+                                  document.getElementById('ERR_MSG').innerHTML = ""
+                                }, 3000);
 
+                                console.log(res.data.status);
+                      }else{
+                                document.getElementById('ERR_MSG').innerHTML = res.data.msg
+
+                                this.setState({
+                                  Loading : false
+                                })
+                                interval = setTimeout(() => {
+                                  document.getElementById('ERR_MSG').innerHTML = ""
+                                }, 3000);
+                                console.log(res.data.status);
+                      }
+            })
+            .catch(err => {
+               console.log(" ");
+               this.setState({ Loading: false })
+            })
+   
+   }
+   catch(err)
+   {
+       console.log(" ");
+       this.setState({ Loading: false})
+   }
       
 }
 
@@ -89,7 +114,7 @@ componentWillUnmount(){
   render(){
     return(
       <div>
-         <Button size="small" style={{padding:"0px 20px"}} onClick={() => document.getElementById('id01').style.display='block'} color="inherit">Login</Button>
+         <button className="btn btn-primary" style={{padding:"0px 20px"}} onClick={() => document.getElementById('id01').style.display='block'} color="inherit">Login</button>
         <span id="login_id" onClick={() => this.handleLogin()}></span>
           {/* <!-- The Modal --> */}
           <div id="id01" className="modal">
@@ -101,7 +126,7 @@ componentWillUnmount(){
             {/* <!-- Modal Content --> */}
           
           
-          {!this.state.forgotpassword &&  <Loginfield forgotpassword={() => this.handleforgot()} submitLogin={(e) => this.submitLogin(e)}></Loginfield>
+          {!this.state.forgotpassword &&  <Loginfield forgotpassword={() => this.handleforgot()} Loading={this.state.Loading} submitLogin={(e) => this.submitLogin(e)}></Loginfield>
   }
 
         {this.state.forgotpassword &&  <ForgotPassword forgotpassword1={() => this.handleforgot()}></ForgotPassword>

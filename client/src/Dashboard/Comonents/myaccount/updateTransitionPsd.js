@@ -49,6 +49,7 @@ class UpdateTransitionPassword extends React.Component {
         value: "",
         valid: false
       },
+      Loading : false,
       
     }
 
@@ -66,50 +67,78 @@ class UpdateTransitionPassword extends React.Component {
   handleSubmit = (e) => {
     
     e.preventDefault();
+    this.setState({ Loading : true })
     
     if((e.target.newPassword.value).toString() === (e.target.confirm.value).toString()){
-     
-        axios.post('/api/users/changeTransitionPassword',{
-          id: this.state.id,
-          newPassword: this.state.newPassword.value,
-          oldPassword: this.state.oldPassword.value 
-        }).then(res => {
-          if(parseInt(res.data.status) === parseInt(1)){
-           const msg=  document.getElementById('Update_Msg');
-           msg.innerHTML = "Update Succesfull !"
-           this.setState({
-            viewpass: false,
-            oldPassword: {
-              value: "",
-              valid: false
-            },
-            newPassword: {
-              value: "",
-              valid: false
-            },
-            confirm: {
-              value: "",
-              valid: false
-            },
-           })
-           msg.style.display = "block"
-            interval = setTimeout(() => {
-              msg.style.display = "none"
-            }, 3000);
+        
+      try{
+              axios.post('/api/users/changeTransitionPassword',{
+                id: this.state.id,
+                newPassword: this.state.newPassword.value,
+                oldPassword: this.state.oldPassword.value 
+              }).then(res => 
+              {
+
+                if(parseInt(res.data.status) === parseInt(1)){
+
+                          const msg=  document.getElementById('Update_Msg');
+                          msg.innerHTML = "Update Succesfull !"
+                      
+                          this.setState({
+                            viewpass: false,
+                            oldPassword: {
+                              value: "",
+                              valid: false
+                            },
+                            newPassword: {
+                              value: "",
+                              valid: false
+                            },
+                            confirm: {
+                              value: "",
+                              valid: false
+                            },
+                            Loading : false
+                          })
+                        
+                          msg.style.display = "block"
+                            interval = setTimeout(() => {
+                              msg.style.display = "none"
+                            }, 3000);
 
 
-          }else{
-            const msg=  document.getElementById('Update_Msg');
-            msg.innerHTML = "Wrong password Entered !"
-            msg.style.display = "block"
-             interval = setTimeout(() => {
-               msg.style.display = "none"
-             }, 3000);
-          }
-        })
+                }else{
+
+                          const msg=  document.getElementById('Update_Msg');
+                          this.setState({
+                            Loading : false
+                          })
+                          msg.innerHTML = "Wrong password Entered !"
+                          msg.style.display = "block"
+                          interval = setTimeout(() => {
+                            msg.style.display = "none"
+                          }, 3000);
+                }
+              
+              }).catch(err => {
+
+                  console.log(" ");
+              
+              })
+     }
+     catch(err)
+     {
+           console.log(" ");
+     }
            
     }else{
+
           document.getElementById('emailHelp').innerHTML = "password not matched";
+          this.setState({
+            Loading : false,
+            confirm: { valid : false }
+          })
+
     }
 
   }
@@ -119,6 +148,9 @@ class UpdateTransitionPassword extends React.Component {
   }
 
 handleConfirm = (e) => {
+
+
+
   if(e.target.value.toString() === this.state.newPassword.value.toString()){
     document.getElementById('emailHelp').innerHTML = "password matched";
     this.setState({confirm:{valid:true}})
@@ -154,7 +186,7 @@ handleConfirm = (e) => {
               <Grid item xs={12}>
                 <Paper className={paper}>
                     <div style={{padding:"20px"}}>
-                        <h3>Update Transition Password</h3>
+                        <h3>Update Transaction Password</h3>
                         <div style={{border:"2px solid blue",margin:"30px 0px"}}>  </div>
                         <div >
 
@@ -171,10 +203,11 @@ handleConfirm = (e) => {
                 value={this.state.oldPassword.value}
                 className={this.state.oldPassword.valid ? "form-control is-valid" : "form-control is-invalid"}
                 name="oldPassword"
+                pattern="[^' ']+"
                 onChange={this.changeHandler}
                 type={this.state.viewpass?"text":"password"}
                 id="defaultFormRegisterNameEx"
-                placeholder="Enter old password"
+                placeholder="ENTER OLD PASSWORD"
                 required
               />
               <div className="valid-feedback">Looks good!</div>
@@ -190,10 +223,11 @@ handleConfirm = (e) => {
                 value={this.state.newPassword.value}
                 className={this.state.newPassword.valid ? "form-control is-valid" : "form-control is-invalid"}
                 name="newPassword"
+                pattern="[^' ']+"
                 onChange={this.changeHandler}
                 type={this.state.viewpass?"text":"password"}
                 id="defaultFormRegisterEmailEx2"
-                placeholder="new password"
+                placeholder="NEW PASSWORD"
                 required
               />
               <div className="valid-feedback">Looks good!</div>
@@ -206,13 +240,14 @@ handleConfirm = (e) => {
                 Confirm Password
               </label>
               <input
-                
+                value={this.state.confirm.value}
                 className={this.state.confirm.valid ? "form-control is-valid" : "form-control is-invalid"}
                 onChange={(e) => this.handleConfirm(e)}
                 type={this.state.viewpass?"text":"password"}
+                pattern="[^' ']+"
                 id="defaultFormRegisterConfirmEx3"
                 name="confirm"
-                placeholder="confirm password"
+                placeholder="CONFIRM PASSWORD"
               />
               <small id="emailHelp"  className="form-text text-muted">
               
@@ -227,13 +262,17 @@ handleConfirm = (e) => {
             className="btn btn-link"
             onMouseOver={() => this.handleViewPassword()}
             onMouseOut={() => this.handleViewPassword()}
-            >view password 
+            >show
             </button>
               
             </div>
       
-          <MDBBtn color="primary" type="submit">
-            Update
+          <MDBBtn color="primary" disabled={this.state.Loading} type="submit">
+          {this.state.Loading ? (
+            <div>
+                Loading...
+            </div>
+            ) : "update" } 
           </MDBBtn>
         </form>
 

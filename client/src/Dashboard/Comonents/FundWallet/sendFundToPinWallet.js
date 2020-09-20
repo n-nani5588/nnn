@@ -3,6 +3,8 @@ import './fundWallet.css'
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import axios from 'axios';
+import Loader from 'react-loader-spinner';
+
 class SendFundToPinWallet extends React.Component{
 
     constructor(){
@@ -20,6 +22,7 @@ class SendFundToPinWallet extends React.Component{
             _fund:0.00,
             _recieved:0.00,
             buttondisable:false,
+            Loading : false
         }
     }
 
@@ -35,7 +38,7 @@ class SendFundToPinWallet extends React.Component{
        
        
             const msg =  document.getElementById('Update_Msg');
-            msg.innerHTML = "Enter amoun";
+            msg.innerHTML = "Enter amount";
             msg.style.display = "block";
     
       
@@ -58,53 +61,72 @@ class SendFundToPinWallet extends React.Component{
     }
 
     handleSubmit = async (e)=> {
+
+        this.setState({
+            Loading : true
+        })
+
         e.preventDefault();
-  
-            if( parseFloat(0.00) < parseFloat(e.target._Send.value)  ){
-                
-                if(parseFloat(e.target._Send.value) <= parseFloat(e.target._Available.value)){
-                 //await code
-                 console.log("in axiospin");
-                  document.getElementById('ERR_MSG').innerHTML = "";
-                  await axios.post('/api/users/sendFund/pinWallet',{
-                    
-                    //updating Values
-                    _id:this.state.id,
-                    useid:this.userdata.userId,
-                    levelamount:e.target._level.value,
-                    autoamount:e.target._autopool.value,
-                    fundamount:e.target._fund.value,
-                    recievedamount:e.target._recieved.value,
-                    pinBalance: e.target._Total.value
 
-                  }).then(res => {
+        try{
+            
+                        if( parseFloat(0.00) < parseFloat(e.target._Send.value)  ){
+                            
+                                        if(parseFloat(e.target._Send.value) <= parseFloat(e.target._Available.value)){
+                                        //await code
+                                                    console.log("in axiospin");
+                                                    document.getElementById('ERR_MSG').innerHTML = "";
+                                                    await axios.post('/api/users/sendFund/pinWallet',{
+                                                        
+                                                        //updating Values
+                                                        _id:this.state.id,
+                                                        useid:this.userdata.userId,
+                                                        levelamount:e.target._level.value,
+                                                        autoamount:e.target._autopool.value,
+                                                        fundamount:e.target._fund.value,
+                                                        recievedamount:e.target._recieved.value,
+                                                        pinBalance: e.target._Total.value
 
-                    if(parseInt(res.data.status) === 1){
-                         sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
-                         const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
-                         this.setState({
-                            id:userdata._id,
-                            levelIncome: parseFloat( userdata.levelIncome.$numberDecimal),
-                            autoPoolIncome: parseFloat( userdata.autoPoolIncome.$numberDecimal),
-                            fundSharingIncome: parseFloat( userdata.fundSharingIncome.$numberDecimal),
-                            recievedIncome: parseFloat( userdata.recievedIncome.$numberDecimal),
-                            _level:0.00,
-                            _autopool:0.00,
-                            _fund:0.00,
-                            _recieved:0.00,
-                        })
-                    }else{
-                       
-                    }
-                  })
+                                                    }).then(res => {
 
-                }else{console.log("3");document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"}
+                                                                if(parseInt(res.data.status) === parseInt(1)){
+                                                                            sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
+                                                                            const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+                                                                            this.setState({
+                                                                                id:userdata._id,
+                                                                                levelIncome: parseFloat( userdata.levelIncome.$numberDecimal),
+                                                                                autoPoolIncome: parseFloat( userdata.autoPoolIncome.$numberDecimal),
+                                                                                fundSharingIncome: parseFloat( userdata.fundSharingIncome.$numberDecimal),
+                                                                                recievedIncome: parseFloat( userdata.recievedIncome.$numberDecimal),
+                                                                                _level:0.00,
+                                                                                _autopool:0.00,
+                                                                                _fund:0.00,
+                                                                                _recieved:0.00,
+                                                                                Loading : false
+                                                                            })
+                                                                }else{
+                                                                            this.setState({ Loading : false })
+                                                                }
+                                                    }).catch(err => {
 
-            }else{
-             console.log("2");
-             document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
-            }
-        
+                                                        this.setState({ Loading : false })
+                                                    })
+
+                                        }else{
+                                            console.log("3");document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                            this.setState({ Loading : false})
+                                        }
+
+                        }else{
+                                        console.log("2");
+                                        document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                        this.setState({ Loading : false})
+                        }
+        }
+        catch(err)
+        {
+            this.setState({ Loading : false})
+        }           
 
 }
 
@@ -156,7 +178,7 @@ class SendFundToPinWallet extends React.Component{
                                     
                                     <div className="Send_Fund_body_wallet">
 
-                                    <input type="text" readOnly value="RECIEVED FUND" className="form-control"></input>
+                                    <input type="text" readOnly value="RECEIVED FUND" className="form-control"></input>
                                     <input type="text" readOnly value={this.state.recievedIncome} className="form-control"></input>
                                     <input type="number" required min="0" max={this.state.recievedIncome} name="_recieved" onChange={(e) => this.handleChange(e)} value={this.state._recieved} className="form-control"></input>
 
@@ -175,7 +197,8 @@ class SendFundToPinWallet extends React.Component{
 
 
                                     </div>
-                                    <div>*5% deduct while transfering to pin wallet</div>
+
+                                    <div>*5% will be deducted while transfering to pin wallet</div>
                                     <div className="Send_Fund_body_Total">
 
                                     <input type="text" readOnly value="TOTAL" className="form-control"></input>
@@ -185,7 +208,10 @@ class SendFundToPinWallet extends React.Component{
                                     </div>
                                     <div className="Send_Fund_body_Total">
 
-                                        <button disabled={this.state.buttondisable} className="btn btn-success" >Transfer</button>
+                                        <button type="submit" disabled={this.state.buttondisable || this.state.Loading } className="btn btn-success" >
+                                        {this.state.Loading ? (<div> <Loader type="ThreeDots" color="#FFF" height={15} width={15} /></div>) : "Transfer"}
+                                        </button>
+
                                      </div>
                                 </div>
                         </Grid>

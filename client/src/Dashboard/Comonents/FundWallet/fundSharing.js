@@ -71,34 +71,50 @@ class FundSharing extends React.Component{
     super();
     this.state={
       data1:{},
-
+      Loading: false
     }
      
   }
 
   async componentDidMount(){
 
+    this.setState(
+      {
+        Loading : true
+      }
+    )
+
     const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
     const row = data.rows;
   
            console.log(row);
   
-        if(row.length === 0){
-          await axios.post('/api/users/GetFundSharing',{userid: userdata.userId})
-          .then(res => {
-            console.log(res.data.users);
-            if(parseInt(res.data.status) === parseInt(1)){
-              this.createTable(res.data.users);
-              console.log(data);
-              this.setState({data1:data})
-            }
+     try{  
+                await axios.post('/api/users/GetFundSharing',{userid: userdata.userId})
+                .then(res => {
+
+                          console.log(res.data.users);
+                          if(parseInt(res.data.status) === parseInt(1)){
+                                this.createTable(res.data.users);
+                                console.log(data);
+                                this.setState({data1:data , Loading: false})
+                          }
+                          else
+                          {
+                             this.setState({data1:data , Loading: false})
+                          }
+                  
+                }).catch(err => {
+                    this.setState({data1:data , Loading: false})
+                })
+      }
+      catch(err)
+      {
             
-          })
-        } else{
-          this.setState({
-            data1: data
-          })
-        }
+           console.log(" ");
+           this.setState({data1:data , Loading: false})
+
+      }
         
   
     }
@@ -106,7 +122,7 @@ class FundSharing extends React.Component{
     createTable= (members)=> {
       let i = 0;
       console.log(members);
-     
+      data.rows = []
     members.map(Direct => {
             i++
             const obj = {
@@ -137,19 +153,35 @@ class FundSharing extends React.Component{
                                         <React.Fragment>
                                 
                         
-                                            <MDBDataTable
-                                            striped
-                                            bordered
-                                            sortable={false}
-                                            theadColor="#fff"
-                                            entries={7}
-                                            small
-                                            noBottomColumns
-                                            responsiveSm
-                                            responsiveMd
-                                            
-                                            data={this.state.data1}
-                                            />
+                      {this.state.Loading ? 
+                        
+                        (<div style={
+                          {
+                           width:"100%",
+                           display: "flex",
+                           justifyContent:"center",
+                           alignItems:"center",
+                           padding: "2% 0%"
+                          }
+                        }>
+                           Loading...
+                        </div>)
+                        :
+                               <MDBDataTable
+                               striped
+                               bordered
+                               sortable={false}
+                               theadColor="#fff"
+                               entries={7}
+                               small
+                               noBottomColumns
+                               responsiveSm
+                               responsiveMd
+                               
+                               data={this.state.data1}
+                               />
+                        
+                        }
                                             {/* <div className={classes.seeMore}>
                                             
                                                 <Link color="primary" href="#" >

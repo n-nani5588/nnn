@@ -79,43 +79,80 @@ export default class WithdrawRequests extends React.Component {
     super();
      this.state= {
         data1:{},
+        Loading : false,
+        Loading_dn_btn : false,
      }
   }
 
    async  componentDidMount(){
 
+    this.setState({
+       Loading: true
+    })
             // axios.post('/api//Adinfo',{
             //     id:"id"
             // })
+    try{        
          await   axios.get('/api/Admin/Adinfo/withdraw')
             .then(res => {
+
                 console.log(res.data);
                 if(parseInt(res.data.status) === parseInt(1)){
                    this.createTable(res.data.request);
                    console.log(this.state.data1);
                 }
+                else
+                {
+                    this.setState({
+                      Loading: false
+                    })
+                }
+
+            }).catch(err => {
+                    this.setState({
+                      Loading : false
+                    })
             })
 
+        }
+        catch(err)
+        {
+              this.setState({
+                Loading : false
+              })
+        }
     }
 
    handleDone = async (data1) =>{
+ 
 
-        console.log(data1);
-await axios.post('/api/Admin/Adinfo/withdrawDone',{
-            userId: data1.userId,
-            _id: data1._id,
-            statement_id: data1.Statement_ID,
-            Amount: data1.Amount,
-            Total: data1.total,
-            date: data1.RequestedDate,
-            status: "Done"
-        })
-        .then(res => {
-          console.log(res.data);
-          this.createTable(res.data.staetment);
-          this.setState({data1: data});
-          console.log("in",this.state.data1);
-        })
+    this.setState({Loading_dn_btn : true})
+
+    try{
+
+              console.log(data1);
+              await axios.post('/api/Admin/Adinfo/withdrawDone',{
+                  userId: data1.userId,
+                  _id: data1._id,
+                  statement_id: data1.Statement_ID,
+                  Amount: data1.Amount,
+                  Total: data1.total,
+                  date: data1.RequestedDate,
+                  status: "Done"
+              })
+              .then(res => {
+                      console.log(res.data);
+                      this.createTable(res.data.staetment);
+                      console.log("in",this.state.data1);
+              })
+              .catch(err => {
+                      this.setState({data1: data , Loading_dn_btn: false});
+              })
+    }
+    catch(err)
+    {
+            this.setState({data1: data , Loading_dn_btn: false});
+    }
 
     }
 
@@ -141,18 +178,33 @@ await axios.post('/api/Admin/Adinfo/withdrawDone',{
                         total: Direct.total,
                         Address: Direct.BitAddress,
                         status: Direct.Status,
-                        button: <BtnComponent data={details} onclick={(data) => this.handleDone(data)}></BtnComponent>
+                        button: <BtnComponent data={details} loading={this.state.Loading_dn_btn} onclick={(data) => this.handleDone(data)}></BtnComponent>
                         
               }
       
                data.rows.push(obj)
       } )}
-      this.setState({data1: data});
+      this.setState({data1: data, Loading: false , Loading_dn_btn: false})
       }
 
     render(){
         return(
-            <div >
+            <div style={{width:"100%",padding:"2%"}}>
+
+                      {this.state.Loading ? 
+                        
+                        (<div style={
+                          {
+                           width:"100%",
+                           display: "flex",
+                           justifyContent:"center",
+                           alignItems:"center",
+                           padding: "2% 0%"
+                          }
+                        }>
+                           Loading...
+                        </div>)
+                        :
                                 <MDBDataTable
                                 striped
                                 bordered
@@ -166,6 +218,7 @@ await axios.post('/api/Admin/Adinfo/withdrawDone',{
                                 
                                 data={this.state.data1}
                                 />
+                              }
             </div>
         )
     }

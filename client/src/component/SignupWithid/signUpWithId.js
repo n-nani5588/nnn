@@ -2,32 +2,40 @@ import React ,{Component } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import axios from 'axios';
-import SignupPart1 from './Signup1';
-import SignupPart2 from './Signup2';
-import './signup.css';
+import SignupPart1 from './Signup_pat1';
+import SignupPart2 from './signUp_part2';
+import { useHistory } from 'react-router-dom';
 
 
 
- class Signup extends Component{
+ class SignupWithId extends Component{
 
-  constructor(props){
-   super(props);
+  constructor(){
+   super();
    this.state = {
-     password:"",
-     confirmPassword:"",
-     First_Name:"",
-     Last_Name:"",
-     _email:"",
       details: "",
      display: false,
 
    }
   }
 
+  componentDidMount(){
+
+    document.getElementById('id023').style.display='block'
+
+    console.log(this.props.match.params.id);
+
+    this.setState({
+        display: false,
+        details : ""
+      })
+
+  }
+
 
   handleEnter = () => {
 
-    document.getElementById('id02').style.display='block'
+    
     // Get the modal
    //  var window1 = document.getElementById('id02');
 
@@ -39,29 +47,28 @@ import './signup.css';
     //   }
     // }
 
-    this.setState({
-      display: false,
-      details : ""
-    })
+    
 
   }
 
   render(){
     return(
       <div>
-
-         <button className="btn btn-primary"  size="small"  style={{padding:"0px 20px"}} 
+         {/* <Button size="small"  style={{padding:"0px 20px"}} 
            onClick={() => this.handleEnter()} 
-           color="inherit">Sign up</button>
+           color="inherit">Sign up</Button> */}
        
           {/* <!-- The Modal --> */}
-          <div id="id02" className="modalSignup">
-            <span onClick={() => document.getElementById('id02').style.display='none'}
+          <div id="id023" className="modalSignup">
+            <span onClick={() => {
+                document.getElementById('id023').style.display='none'
+
+            }}
             className="close" title="Close Modal">&times;</span>
 
            {  
           
-                !this.state.display && <SignupPart1 changes={(data) => this.setState({display : true,details : data })}></SignupPart1>
+                !this.state.display && <SignupPart1 referalId={this.props.match.params.id} changes={(data) => this.setState({display : true,details : data })}></SignupPart1>
           
            }
 
@@ -77,7 +84,7 @@ import './signup.css';
     )
   }
 }
-export default Signup;
+export default SignupWithId;
 
 
 

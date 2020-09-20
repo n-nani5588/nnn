@@ -46,7 +46,7 @@ class UpdateWalletAddress extends React.Component {
         value: "",
         valid: false
       },
-      
+      Loading : false
     }
 
   }
@@ -60,30 +60,55 @@ class UpdateWalletAddress extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('/api/users/walletAddress',{
-         id:this.state.id,
-         walletAddress: e.target.Address.value,
-         oldPassword: e.target.Password.value
-    }).then(res => {
-      if(parseInt(res.data.status) === 1){
-      sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.userdetails));
-       const msg=  document.getElementById('Update_Msg');
-       msg.innerHTML = "Update Succesfull !"
-       msg.style.display = "block"
-       interval = setTimeout(() => {
-          msg.style.display = "none"
-        }, 3000);
-        this.setState({Address : {value:"",valid:"false"},Password: { value:"",valid:false}})
-     
-      }else{
-        const msg=  document.getElementById('Update_Msg');
-        msg.innerHTML = "Wrong password Entered !"
-        msg.style.display = "block"
-        interval = setTimeout(() => {
-           msg.style.display = "none"
-         }, 3000);
-      }
-    })
+    this.setState({ Loading : true })
+    try{
+            axios.post('/api/users/walletAddress',{
+                id:this.state.id,
+                walletAddress: e.target.Address.value,
+                oldPassword: e.target.Password.value
+            }).then(res => {
+
+              if(parseInt(res.data.status) === 1){
+
+                      sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.userdetails));
+                      const msg=  document.getElementById('Update_Msg');
+                      msg.innerHTML = "Update Succesfull !"
+                      msg.style.display = "block"
+                      interval = setTimeout(() => {
+                          msg.style.display = "none"
+                        }, 3000);
+
+                        this.setState({
+                          Address : {value:"",valid:false},
+                          Password: { value:"",valid:false},
+                          Loading : false
+                        })
+                    
+              }
+              else
+              {
+                        const msg=  document.getElementById('Update_Msg');
+                        msg.innerHTML = "Wrong password Entered !"
+                        this.setState({
+                          Loading : false
+                        })
+                        msg.style.display = "block"
+                        interval = setTimeout(() => {
+                          msg.style.display = "none"
+                        }, 3000);
+              }
+            }).catch(res => {
+
+              console.log(" ");
+            
+            })
+            
+       }
+       catch(err)
+       {
+         console.log(" ");
+       }
+
   }
 
   componentWillUnmount(){
@@ -161,10 +186,11 @@ class UpdateWalletAddress extends React.Component {
                 value={this.state.Address.value}
                 className={this.state.Address.valid ? "form-control is-valid" : "form-control is-invalid"}
                 name="Address"
+                pattern="[^' ']+"
                 onChange={this.changeHandler}
                 type="text"
                 id="defaultFormRegisterNameEx"
-                placeholder="Wallet Address"
+                placeholder="WALLET ADDRESS"
                 required
               />
               <div className="valid-feedback">Looks good!</div>
@@ -174,16 +200,17 @@ class UpdateWalletAddress extends React.Component {
                 htmlFor="defaultFormRegisterEmailEx2"
                 className="grey-text"
               >
-                Enter Transition Password
+                Enter Transaction Password
               </label>
               <input
                 value={this.state.Password.value}
                 className={this.state.Password.valid ? "form-control is-valid" : "form-control is-invalid"}
                 name="Password"
+                pattern="[^' ']+"
                 onChange={this.changeHandler}
                 type={this.state.viewpass?"text":"password"}
                 id="defaultFormRegisterEmailEx2"
-                placeholder="Enter Transition Password"
+                placeholder="ENTER TRANSACTION PASSWORD"
                 required
               />
               <div className="valid-feedback">Looks good!</div>
@@ -196,13 +223,17 @@ class UpdateWalletAddress extends React.Component {
             className="btn btn-link"
             onMouseOver={() => this.handleViewPassword()}
             onMouseOut={() => this.handleViewPassword()}
-            >view password </button>
+            > show </button>
           
             </div>
          
          
-          <MDBBtn color="primary" type="submit">
-            Update Wallet Address
+          <MDBBtn color="primary" disabled={this.state.Loading} type="submit">
+          {this.state.Loading ? (
+            <div>
+                Loading...
+            </div>
+            ) : "update" } 
           </MDBBtn>
         </form>
 

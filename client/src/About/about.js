@@ -24,7 +24,7 @@ export default class About extends React.Component{
                         <div style={{width:"100%",padding:"5% 10%"}}
                         >
                         <Grid xs={12} >
-                        <img src={process.env.PUBLIC_URL + '/images/imgqw.jpg'} style={{width:"500px",height:"300px",float:"right",margin:"10px 0px 12px 30px"}}></img>
+                        {/* <img src={process.env.PUBLIC_URL + '/images/imgqw.jpg'} style={{width:"500px",height:"300px",float:"right",margin:"10px 0px 12px 30px"}}></img> */}
                         </Grid>
                         <h2 style={{fontWeight:"bold"}}> HOW&nbsp; WE&nbsp; ARE </h2>
                         <p style={{textAlign:"justify",letterSpacing:"1px",fontWeight:"thin"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod

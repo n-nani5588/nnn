@@ -62,15 +62,30 @@ class AvailablePins extends React.Component {
   constructor(){
     super();
     this.state = {
-      data1:{} 
+      data1:{} ,
+      Loading: false
     }
   }
 
 
   componentDidMount(){
 
-    const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
-    this.createTable(userdata.availablePins);
+          this.setState({
+            Loading: true
+          })
+try{
+          const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
+          this.createTable(userdata.availablePins);
+}
+catch(err)
+{
+    console.log(" ");
+    this.setState({
+      data1: data,
+      Loading: false
+    })
+}
+
   }
 
   createTable= (members)=> {
@@ -87,7 +102,8 @@ class AvailablePins extends React.Component {
   } )
 
   this.setState({
-    data1: data
+    data1: data,
+    Loading: false
   })
   
   }
@@ -108,18 +124,35 @@ class AvailablePins extends React.Component {
                           <React.Fragment>
                   
           
-                              <MDBDataTable
-                              striped
-                              bordered
-                              sortable={false}
-                              theadColor="#fff"
-                              entries={7}
-                              small
-                              noBottomColumns
-                              responsiveSm
-                              responsiveMd
-                              data={this.state.data1}
-                              />
+                          {this.state.Loading ? 
+                        
+                        (<div style={
+                          {
+                           width:"100%",
+                           display: "flex",
+                           justifyContent:"center",
+                           alignItems:"center",
+                           padding: "2% 0%"
+                          }
+                        }>
+                           Loading...
+                        </div>)
+                        :
+                               <MDBDataTable
+                               striped
+                               bordered
+                               sortable={false}
+                               theadColor="#fff"
+                               entries={7}
+                               small
+                               noBottomColumns
+                               responsiveSm
+                               responsiveMd
+                               
+                               data={this.state.data1}
+                               />
+                        
+                        }
                               {/* <div className={classes.seeMore}>
                               
                                   <Link color="primary" href="#" >

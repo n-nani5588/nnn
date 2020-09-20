@@ -1,6 +1,6 @@
 import React from 'react';
 import Axios from 'axios';
-
+import Loader from 'react-loader-spinner';
 
 class ForgotPassword extends React.Component {
 
@@ -9,6 +9,7 @@ class ForgotPassword extends React.Component {
         this.state = {
             userid:"",
             mail:"",
+            Loading: false
         }
     }
 
@@ -22,6 +23,10 @@ class ForgotPassword extends React.Component {
 
         e.preventDefault();
 
+        this.setState({
+            Loading: true
+        })
+
             Axios.post('/api/users/ForgotPassword',{
                 userid: e.target.userid.value,
                 mail: e.target.mail.value
@@ -33,9 +38,13 @@ class ForgotPassword extends React.Component {
                     this.setState({
                         mail:"",
                         userid:"",
+                        Loading: false
                     })
                 }else{
                     document.getElementById('ERR_MSG').innerHTML = "Invalid User Id"
+                    this.setState({
+                        Loading: false
+                    })
                 }
 
             });
@@ -64,7 +73,10 @@ class ForgotPassword extends React.Component {
                       }>
                       <input type="text" onChange={(e) => this.handleChange(e)} required value={this.state.userid} className="fadeIn form-control second inputtext-type" name="userid" placeholder="Enter User Id" />
                       <input type="email" onChange={(e) => this.handleChange(e)} required className="form-control fadeIn second inputtext-type" value={this.state.mail} name="mail" placeholder="Enter Mail"></input>
-                      <button type="submit" className="fadeIn fourth Button-submit">Send mail </button>
+                      <button type="submit" disabled={this.state.Loading} className="fadeIn fourth Button-submit">
+                         
+                              {this.state.Loading ? (<div> <Loader type="ThreeDots" color="#FFF" height={15} width={15} /></div>) : "send mail"}
+                      </button>
                       </form>
                     
 

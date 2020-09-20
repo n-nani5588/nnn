@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import './deposit.css';
 import Axios from 'axios';
-
+import Loader from 'react-loader-spinner';
 
 class  DirectDeposit extends React.Component {
 
@@ -15,12 +15,18 @@ class  DirectDeposit extends React.Component {
             _bitAddress : "",
             _Amount : "" ,
             _hashCode :"",
-            _transactionPassword : ""
+            _transactionPassword : "",
+            Loading : false,
+            Loading_btn : false
         }
     }
 
     componentDidMount(){
         
+        this.setState({
+            Loading : true
+        })
+
         Axios.get('/api/Admin/getNews')
         .then(res => {
             console.log(res.data);
@@ -28,9 +34,14 @@ class  DirectDeposit extends React.Component {
                 console.log(res.data.news);
                 this.setState({ 
                     QrImage : res.data.news[0].QRimage[0].img,
-                    _bitAddress : res.data.news[0].QRimage[0].btcAddress
+                    _bitAddress : res.data.news[0].QRimage[0].btcAddress,
+                    Loading: false
                 })
                 console.log(this.state.currentNews);
+            }else{
+                this.setState({
+                    Loading: false
+                })
             }
         })
         
@@ -46,38 +57,75 @@ class  DirectDeposit extends React.Component {
 
     handleFormSubmit = (e) => {
 
+        this.setState({
+            Loading_btn : true
+        })
+
         e.preventDefault()
 
-        Axios.post('/api/users/SubmitDeposit',{
+        try{
 
-            amount : e.target._Amount.value,
-            sendtobtcaddress : e.target._bitAddress.value,
-            hashcode : e.target._hashCode.value,
-            userid : this.userdata.userId,
-            name : this.userdata.firstName+" "+ this.userdata.lastName,
-            transactionPassword : e.target._transactionPassword.value,
-            
-        }).then(res => {
-            if(parseInt(res.data.status) === parseInt(1))
-            {
-                    this.setState({
+                        Axios.post('/api/users/SubmitDeposit',{
 
-                        _Amount : "" ,
-                        _hashCode :"",
-                        _transactionPassword : ""
-                        
+                            amount : e.target._Amount.value,
+                            sendtobtcaddress : e.target._bitAddress.value,
+                            hashcode : e.target._hashCode.value,
+                            userid : this.userdata.userId,
+                            name : this.userdata.firstName+" "+ this.userdata.lastName,
+                            transactionPassword : e.target._transactionPassword.value,
+                            
+                        }).then(res => {
+                            if(parseInt(res.data.status) === parseInt(1))
+                            {
+                                    this.setState({
 
-                    })
+                                        _Amount : "" ,
+                                        _hashCode :"",
+                                        _transactionPassword : "",
+                                        Loading_btn: false
+
+                                    })
+                                    document.getElementById('Msg_disp').innerHTML = "Update Successful"
+                            }
+                            else
+                            {
+                                    document.getElementById('Msg_disp').innerHTML = "Wrong Password !!"
+                                    this.setState({
+                                        Loading_btn : false
+                                    })
+                            }
+                        }).catch(err => {
+
+                                    this.setState({
+                                        Loading_btn : false
+                                    })
+
+                        })
             }
-            else
+            catch(err)
             {
-                   document.getElementById('Msg_disp').innerHTML = "Update Successful"
+                        this.setState({
+                            Loading_btn : false
+                        })
             }
-        })
 
     }
 
     render(){
+
+        if(this.state.Loading)
+        {
+            return(
+                <div style={{margin:"0px",padding:"0px",backgroundColor:"#fff",height:"100%",width:"100%",display:"flex",justifyContent:"center",alignItems:"center"}}>
+                     
+                     <Loader type="ThreeDots" color="#00BFFF" height={80} width={80} />
+      
+                </div>
+              )
+
+        }
+        else
+        {
         return(
             <div style={{margin:"0px",padding:"2% 5%"}}>
                 <div className="Send_Fund_Container_deposit">
@@ -97,7 +145,9 @@ class  DirectDeposit extends React.Component {
                                            <Grid item xs={12} >
 
                                                 <label>Amount :</label>
-                                                <input type="text" name="_Amount" 
+                                                <input type="text" 
+                                                pattern="[0-9]+"
+                                                name="_Amount" 
                                                 required
                                                 value={this.state._Amount}
                                                 onChange={(e) => this.handleChange(e)}
@@ -125,6 +175,7 @@ class  DirectDeposit extends React.Component {
                                                 <label>Transaction Password :</label>
                                                 <input type="password" name="_transactionPassword"
                                                 required 
+                                                pattern="[^' ']+"
                                                 value={this.state._transactionPassword}
                                                 onChange={(e) => this.handleChange(e)}
                                                 className="form-control"></input>
@@ -132,7 +183,9 @@ class  DirectDeposit extends React.Component {
                                             </Grid>
                                             <div className="Send_Fund_body_Total_deposit">
     
-                                                <button type="submit" className="btn btn-success" >Deposit</button>
+                                                <button type="submit" disabled={this.state.Loading_btn} className="btn btn-success" >
+                                                {this.state.Loading_btn ? (<div> <Loader type="ThreeDots" color="#FFF" height={15} width={15} /></div>) : "Deposit"}
+                                                </button>
                                             </div>
                                         </form>    
                                 </div>
@@ -146,6 +199,7 @@ class  DirectDeposit extends React.Component {
             </div>
           
           )
+        }
     }
 }
 

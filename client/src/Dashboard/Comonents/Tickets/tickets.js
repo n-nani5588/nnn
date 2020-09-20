@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import './tickets.css';
+import Loader from 'react-loader-spinner';
 
 class Tickets extends React.Component{
 
@@ -11,8 +12,8 @@ class Tickets extends React.Component{
 
             _userid : this.userdata.userId,
             _Sub : "",
-            _msg  : ""
-
+            _msg  : "",
+            Loading : false
         }
     }
 
@@ -26,6 +27,12 @@ class Tickets extends React.Component{
 
     handleSubmit = (e)=> {
         e.preventDefault();
+        this.setState({
+            Loading : true
+        })
+      
+    try{    
+
         axios.post('/api/users/CreateTickets',{
             userid:  e.target._userid.value,
             msg_id:  1,
@@ -34,17 +41,33 @@ class Tickets extends React.Component{
         })
         .then(res => {   console.log(res.data);
 
-            if(parseInt(res.data.status) === parseInt(1)){
-                this.setState({
-                    _Sub : "",
-                    _msg  : ""
-                })
-                document.getElementById('Update_Msg').innerHTML = "Ticket created Successfully !"
-            }else{
-                document.getElementById('Update_Msg').innerHTML = "Sorry Sothing Went Wrong"
-            }
+                if(parseInt(res.data.status) === parseInt(1)){
+                    this.setState({
+                        _Sub : "",
+                        _msg  : "",
+                        Loading: false
+                    })
+                    document.getElementById('Update_Msg').innerHTML = "Ticket created Successfully !"
+                }else{
+                    document.getElementById('Update_Msg').innerHTML = "Sorry Sothing Went Wrong"
+                    this.setState({
+                        Loading: false
+                    })
+                }
             
+        }).catch(err =>{ 
+            this.setState({
+                Loading: false
+            })
         })
+    }
+    catch(err)
+    {
+          console.log(" ");
+          this.setState({
+            Loading: false
+        })
+    }
     }
 
     render(){
@@ -96,8 +119,9 @@ class Tickets extends React.Component{
                                 <button
                                 type="submit"
                                 className="btn btn-primary"
+                                disabled={this.state.Loading}
                                 >
-                                    Raise Ticket
+                                   {this.state.Loading ? (<div> <Loader type="ThreeDots" color="#FFF" height={30} width={30} /></div>) : "Raise Tiket"}  
                                 </button>
 
                         </div>

@@ -18,8 +18,8 @@ import Bussiness_plan from './Bussiness_Plan/bussiness_plan'
 import { connect } from 'react-redux';
 import Admin from './Admin/index';
 import axios from 'axios';
-
-
+import ErrorBoundry from './component/ErrorBoundary';
+import NavbarPage from './component/newNav';
 class App extends React.Component {
 
   constructor(){
@@ -27,6 +27,7 @@ class App extends React.Component {
     this.state ={
       render: <Home></Home>,
       login:"",
+      toggle: false
     }
   }
 
@@ -43,7 +44,7 @@ class App extends React.Component {
           login: true,
           render: <DashboardMain data={userdata}></DashboardMain>,
       })
-   
+      
 
    }
    else
@@ -54,6 +55,12 @@ class App extends React.Component {
    }
   
    
+ }
+
+ handleNav = () => {
+
+   document.getElementById("basicExampleNav").style.display = !this.state.toggle? "block" : "none"
+    this.setState({ toggle: !this.state.toggle })
  }
 
  componentWillUnmount(){
@@ -68,7 +75,9 @@ class App extends React.Component {
   
   render(){
       return (
+
         <div style={{margin:"0px",padding:"0px",backgroundColor:"white"}}>
+
          {/* Header Div */}
          {/* {!this.props._login && <div>  */}
         {/* <Router>
@@ -83,18 +92,34 @@ class App extends React.Component {
            </div>  
      </Router>  */}
       {/*  </div> } */}
-        {!this.state.login && <Navbar 
+        {/* {!this.state.login && <Navbar 
             onClick1={(e) =>  this.setState({ render: <Home></Home>})}
             onClick2={(e) => this.setState({ render: <About></About>})}
             onClick3={(e) => this.setState({ render: <Bussiness_plan></Bussiness_plan>})}
             Signup={ <Signup ></Signup>}
             Login={ <Login ></Login>}
          
-            ></Navbar>}
+        ></Navbar>} */}
+         {!this.state.login &&    <NavbarPage 
+            onClick1={(e) =>  this.setState({ render: <Home></Home>})}
+            onClick2={(e) => this.setState({ render: <About></About>})}
+            onClick3={(e) => this.setState({ render: <Bussiness_plan></Bussiness_plan>})}
+            Signup={ <Signup ></Signup>}
+            Login={ <Login ></Login>}
+         ></NavbarPage> }
+
+            {/* ========================================================================== */}
+
+            {/* =========================================================================== */}
+
+          <ErrorBoundry>
+        {!this.state.login &&   <div style={{width:"100%",marginTop:"6%"}}></div> }
             {this.state.render}
-    
+          </ErrorBoundry>
          {/* {this.props._login && <div> <Dashboard></Dashboard></div> }  */}
           {/* // <Dashboard></Dashboard> */}
+          
+
         </div>
       
       );

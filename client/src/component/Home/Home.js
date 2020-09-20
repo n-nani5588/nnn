@@ -9,9 +9,15 @@ import Divider from '@material-ui/core/Divider';
 import './home.css';
 
 export default class Home extends React.Component{
+
+   
     render(){
-        return(
-            <div>
+
+      
+       return(
+            
+            <div >
+                
              <Grid conatiner>
                {/* <Grid item>
                    
@@ -37,8 +43,10 @@ export default class Home extends React.Component{
                  </div>
                   
                 </Grid>
+
+                <Divider></Divider>
                 
-                <Grid container iteam >
+                {/* <Grid container iteam >
                     <div className="body">
                          <div style={{display:"flex",width:"100%",flexDirection:"row",justifyContent:"space-evenly",flexWrap:"wrap"}}>   
                         <div className="blog-post">
@@ -114,7 +122,7 @@ export default class Home extends React.Component{
                         </div>
                         
                     </div>
-                </Grid> 
+                </Grid>  */}
 
                 <Grid item>
                     {/* Displays  Values component */}

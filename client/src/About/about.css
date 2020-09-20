@@ -1,5 +1,6 @@
 .background_img {
     background-image: url('./Bgimg1.jpg');
+    background-color: #006B94;
     display: flex;
     flex-direction: column;
     justify-content: center;

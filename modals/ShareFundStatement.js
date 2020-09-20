@@ -6,7 +6,6 @@ const FundSharingSchema = new newSchema({
     userId:{
         type: String,
         required: true,
-        unique:true
     },
     mailId:{
         type:String,

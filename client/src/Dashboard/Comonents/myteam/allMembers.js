@@ -110,44 +110,94 @@ class AllMembers extends React.Component {
       l8: [],
       l9: [],
       l10: [],
+      Loading: false
     }
      
   }
 
   async componentDidMount(){
 
+    this.setState({
+      Loading : true
+    })
+
     const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
     const row = data.rows;
   
            console.log(row);
   
-      if(row.length === 0){
-      await Axios.post('/api/users/All_Members',{userid: userdata.userId})
-      .then(res => {
-        console.log(res.data.levels);
-        if(parseInt(res.data.status) === 1){
+     try{
+                  await Axios.post('/api/users/All_Members',{userid: userdata.userId})
+                  .then(res => {
+                    console.log(res.data.levels);
+                                if(parseInt(res.data.status) === parseInt(1)){
 
-          this.setState({
-            l1:  res.data.levels[0],
-            l2:  res.data.levels[1],
-            l3:  res.data.levels[2],
-            l4:  res.data.levels[3],
-            l5:  res.data.levels[4],
-            l6:  res.data.levels[5],
-            l7:  res.data.levels[6],
-            l8:  res.data.levels[7],
-            l9:  res.data.levels[8],
-            l10: res.data.levels[9]
-          })
-          
+                                      this.setState({
+                                        l1:  res.data.levels[0],
+                                        l2:  res.data.levels[1],
+                                        l3:  res.data.levels[2],
+                                        l4:  res.data.levels[3],
+                                        l5:  res.data.levels[4],
+                                        l6:  res.data.levels[5],
+                                        l7:  res.data.levels[6],
+                                        l8:  res.data.levels[7],
+                                        l9:  res.data.levels[8],
+                                        l10: res.data.levels[9],
+                                        Loading : false
+                                      })
+                                  
+                                }
+                                else
+                                {
+                                      this.setState({
+                                        l1:  [],
+                                        l2:  [],
+                                        l3:  [],
+                                        l4:  [],
+                                        l5:  [],
+                                        l6:  [],
+                                        l7:  [],
+                                        l8:  [],
+                                        l9:  [],
+                                        l10: [],
+                                        Loading : false
+                                      })
+                                }
+                    
+                  }).catch(err => {
+                           console.log(" ");
+                           this.setState({
+                            l1:  [],
+                            l2:  [],
+                            l3:  [],
+                            l4:  [],
+                            l5:  [],
+                            l6:  [],
+                            l7:  [],
+                            l8:  [],
+                            l9:  [],
+                            l10: [],
+                            Loading : false
+                          })
+                  })
         }
-        
-      })
-    } else{
-      this.setState({
-        data1: data
-      })
-    }
+        catch(err)
+        {
+              console.log(" ");
+              this.setState({
+                l1:  [],
+                l2:  [],
+                l3:  [],
+                l4:  [],
+                l5:  [],
+                l6:  [],
+                l7:  [],
+                l8:  [],
+                l9:  [],
+                l10: [],
+                Loading : false
+              })
+        }
 
 }
 
@@ -186,9 +236,9 @@ createTable = (members)=> {
                  width:"100%",
                  borderBottom:"1px solid #ccc"}}>
 
-               <MDBDropdown dropright  size="sm">
-                  <MDBDropdownToggle caret color="primary">
-                    Select Level
+               <MDBDropdown dropright disabled={this.state.Loading} size="sm">
+                  <MDBDropdownToggle disabled={this.state.Loading} caret color="primary">
+                    {this.state.Loading ? "Loading..." : "Select Level"}
                   </MDBDropdownToggle>
                   <MDBDropdownMenu basic>
                   <MDBDropdownItem header>LEVEL's</MDBDropdownItem>

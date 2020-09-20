@@ -55,7 +55,7 @@ const classes = makeStyles((theme) => ({
         field: 'sendto',
       },
       {
-        label: 'Recieved from',
+        label: 'Received from',
         field: 'recfrom',
       },
       {
@@ -63,7 +63,7 @@ const classes = makeStyles((theme) => ({
         field: 'Name',
       },
       {
-        label: 'Mail',
+        label: 'Email',
         field: 'Mail',
       },
       {
@@ -86,7 +86,7 @@ class FundStatement extends React.Component{
     super();
     this.state={
       data1:{},
-
+      Loading : false
     }
      
   }
@@ -94,34 +94,47 @@ class FundStatement extends React.Component{
 
   async componentDidMount(){
 
+    this.setState({
+      Loading : true
+    })
+
     const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
     const row = data.rows;
 
     console.log(row);
 
-    if(row.length === 0){
-      await Axios.post('/api/users/Fund_Statement',{userid: userdata.userId})
-      .then(res => {
-        console.log(res.data.users);
-        if(parseInt(res.data.status) === parseInt(1)){
-          this.createTable(res.data.users);
-            console.log(data);
-            this.setState({data1:data})
-        }
-        
-      })
-    } else{
-      this.setState({
-        data1: data
-      })
-    }
+    try{
+              await Axios.post('/api/users/Fund_Statement',{userid: userdata.userId})
+              .then(res => {
 
+                      console.log(res.data.users);
+                      if(parseInt(res.data.status) === parseInt(1)){
+                        this.createTable(res.data.users);
+                          console.log(data);
+                          this.setState({data1:data ,Loading : false})
+                      }
+                      else
+                      {
+                        this.setState({data1:data ,Loading : false})
+                      }
+                      
+              }).catch(err =>{
+
+                   this.setState({data1:data ,Loading : false})
+
+              })
+      }
+      catch(err)
+      {
+           console.log(" ");
+           this.setState({data1:data ,Loading : false})
+      }    
 }
 
 createTable= (members)=> {
   let i = 0;
- 
-members.map(Direct => {
+  data.rows=[];
+     members.map(Direct => {
         i++
         const obj = {
           Sno: i,
@@ -132,15 +145,11 @@ members.map(Direct => {
           Mail: Direct.mailId,
           Date: new Date(Direct.joiningDate).toLocaleDateString(),
           Amount: Direct.Amount.$numberDecimal
-        }
+      }
 
          data.rows.push(obj)
 } )
 
-}
-
-componentWillUnmount(){
-  data.rows=[];
 }
 
     render()
@@ -157,20 +166,36 @@ componentWillUnmount(){
                                         <div style={{padding:"3%"}}>
                                         <React.Fragment>
                                 
+                        {this.state.Loading ? 
                         
-                                            <MDBDataTable
-                                            striped
-                                            bordered
-                                            sortable={false}
-                                            theadColor="#fff"
-                                            entries={7}
-                                            small
-                                            noBottomColumns
-                                            responsiveSm
-                                            responsiveMd
-                                            
-                                            data={this.state.data1}
-                                            />
+                       (<div style={
+                         {
+                          width:"100%",
+                          display: "flex",
+                          justifyContent:"center",
+                          alignItems:"center",
+                          padding: "2% 0%"
+                         }
+                       }>
+                          Loading...
+                       </div>)
+                       :
+                              <MDBDataTable
+                              striped
+                              bordered
+                              sortable={false}
+                              theadColor="#fff"
+                              entries={7}
+                              small
+                              noBottomColumns
+                              responsiveSm
+                              responsiveMd
+                              
+                              data={this.state.data1}
+                              />
+                       
+                       }
+                                           
                                             {/* <div className={classes.seeMore}>
                                             
                                                 <Link color="primary" href="#" >

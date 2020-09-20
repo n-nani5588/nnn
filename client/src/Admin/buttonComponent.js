@@ -11,7 +11,9 @@ export default class BtnComponent extends React.Component{
     render(){
         return(
             <div>
-                <button onClick={() => this.props.onclick(this.props.data)}>Done</button>
+                <button disabled={this.props.loading} onClick={() => this.props.onclick(this.props.data)}>
+                   {this.props.loading ? "loading" : "Donr"} 
+                    </button>
             </div>
         )
     }

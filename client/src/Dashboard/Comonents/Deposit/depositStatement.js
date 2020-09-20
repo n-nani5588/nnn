@@ -41,7 +41,7 @@ const classes = makeStyles((theme) => ({
     );
   }
   
-  const data = {
+  let data = {
     columns: [
       {
         label: 'Sno',
@@ -87,25 +87,36 @@ class DepositStatement extends React.Component{
       super();
       this.userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
       this.state = {
-        data1: ""
+        data1: "",
+        Loading: false,
       }
     }
 
     componentDidMount(){
 
+      this.setState({
+        Loading: true
+      })
 
-        axios.get( `/api/users/DepositStatment/${this.userdata.userId}`)
-        .then(res => {
-          if(parseInt(res.data.status) === parseInt(1))
-          {
-              this.createTable(res.data.statements)
-          }
-          else
-          {
-              this.setState({data1 : data })
-          }
-        })
-
+     try{
+              axios.get( `/api/users/DepositStatment/${this.userdata.userId}`)
+              .then(res => {
+                if(parseInt(res.data.status) === parseInt(1))
+                {
+                    this.createTable(res.data.statements)
+                }
+                else
+                {
+                    this.setState({data1 : data ,Loading: false})
+                }
+              }).catch(err => {
+                    this.setState({data1 : data ,Loading: false})
+              })
+        }
+        catch(err)
+        {
+               this.setState({data1 : data ,Loading: false})
+        }
     }
 
     createTable = (members) => {
@@ -120,7 +131,7 @@ class DepositStatement extends React.Component{
                 Sno : i,
                 amount : Direct.Amount,
                 name: Direct.Name,
-                date: Direct.date,
+                date: new Date(Direct.date).toLocaleDateString(),
                 send : Direct.SentBTCaddress,
                 hash : Direct.HashCode,
                 userid: Direct.userId,
@@ -133,7 +144,8 @@ class DepositStatement extends React.Component{
       })}
 
       this.setState({
-        data1 : data
+        data1 : data,
+        Loading : false
       })
 
     }
@@ -152,20 +164,37 @@ class DepositStatement extends React.Component{
                                         <div style={{padding:"3%"}}>
                                         <React.Fragment>
                                 
+                        {this.state.Loading ? 
+
+                        (<div style={{
+                          width:"100%",
+                          display: "flex",
+                          justifyContent:"center",
+                          alignItems:"center",
+                          padding: "2% 0%",
+  
+                        }}>
+                          Loading...
+                        </div>)
                         
-                                            <MDBDataTable
-                                            striped
-                                            bordered
-                                            sortable={false}
-                                            theadColor="#fff"
-                                            entries={7}
-                                            small
-                                            noBottomColumns
-                                            responsiveSm
-                                            responsiveMd
+                      
+                      :
+                            <MDBDataTable
+                            striped
+                            bordered
+                            sortable={false}
+                            theadColor="#fff"
+                            entries={7}
+                            small
+                            noBottomColumns
+                            responsiveSm
+                            responsiveMd
+                            
+                            data={this.state.data1}
+                            />
+                      
+                      }
                                             
-                                            data={this.state.data1}
-                                            />
                                             {/* <div className={classes.seeMore}>
                                             
                                                 <Link color="primary" href="#" >

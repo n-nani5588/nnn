@@ -2,6 +2,7 @@ import React from 'react';
 import Login from './login';
 import Home from './home';
 import './admin.css'
+import ErrorBoundary from '../component/ErrorBoundary';
 
 class Admin extends React.Component {
 
@@ -48,9 +49,9 @@ class Admin extends React.Component {
         return(
             <div className="Main_div">
 
-               
+        <ErrorBoundary> 
                {this.state.Display}
-              
+        </ErrorBoundary>  
 
             </div>
         )

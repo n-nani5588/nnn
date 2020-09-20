@@ -22,91 +22,121 @@ export default class Generatepin extends React.Component{
             recieve:"",
             pinbalance:"",
             bitaddress:"",
+            Load_G_pin : false,
+            Loading: false,
         }
     }
 
     handleGeneratepin = () =>{
-            const key =short.generate()
+            const key =short.uuid()
         this.setState({
             Generatedpin: key
         })
 
     }
 
-    handleSendpin =async ()=>{
+        handleSendpin =async ()=>{
 
-        const pin1 = this.state.Generatedpin;
-        const id = this.state.id
+                this.setState({ Loading: true })
 
-        await axios.post('/api/Admin/sendPinToUser',{
-            _id: id,
-            pin: pin1
-        }).then(res => {
+                const pin1 = this.state.Generatedpin; 
+                const id = this.state.id
+        try{
+                await axios.post('/api/Admin/sendPinToUser',{
+                    _id: id,
+                    pin: pin1
+                }).then(res => {
 
-            if( parseInt(res.data.status) === parseInt(1)){
-                this.setState({
-                    Generatedpin:"",
-                    userid:"",
-                    id:"",
-                    active:"",
-                    pin:"",
-                    fname:"",
-                    lname:"",
-                    country:"",
-                    mailid:"",
-                    fund:"",
-                    recieve:"",
-                    level:"",
-                    recieve:"",
-                    pinbalance:"",
-                    bitaddress:"",
+                    if( parseInt(res.data.status) === parseInt(1)){
+                        this.setState({
+                            Generatedpin:"",
+                            userid:"",
+                            id:"",
+                            active:"",
+                            pin:"",
+                            fname:"",
+                            lname:"",
+                            country:"",
+                            mailid:"",
+                            fund:"",
+                            recieve:"",
+                            level:"",
+                            recieve:"",
+                            pinbalance:"",
+                            bitaddress:"",
+                            Loading: false
+                        })
+                        document.getElementById('UP_MSG').innerHTML = "Update Successful !"
+                    }else{
+                        document.getElementById('UP_MSG').innerHTML = " Something went wrong !"
+                        this.setState({ Loading : false })
+                    }
+
+                }).catch(err => {
+                    this.setState({ Loading : false })
                 })
-                document.getElementById('UP_MSG').innerHTML = "Update Successful !"
-            }else{
-                document.getElementById('UP_MSG').innerHTML = " Something went wrong !"
 
             }
+            catch(err)
+            {
+                this.setState({ Loading : false})
+            }
 
-        })
-
-    }
+        }
 
     getUserDetails = async (e) => {
 
-        console.log(e.target.value);
-
-        e.preventDefault()
-
-       await axios.get(`/api/Admin/getUserForPin/${e.target.USRID.value}`)
-        .then(res => {
-            console.log(res.data);
-            if(parseInt(res.data.status) === parseInt(1)){
-
-                this.setState({
-                    userid:res.data.user.userid,
-                    id:res.data.user._id,
-                    active: res.data.user.Active,
-                    pin: res.data.user.availablePins,
-                    fname: res.data.user.firstName,
-                    lname: res.data.user.lastName,
-                    country: res.data.user.country,
-                    mailid: res.data.user.mailId,
-                    fund: res.data.user.fundSharingIncome.$numberDecimal,
-                    autoPool: res.data.user.autoPoolIncome.$numberDecimal,
-                    level: res.data.user.levelIncome.$numberDecimal,
-                    recieve: res.data.user.recievedIncome.$numberDecimal,
-                    pinbalance: res.data.user.pinBalance.$numberDecimal,
-                    bitaddress: res.data.user.bitAddress,
-                    date: res.data.user.joiningDate,
-                    referedby: res.data.user.referedBy,
-                })
-            }
-            else{
-                document.getElementById('UP_MSG').innerHTML = "User Not Found!"
-            }
-           
+        this.setState({
+            Load_G_pin : true
         })
+try{
+               console.log(e.target.value);
 
+               e.preventDefault()
+
+                await axios.get(`/api/Admin/getUserForPin/${e.target.USRID.value}`)
+                    .then(res => {
+                                console.log(res.data);
+                                if(parseInt(res.data.status) === parseInt(1)){
+
+                                    this.setState({
+                                        userid:res.data.user.userId,
+                                        id:res.data.user._id,
+                                        active: res.data.user.Active,
+                                        pin: res.data.user.availablePins,
+                                        fname: res.data.user.firstName,
+                                        lname: res.data.user.lastName,
+                                        country: res.data.user.country,
+                                        mailid: res.data.user.mailId,
+                                        fund: res.data.user.fundSharingIncome.$numberDecimal,
+                                        autoPool: res.data.user.autoPoolIncome.$numberDecimal,
+                                        level: res.data.user.levelIncome.$numberDecimal,
+                                        recieve: res.data.user.recievedIncome.$numberDecimal,
+                                        pinbalance: res.data.user.pinBalance.$numberDecimal,
+                                        bitaddress: res.data.user.bitAddress,
+                                        date: res.data.user.joiningDate,
+                                        referedby: res.data.user.referedBy,
+                                        Load_G_pin: false
+                                    })
+                                }
+                                else{
+                                            document.getElementById('UP_MSG').innerHTML = "User Not Found!"
+                                            this.setState({
+                                                Load_G_pin: false
+                                            })
+                                }
+           
+                 }).catch(err => {
+                            this.setState({
+                                Load_G_pin : false
+                            })
+                 })
+   
+    }
+    catch(err)
+    {
+        console.log(" ");
+    }
     }
 
     render(){
@@ -117,7 +147,7 @@ export default class Generatepin extends React.Component{
             <div>
                 <div >
                     Generate pin :
-                    <input readOnly name="Generated_Pin" size="30" value={this.state.Generatedpin}></input>
+                    <input readOnly name="Generated_Pin" size="40" value={this.state.Generatedpin}></input>
                 </div> 
 
                 {/* Error Msg */}
@@ -132,7 +162,7 @@ export default class Generatepin extends React.Component{
                     className="btn btn-primary"
                     onClick={() => this.handleGeneratepin()}
                     >
-                        Generate Pin
+                        generate pin
                     </button>
 
                 </div>
@@ -153,9 +183,10 @@ export default class Generatepin extends React.Component{
                         <button 
                         className="btn btn-primary"
                         type="submit"
+                        disabled={this.state.Load_G_pin}
                         >
 
-                            Get user details
+                            {this.state.Load_G_pin ? "Loading" :"Get user details"}
 
                         </button>
 
@@ -219,8 +250,9 @@ export default class Generatepin extends React.Component{
                  <button
                  className="btn btn-primary"
                  onClick={()=> this.handleSendpin()}
+                 disabled={this.state.Loading}
                  >
-                     send pin
+                     {this.state.Loading ? "Loading..." : "send pin"}
                  </button>
 
              </div>

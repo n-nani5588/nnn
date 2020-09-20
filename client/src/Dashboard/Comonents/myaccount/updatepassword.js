@@ -49,12 +49,36 @@ class UpdatePassword extends React.Component {
         value: "",
         valid: false
       },
+      Loading : false,
       
     }
 
   }
-  changeHandler = event => {
-    this.setState({ [event.target.name]: { value: event.target.value, valid: !!event.target.value } });
+
+  changeHandler = e => {
+   
+    this.setState({
+      [e.target.name]:{ value : e.target.value , valid : !!e.target.value }
+    })
+
+    // const eed = e.target.value.toString()
+    // const vsd = this.state.confirm.value.toString()
+
+    // if( eed === vsd){
+
+    //   document.getElementById('emailHelp').innerHTML = "password matched";
+    //   this.setState({confirm:{valid:true}})
+
+    // }
+    // else
+    // {
+
+    //   document.getElementById('emailHelp').innerHTML = "password not matched";
+    //   this.setState({confirm:{valid:false}})
+
+    // }
+
+
   };
 
   handleViewPassword = () => {
@@ -66,35 +90,76 @@ class UpdatePassword extends React.Component {
   handleSubmit = (e) => {
     
     e.preventDefault();
+    this.setState({ Loading : true})
     
     if((e.target.newPassword.value).toString() === (e.target.confirm.value).toString()){
+
+      try{
      
-        axios.post('/api/users/changePassword',{
-          id: this.state.id,
-          newPassword: this.state.newPassword.value,
-          oldPassword: this.state.oldPassword.value 
-        }).then(res => {
-          if(parseInt(res.data.status) === 1){
-           const msg=  document.getElementById('Update_Msg');
-           msg.innerHTML = "Update Succesfull !"
-           msg.style.display = "block"
-            interval = setTimeout(() => {
-              msg.style.display = "none"
-            }, 3000);
+                axios.post('/api/users/changePassword',{
+                  id: this.state.id,
+                  newPassword: this.state.newPassword.value,
+                  oldPassword: this.state.oldPassword.value 
+                }).then(res => 
+                  {
+                  if(parseInt(res.data.status) === parseInt(1)){
+                    
+                    const msg=  document.getElementById('Update_Msg');
+
+                    this.setState({
+                      oldPassword: {
+                        value: "",
+                        valid: false
+                      },
+                      newPassword: {
+                        value: "",
+                        valid: false
+                      },
+                      confirm: {
+                        value: "",
+                        valid: false
+                      },
+                      Loading : false,
+                    })
+                    document.getElementById('emailHelp').innerHTML = " ";
+                      msg.innerHTML = "Update Succesfull !"
+                      msg.style.display = "block"
+                        interval = setTimeout(() => {
+                          msg.style.display = "none"
+                        }, 3000);
 
 
-          }else{
-            const msg=  document.getElementById('Update_Msg');
-            msg.innerHTML = "Wrong password Entered !"
-            msg.style.display = "block"
-             interval = setTimeout(() => {
-               msg.style.display = "none"
-             }, 3000);
+                  }else{
+                    const msg=  document.getElementById('Update_Msg');
+                    
+                    this.setState({
+                    
+                      Loading : false,
+                    })
+
+                    msg.innerHTML = "Wrong password Entered !"
+                    msg.style.display = "block"
+                    interval = setTimeout(() => {
+                      msg.style.display = "none"
+                    }, 3000);
+                  }
+               
+                }) .catch(res => {
+                      console.log(" ");
+                })
+                
           }
-        })
+          catch(err)
+          {
+            console.log(" ");
+          }
            
     }else{
           document.getElementById('emailHelp').innerHTML = "password not matched";
+          this.setState({
+            Loading : false,
+            confirm: {valid: false}
+          })
     }
 
   }
@@ -104,6 +169,9 @@ class UpdatePassword extends React.Component {
   }
 
 handleConfirm = (e) => {
+  
+  this.setState({ [e.target.name]: { value: e.target.value, valid: !!e.target.value } });
+
   if(e.target.value.toString() === this.state.newPassword.value.toString()){
     document.getElementById('emailHelp').innerHTML = "password matched";
     this.setState({confirm:{valid:true}})
@@ -111,7 +179,11 @@ handleConfirm = (e) => {
     document.getElementById('emailHelp').innerHTML = "password not matched";
     this.setState({confirm:{valid:false}})
   }
+
 }
+
+
+
     render(){
       return(
         <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",backgroundColor:"#fffff",color:"white",textTransform:"uppercase"}}>
@@ -155,11 +227,12 @@ handleConfirm = (e) => {
               <input
                 value={this.state.oldPassword.value}
                 className={this.state.oldPassword.valid ? "form-control is-valid" : "form-control is-invalid"}
+                pattern="[^' ']+"
                 name="oldPassword"
-                onChange={this.changeHandler}
+                onChange={(e) => this.setState({  oldPassword: { value: e.target.value, valid: !!e.target.value } })} 
                 type={this.state.viewpass?"text":"password"}
                 id="defaultFormRegisterNameEx"
-                placeholder="Enter old password"
+                placeholder="ENTER OLD PASSWORD"
                 required
               />
               <div className="valid-feedback">Looks good!</div>
@@ -171,14 +244,16 @@ handleConfirm = (e) => {
               >
                 New Password
               </label>
+
               <input
                 value={this.state.newPassword.value}
                 className={this.state.newPassword.valid ? "form-control is-valid" : "form-control is-invalid"}
+                pattern="[^' ']+"
                 name="newPassword"
-                onChange={this.changeHandler}
+                onChange={(e) => this.changeHandler(e)}
                 type={this.state.viewpass?"text":"password"}
                 id="defaultFormRegisterEmailEx2"
-                placeholder="new password"
+                placeholder="NEW PASSWORD"
                 required
               />
               <div className="valid-feedback">Looks good!</div>
@@ -194,13 +269,14 @@ handleConfirm = (e) => {
              
        
               <input
-                
+                 value={this.state.confirm.value}
                 className={this.state.confirm.valid ? "form-control is-valid" : "form-control is-invalid"}
                 onChange={(e) => this.handleConfirm(e)}
+                pattern="[^' ']+"
                 type={this.state.viewpass?"text":"password"}
                 id="defaultFormRegisterConfirmEx3"
                 name="confirm"
-                placeholder="confirm password"
+                placeholder="CONFIRM PASSWORD"
               />
               <small id="emailHelp"  className="form-text text-muted">
               
@@ -219,8 +295,12 @@ handleConfirm = (e) => {
             </button>
             </div>
         
-          <MDBBtn color="primary" type="submit">
-            Update
+          <MDBBtn color="primary" disabled={this.state.Loading} type="submit">
+          {this.state.Loading ? (
+            <div>
+                Loading...
+            </div>
+            ) : "update" } 
           </MDBBtn>
         </form>
 
@@ -232,9 +312,7 @@ handleConfirm = (e) => {
             </Grid>
 
 
-            <Box pt={4}>
-              <Copyright />
-            </Box>
+         
             
           </Container>
          

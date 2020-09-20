@@ -24,7 +24,7 @@ class Home extends React.Component{
         return( 
             <div>
                  <div style={{width:"100%",display:"block"}}>
-                        <button className="btn btn-primary btn-small" onClick={() => this.props.logout()}>Logout</button>
+                        <button type="button" className="btn btn-primary btn-small" onClick={() => this.props.logout()}>Logout</button>
                 </div>
             <div className="Home_Main_div">
 

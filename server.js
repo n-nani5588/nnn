@@ -10,6 +10,7 @@ const statementRoute = require('./routes/api/statementRoute');
 
 //parser
 app.use(express.json());
+// app.use(cors)
 
 //DB Config
 //const db = require('./config/Keys').mongoUri;

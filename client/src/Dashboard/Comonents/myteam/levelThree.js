@@ -56,7 +56,7 @@ const classes = makeStyles((theme) => ({
         
       },
       {
-        label: 'Mail',
+        label: 'Email',
         field: 'Mail',
         
       },
@@ -80,7 +80,7 @@ class LevelThree extends React.Component {
         super();
         this.state={
           data1:{},
-    
+          Loading : false
         }
          
       }
@@ -88,36 +88,65 @@ class LevelThree extends React.Component {
 
       async componentDidMount(){
 
+        this.setState({
+          Loading : true
+        })
+
         const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
         console.log(this.props.data);
-        
-        if(this.props.data.length > 0){
-          await Axios.post('/api/users/getLevelArrayDetails',
-          {
-              useridsArray: this.props.data
-          })
-          .then(res => {
-            console.log(res.data.users);
+      try{  
+                  if(this.props.data.length > 0){
 
-           if(parseInt(res.data.status) === 1)
-           {
-             this.createTable(res.data.users);
-               console.log(data);
-              
-           }
-           
-         })
-       } 
-       else
-       {
-         this.setState({
-           data1: data
-         })
-       }
+                                await Axios.post('/api/users/getLevelArrayDetails',
+                                {
+                                    useridsArray: this.props.data
+                                })
+                                .then(res => {
+                                  console.log(res.data.users);
+
+                                          if(parseInt(res.data.status) === parseInt(1))
+                                          {
+                                            this.createTable(res.data.users);
+                                              console.log(data);
+                                              
+                                          }
+                                          else
+                                          {
+                                                  this.setState({
+                                                    data1: data,
+                                                    Loading: false
+                                                  })
+                                          }
+                                
+                              }).catch(err => {
+                                        console.log(" ");
+                                        this.setState({
+                                          data1: data,
+                                          Loading: false
+                                        })
+                              })
+                } 
+                else
+                {
+                          this.setState({
+                            data1: data,
+                            Loading : false
+                          })
+                }
+          }
+          catch(err)
+          {
+                    console.log(" ");
+                    this.setState({
+                      data1: data,
+                      Loading: false
+                    })
+          }
     }
 
     createTable = (members)=> {
       let i = 0;
+      data.rows = [];
       console.log(members);
     {members && members.map(Direct => {
             i++
@@ -133,7 +162,7 @@ class LevelThree extends React.Component {
              data.rows.push(obj);
     } )
     }
-    this.setState({data1:data})
+    this.setState({data1:data , Loading: false})
     }
 
     render(){
@@ -157,6 +186,19 @@ class LevelThree extends React.Component {
                   <React.Fragment>
         
   
+                  {this.state.Loading ? (
+                      <div style={{
+                        width:"100%",
+                        display: "flex",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        padding: "2% 0%",
+
+                      }}>
+                          Loading...
+                      </div>
+                    )
+                  :
                       <MDBDataTable
                       striped
                       bordered
@@ -170,6 +212,8 @@ class LevelThree extends React.Component {
                       
                       data={this.state.data1}
                       />
+                      
+                  }
                       {/* <div className={classes.seeMore}>
                       
                           <Link color="primary" href="#" >

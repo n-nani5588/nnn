@@ -13,7 +13,7 @@ const transport = nodemailer.createTransport({
   }
 });
 
-let number = 333786
+let number = 333785
 
 
 //user model
@@ -59,28 +59,37 @@ router.post('/CreateTickets', (req,res) => {
 
   console.log(req.body);
 
-  const obj = 
-  {
-    msgid: req.body.msg_id,
-    message: req.body.message
-  }
+  try{
+          const obj =   {
+                          msgid: req.body.msg_id,
+                          message: req.body.message
+                        }
 
-  const Ticket = new Tickets({
+          const Ticket = new Tickets({
 
-  userId: req.body.userid,
-  message: obj,
-  Subject: req.body.subject,
-  status: true,
-  usermessage: true,
-  adminmessage: false,
+              userId: req.body.userid,
+              message: obj,
+              Subject: req.body.subject,
+              status: true,
+              usermessage: true,
+              adminmessage: false,
 
-  })
+          })
 
-  Ticket.save()
-  .then(ticket => {
-    if(ticket){res.json({status: 1, ticket})}
-    else{res.json({status: 0})}
-  })
+          Ticket.save()
+          .then(ticket => {
+            if(ticket){res.json({status: 1, ticket})}
+            else{res.json({status: 0})}
+          }).catch(err => {
+            console.log(err.message);
+           res.json({status: 0})
+          })
+
+      }
+      catch(err){
+        console.log(err.message);
+        res.json({status: 0})
+      }
 
 });
 
@@ -91,16 +100,28 @@ router.post('/CreateTickets', (req,res) => {
 router.get('/GetTickets/:id', (req,res) => {
   
   console.log(req.params.id);
-  
-  Tickets.find({userId: req.params.id})
-  .sort({RequestedDate: 1})
-  .then(Tickets => {
-      console.log(Tickets);
-      if(Tickets){
-          res.json({status: 1, Tickets})
-      }else{ res.json({status: 0})}
-  })
+  try{
+          Tickets.find({userId: req.params.id})
+          .sort({RequestedDate: 1})
+          .then(Tickets => {
 
+                  console.log(Tickets);
+                  if(Tickets){
+                      res.json({status: 1, Tickets})
+                  }else{ res.json({status: 0})}
+
+          }).catch(err => {
+
+                console.log(err.message);
+                res.json({status: 0})
+
+          })
+    }
+    catch(err)
+    {
+          console.log(err.message);
+          res.json({status: 0})
+    }
 });
 
 
@@ -123,6 +144,9 @@ router.get('/getNews', (req,res) => {
       if(news){
           res.json({status: 1, news})
       }else{ res.json({status: 0})}
+  }).catch(err =>{
+    console.log(err);
+    res.json({status: 0})
   })
 
 });
@@ -132,17 +156,29 @@ router.get('/getNews', (req,res) => {
 // @acess public
 router.get('/sendFund/:id', (req,res) => {
   console.log(req.params.id);
-  User.findOne({ userId: req.params.id })
-  .select('-password')
-    .then(user => {
-      console.log(user);
-      if(user){
-        res.json({status:1,user})
-      }else{
-        res.json({status: 0})
+
+  try{
+          User.findOne({ userId: req.params.id })
+          .select('-password')
+            .then(user => {
+                      console.log(user);
+                      if(user){
+                        res.json({status:1,user})
+                      }else{
+                        res.json({status: 0})
+                      }
+                      
+            }).catch(err => {
+                 console.log(err.message);
+                 res.json({status: 0})
+            })
       }
-      
-    });
+      catch(err)
+      {
+            console.log(err.message);
+            res.json({status: 0})
+
+      }
 });
 
 ///test Route
@@ -209,19 +245,29 @@ handleActivateUser(13)
 router.post('/UpdateMessage', (req,res) => {
   
   console.log(req.body);
-
-  Tickets.findOneAndUpdate({
-      _id: req.body._id
-  },{
-      $push: { message : req.body.message }
-  },{new: true})
-  .sort({RequestedDate: 1})
-  .then(Tickets => {
-      console.log(Tickets);
-      if(Tickets){
-          res.json({status: 1, Tickets})
-      }else{ res.json({status: 0})}
-  })
+try{
+          Tickets.findOneAndUpdate({
+              _id: req.body._id
+          },{
+              $push: { message : req.body.message }
+          },{new: true})
+          .sort({RequestedDate: 1})
+          .then(Tickets => {
+              console.log(Tickets);
+              if(Tickets){
+                  res.json({status: 1, Tickets})
+              }else{ res.json({status: 0})}
+          })
+          .catch(err => {
+            console.log(err.message);
+            res.json({status: 0})
+          })
+}
+catch(err)
+{
+   console.log(err.message);
+   res.json({status: 0})
+}
 
 })
 
@@ -231,28 +277,57 @@ router.post('/UpdateMessage', (req,res) => {
 router.post('/SubmitDeposit', (req,res) => {
   
         console.log(req.body);
-
-        const Deposit = new Depositstatement({
-
-        userId: req.body.userid,
-        Amount : req.body.amount,
-        HashCode : req.body.hashcode,
-        Name : req.body.name,
-        SentBTCaddress : req.body.sendtobtcaddress,
-        status : false,
-        success : "processing"
+  try{
+        User.findOne({
+          userId : req.body.userid,
+          TransitionPassword : req.body.transactionPassword
         })
-
-        Deposit.save().then(statement => {
-          console.log(statement);
-          if(statement)
+        .then(user => 
           {
-            res.json({status : 1 })
-          }
-          else{
-            res.json({status : 0 })
-          }
-        })
+            if(user)
+            {
+                  const Deposit = new Depositstatement({
+
+                              userId: req.body.userid,
+                              Amount : req.body.amount,
+                              HashCode : req.body.hashcode,
+                              Name : req.body.name,
+                              SentBTCaddress : req.body.sendtobtcaddress,
+                              status : false,
+                              success : "processing"
+                    })
+            
+                    Deposit.save().then(statement => {
+
+                            console.log(statement);
+                            if(statement)
+                            {
+                              res.json({status : 1 })
+                            }
+                            else{
+                              res.json({status : 0 })
+                            }
+                    }).catch(err => {
+                            console.log(err.message);
+                            res.json({status : 0 })
+                    })
+            }
+            else
+            {
+              res.json({status : 0 })
+            }
+          }).catch(err => {
+                  console.log(err.message);
+                res.json({status : 0 })
+          })
+          
+
+     }
+     catch(err)
+     {
+           console.log(err.message);
+           res.json({status : 0 })
+     }
 
 })
 
@@ -261,18 +336,29 @@ router.post('/SubmitDeposit', (req,res) => {
 // @acess public
 router.get('/DepositStatment/:id', (req,res) => {
   
-  console.log(req.body);
+  console.log(req.params.id);
+  try{
+          Depositstatement.find({ userId : req.params.id })
+          .then(statements => {
 
-  Depositstatement.find({ userId : req.params.id })
-  .then(statements => {
-    if(statements)
+                    if(statements)
+                    {
+                      res.json({status : 1 , statements})
+                    }
+                    else{
+                      res.json({status : 0 , statements})
+                    }
+                    
+          }).catch(err => {
+            console.log(err.message);
+            res.json({status : 0 , statements})
+          })
+    }
+    catch(err)
     {
-      res.json({status : 1 , statements})
+         console.log(err.message);
+         res.json({status : 0 , statements})
     }
-    else{
-      res.json({status : 0 , statements})
-    }
-  })
 
 })
 
@@ -283,235 +369,340 @@ router.get('/DepositStatment/:id', (req,res) => {
 router.post('/Activate_account', (req,res) => {
   
   console.log(req.body);
-  const date = new Date();
-  console.log(date.toLocaleDateString());
-  const today = date.toLocaleDateString()
- 
-  if(req.body.ActivatingId.toString() === req.body.shouldActivateUserId.toString()){
 
-    console.log("inside:if:");
+  try{
+            const date = new Date();
+            console.log(date.toLocaleDateString());
+            const today = date.toLocaleDateString()
 
-    User.findByIdAndUpdate({_id: req.body.ActivatingId},{
-      $pull: { availablePins: req.body.pin } ,
-      Active:true,
-      poolOne:true
-    },{new: true}).then(
-       user => {if(user){
+            //Activating Accounts
+            if(req.body.ActivatingId.toString() === req.body.shouldActivateUserId.toString()){
 
-        console.log(user); 
-        createAutopool(user)
-        handleActivateUser(user.referedBy);
-        dailyReport.findOneAndUpdate({ dateId: today},{
-          $inc : { Nothing : 0 }
-        },{new: true})
-        .then( updated => {
-          if(updated){
+                            console.log("inside:if:");
 
-            res.json({status: 1 ,user});
+                              User.findByIdAndUpdate({_id: req.body.ActivatingId},
+                              {
+                                      $pull: { availablePins: req.body.pin } ,
+                                      Active:true,
+                                      poolOne:true
 
-          }else{
+                              },{
+                                new: true
+                              })
+                              .then( user => 
+                                {    
+                                            if(user)
+                                            {
 
-            const report =  new DailyReport({
-             
-              dateId: today,
-              LevelPinsIncome:  0,
-              PoolOnePinsIncome:  0,
-              PoolTwoPinsIncome: 0,
-              PoolThreePinsIncome: 0,
-              PoolFourPinsIncome:  0,
-              PoolFivePinsIncome:  0,
-              PoolSixPinsIncome:  0,
-              PoolSevenPinsIncome: 0,
-              PoolEightPinsIncome:  0,
-              PoolNinePinsIncome:  0,
-              PoolTenPinsIncome:  0,
-              withdrawpercentage: 0,
-              funtToPinPercent : 0,
-              //Spend 
-              LevelOutSpend: 0,
-              FundSharing:  0,
-              PoolOutgo: 0,
-              withdraw: 0,
-              //Others
-              Balance : 0,
-              BalanceReport: [],
-              Nothing: 0,
-      
-             })
-              
-             report.save()
-             res.json({status: 1 ,user});
+                                                      console.log(user); 
+                                                      createAutopool(user)
+                                                      handleActivateUser(user.referedBy,user.userId);
+                                                      dailyReport.findOneAndUpdate({ dateId: today},{
+                                                        $inc : { Nothing : 0 }
+                                                      },{new: true})
+                                                      .then( updated => {
 
-          }
-        } )
-        
-      
-      }else{res.json({status: 0});}}     
-    )
+                                                                  if(updated){
 
-  }else{
+                                                                          res.json({status: 1 ,user});
 
-  User.findByIdAndUpdate({ _id: req.body.ActivatingId },{
-   $pull: { availablePins: req.body.pin } 
-  },{new:true})
-  .select('-password')
-  .then((user)=>{
+                                                                  }else{
 
-    if(user){
-      console.log("pin Remover :", user);
-      //response
-      res.json({status: 1 , user })
-      //update Activate account
-      User.findByIdAndUpdate({_id: req.body.shouldActivateUserId},{
-        Active:true,
-        poolOne:true
-     },{new: true}).then((user) =>{
-             createAutopool(user)
-             handleActivateUser(user.referedBy);
-            
-             //daily updates 
+                                                                    const report =  new DailyReport({
+                                                                    
+                                                                      dateId: today,
+                                                                      LevelPinsIncome:  0,
+                                                                      PoolOnePinsIncome:  0,
+                                                                      PoolTwoPinsIncome: 0,
+                                                                      PoolThreePinsIncome: 0,
+                                                                      PoolFourPinsIncome:  0,
+                                                                      PoolFivePinsIncome:  0,
+                                                                      PoolSixPinsIncome:  0,
+                                                                      PoolSevenPinsIncome: 0,
+                                                                      PoolEightPinsIncome:  0,
+                                                                      PoolNinePinsIncome:  0,
+                                                                      PoolTenPinsIncome:  0,
+                                                                      withdrawpercentage: 0,
+                                                                      funtToPinPercent : 0,
+                                                                      //Spend 
+                                                                      LevelOutSpend: 0,
+                                                                      FundSharing:  0,
+                                                                      PoolOutgo: 0,
+                                                                      withdraw: 0,
+                                                                      //Others
+                                                                      Balance : 0,
+                                                                      BalanceReport: [],
+                                                                      Nothing: 0,
+                                                              
+                                                                    })
+                                                                      
+                                                                    report.save()
+                                                                    .then(re => {
+                                                                          res.json({status: 1 ,user});
+                                                                    })
+                                                                    .catch(err => {
+                                                                          res.json({status: 0});
+                                                                    })
+                                                          
 
-             dailyReport.findOneAndUpdate(
-              {
-               dateId : today
-              },
-              {
-              $inc : { Nothing : 0  }
-            },{new: true})
-            .then( updated => {
-              if(updated){
-    
-                console.log("updated");
-    
-              }else{
-    
-                const report =  new DailyReport({
-             
-                  dateId: today,
-                  LevelPinsIncome:  0,
-                  PoolOnePinsIncome:  0,
-                  PoolTwoPinsIncome: 0,
-                  PoolThreePinsIncome: 0,
-                  PoolFourPinsIncome:  0,
-                  PoolFivePinsIncome:  0,
-                  PoolSixPinsIncome:  0,
-                  PoolSevenPinsIncome: 0,
-                  PoolEightPinsIncome:  0,
-                  PoolNinePinsIncome:  0,
-                  PoolTenPinsIncome:  0,
-                  withdrawpercentage: 0,
-                  funtToPinPercent : 0,
-                  //Spend 
-                  LevelOutSpend: 0,
-                  FundSharing:  0,
-                  PoolOutgo: 0,
-                  withdraw: 0,
-                  //Others
-                  Balance : 0,
-                  BalanceReport: [],
-                  Nothing: 0,
-          
-                 })
-                  
-                 report.save()
-                console.log("created");
-    
-              }
-            } )
+                                                            }
+                                                      }).catch(err => {
+                                                                res.json({status: 0});
+                                                      })
+                                            
+                                            }
+                                            else
+                                            {
+                                                     res.json({status: 0});
+                                            }
+                                })
+                                .catch(err => {
+                                         res.json({status: 0});
+                                })
 
-            console.log(user);
-     } )
+            }else{
 
-    }else{res.json({status: 0})}
-  });
+                    User.findByIdAndUpdate({ _id: req.body.ActivatingId },{
+                             $pull: { availablePins: req.body.pin } 
+                    },{new:true})
+                    .select('-password')
+                    .then((user1)=>{
 
-}
+                            if(user1){
+                                  console.log("use 1 is updated ***********************************************************");
+                                      console.log("pin Remover :", user1);
+                                      //response
+                                      
+                                          //update Activate account
+                                          User.findByIdAndUpdate({_id: req.body.shouldActivateUserId},{
+                                            Active:true,
+                                            poolOne:true
+                                          },{new: true})
+                                          .then((user) =>{
+                                            
+                                            if(user){
+                                              console.log("use 2 is updated ************************************************");
+                                                            createAutopool(user)
+                                                            console.log("autopool created **************************************");
+                                                            handleActivateUser(user.referedBy,user.userId);
+                                                            console.log("Active user Done **************************************");
+                                                            //         daily updates 
+                                                            dailyReport.findOneAndUpdate(
+                                                              {
+                                                              dateId : today
+                                                              },
+                                                              {
+                                                              $inc : { Nothing : 0  }
+                                                            },{new: true})
+                                                            .then( updated => {
+                                                                            if(updated){
+                                                                              console.log("daily report updated **************************************");
+                                                                                      console.log("updated");
+                                                                                      res.json({status: 1 , user1 })
+                                                                            }else{
+                                                                  
+                                                                                        const report =  new DailyReport({
+                                                                                    
+                                                                                          dateId: today,
+                                                                                          LevelPinsIncome:  0,
+                                                                                          PoolOnePinsIncome:  0,
+                                                                                          PoolTwoPinsIncome: 0,
+                                                                                          PoolThreePinsIncome: 0,
+                                                                                          PoolFourPinsIncome:  0,
+                                                                                          PoolFivePinsIncome:  0,
+                                                                                          PoolSixPinsIncome:  0,
+                                                                                          PoolSevenPinsIncome: 0,
+                                                                                          PoolEightPinsIncome:  0,
+                                                                                          PoolNinePinsIncome:  0,
+                                                                                          PoolTenPinsIncome:  0,
+                                                                                          withdrawpercentage: 0,
+                                                                                          funtToPinPercent : 0,
+                                                                                        //  Spend 
+                                                                                          LevelOutSpend: 0,
+                                                                                          FundSharing:  0,
+                                                                                          PoolOutgo: 0,
+                                                                                          withdraw: 0,
+                                                                                      //   Others
+                                                                                          Balance : 0,
+                                                                                          BalanceReport: [],
+                                                                                          Nothing: 0,
+                                                                                  
+                                                                                        })
+                                                                                          
+                                                                                        report.save()
+                                                                                        .then(re => {
+                                                                                          console.log("daily reported created **************************************");
+                                                                                          res.json({status: 1 , user1 })
+                                                                                        }).catch(re => {
+                                                                                          console.log("error catched at daily report created **************************************");
+                                                                                            res.json({status : 0})
+                                                                                        })
+                                                                                        console.log("created");
+                                                                            
+                                                                            }
+                                                                 } )  
+                                                                 .catch(err => {
+                                                                  console.log(err.message);
+                                                                  console.log("error catched at daily report **************************************");
+                                                                  res.json({status: 0})
+                                                                })
 
- function createAutopool(user){
+                                                            console.log(user);
+                                                }
+                                                else
+                                                {
+                                                  console.log("error catched at user 2 else**************************************");
+                                                            res.json({status: 0})
+                                                }
+                                        } )
+                                        .catch(err => {
+                                          console.log("error catched at user 2  **************************************");
+                                            console.log(err.message);
+                                            res.json({status: 0})
+                                          })
+                                 
+                            }
+                            else{
+                              console.log("error catched at user 1 else **************************************");
+                              res.json({status: 0})}
+                        
+                    }).catch(err => {
+                      console.log("error catched at user 1 **************************************");
+                            console.log(err.message)
+                            res.json({status: 0});
 
-  console.log("in create Autopool :", user);
+                    })
 
-  const autopool = new Autopool({
+            }
 
-  userId: user.userId,
-  poolOneCompleted: false,
-  members: [],
-  referedBy: " ",
-  levelOne: 0,
-  levelTwo: 0,
-  levelThree: 0,
-  levelOneIncome: 0,
-  levelTwoIncome: 0,
-  levelThreeIncome:0,
-  available: true
-  })
-      
-  autopool.save()
-  .then(user => console.log(user))
+            function createAutopool(user){
 
- }
+                          console.log("in create Autopool :", user);
 
-  //handle Active user
- async function handleActivateUser (user1){
+                          const autopool = new Autopool({
 
-    let i = 0;
-    let ReferedBy1 = user1;
-    console.log("line: 66",ReferedBy1);
+                                  userId: user.userId,
+                                  poolOneCompleted: false,
+                                  members: [],
+                                  referedBy: " ",
+                                  levelOne: 0,
+                                  levelTwo: 0,
+                                  levelThree: 0,
+                                  levelOneIncome: 0,
+                                  levelTwoIncome: 0,
+                                  levelThreeIncome:0,
+                                  available: true
+                          })
+                              
+                          autopool.save()
+                          .then(user => 
+                            
+                            {
+                            console.log("pool created  **************************************")
+                            console.log(user)})
+                          .catch(err => {
+                            console.log("error catched at pool created catch **************************************");
+                                  console.log(err.message);
+                                  res.json({status: 0});
+                          })
 
-  while (ReferedBy1 && i<10) {
+            }
 
-      if(i===0){ 
-        
-           await User.findOneAndUpdate({userId: ReferedBy1},{
-              $inc: { levelIncome : parseFloat(2)  }
-            }).then( async (user) => {console.log(user);
-              if(user){
-               await dailyReport.findOneAndUpdate({
-               dateId : today
-              },{
-                  $inc : {  LevelOutSpend : parseFloat(2) }
-                })
-                ReferedBy1 = user.referedBy
-              }
-              else{
-                ReferedBy1 = ""
-              }
-              })
-            console.log("line: 11",ReferedBy1);
+            //handle Active user
+            async function handleActivateUser (user1,user2){
 
-      }else{
+                    let i = 0;
+                    let ReferedBy1 = user1;
+                    console.log("line: 66",ReferedBy1);
 
-          await  User.findOneAndUpdate({userId: ReferedBy1},{
-              $inc: { levelIncome : parseFloat(0.5)  }
-            }).then( async (user) => {console.log(user); 
-              if(user){
-             
-             await  dailyReport.findOneAndUpdate({
-               dateId : today
-              },{
-                  $inc : {  LevelOutSpend : parseFloat(0.5) }
-                })
+                  while (ReferedBy1 && i<10) {
 
-                ReferedBy1 = user.referedBy
-              }  
-              else
-              {
-                ReferedBy1 = ""
-              }
-            })
-            console.log("line: 12",ReferedBy1);
-      }
+                                if(i===0){ 
+                                  
+                                    await User.findOneAndUpdate({userId: ReferedBy1},{
+                                        $inc: { levelIncome : parseFloat(2)  },
+                                        $push : { levelTeam : user2 }
+                                      }).then( async (user) => { console.log(user);
 
-     
+                                                if(user){
+                                                                await dailyReport.findOneAndUpdate({
+                                                                    dateId : today
+                                                                },{
+                                                                    $inc : {  LevelOutSpend : parseFloat(2) }
+                                                                  })
+                                                                  .then(re => {
+                                                                    console.log("error catched at in and as was created **************************************");
+                                                                    console.log(" ")})
+                                                                  .catch(err => {
+                                                                    console.log(err.message)
+                                                                    console.log("error catched at catched batched sached allowed **************************************");
+                                                                    res.json({status: 0});
+                                                                  })
+                                                                  ReferedBy1 = user.referedBy
+                                                }
+                                                else
+                                                {
+                                                                ReferedBy1 = ""
+                                                }
 
-      i++;
-      console.log("i :",i);
-      console.log("line: 79",ReferedBy1);
-    
-  }
+                                        }).catch(err => {
+                                          console.log("error catched at user if handle Active user **************************************");
+                                              res.json({status: 0});
+                                        })
+                                      console.log("line: 11",ReferedBy1);
 
-}
+                                }else{
 
+                                    await  User.findOneAndUpdate({userId: ReferedBy1},{
+                                        $inc: { levelIncome : parseFloat(0.5)  }
+                                      }).then( async (user) => {console.log(user); 
+
+                                                  if(user){
+                                                
+                                                            await  dailyReport.findOneAndUpdate({
+                                                            dateId : today
+                                                            },{
+                                                                $inc : {  LevelOutSpend : parseFloat(0.5) }
+                                                            })
+                                                            .then(re => 
+                                                              { console.log("error catched at daily report created in level income**************************************");
+                                                                console.log(" ")})
+                                                            .catch(err => {
+                                                                    console.log(err.message)
+                                                                    console.log("error catched at daily report created in level income catch **************************************");
+                                                                    res.json({status: 0});
+                                                            })
+                                                              ReferedBy1 = user.referedBy
+                                                  }  
+                                                  else
+                                                  {
+                                                    ReferedBy1 = ""
+                                                  }
+
+                                      }).catch(err => {
+                                        console.log("error catched at user else catch 0.5 **************************************");
+                                              console.log(err.message)
+                                              res.json({status: 0});
+                                      })
+                                      console.log("line: 12",ReferedBy1);
+                                }
+
+                    
+
+                      i++;
+                      console.log("i :",i);
+                      console.log("line: 79",ReferedBy1);
+                    
+                  }
+
+            }
+    }
+    catch(err)
+    {
+      console.log("error catched at try catched tried**************************************");
+           console.log(err.message);
+           res.json({status: 0});
+    }
 
 });
 
@@ -521,59 +712,83 @@ router.post('/Activate_account', (req,res) => {
 router.post('/sendFund/update', (req,res) => {
   console.log(req.body);
   // sendMnyTo:this.state.sendMnyTo,
+ 
+  try{
   
-  User.findByIdAndUpdate({ _id: req.body.sendMnyFrom },
-    {$inc: {
-      levelIncome: -parseFloat(req.body.levelamount),
-      autoPoolIncome: -parseFloat(req.body.autoamount),
-      fundSharingIncome: -parseFloat(req.body.fundamount),
-      recievedIncome: -parseFloat(req.body.recievedamount),
-  }},{new:true})
-    .then(user => {
-      if(user){
+                User.findByIdAndUpdate({ _id: req.body.sendMnyFrom },
+                {
+                    $inc: {
+                              levelIncome: -parseFloat(req.body.levelamount),
+                              autoPoolIncome: -parseFloat(req.body.autoamount),
+                              fundSharingIncome: -parseFloat(req.body.fundamount),
+                              recievedIncome: -parseFloat(req.body.recievedamount),
+                         }
+                },
+                {new:true}
+                )
+                .then(user => {
+                            if(user)
+                            {
 
-         //recieved details
-    const fundSt = new FundStatement({
-      Sendto: "-----",
-      RecievedFrom: req.body.from,
-      userId: req.body.sendMnyToDetails.userId,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      mailId: user.mailId,
-      Amount: req.body.total,
-    })
-    fundSt.save()
-          res.send({status:1,user})
 
-      }else{
-        res.json({status: 0})
-      }
-      
-    });
+                                  //sentTo
+                                  User.findByIdAndUpdate({ _id: req.body.sendMnyTo },
+                                    {$inc: {
 
-    //sentTo
-    User.findByIdAndUpdate({ _id: req.body.sendMnyTo },
-      {$inc: {
-        levelIncome: parseFloat(req.body.levelamount),
-        autoPoolIncome: parseFloat(req.body.autoamount),
-        fundSharingIncome: parseFloat(req.body.fundamount),
-        recievedIncome: parseFloat(req.body.recievedamount),
-    }},{new:true}).then(res => console.log(res))
-    //sender details
-    const fundSt = new FundStatement({
-      Sendto: req.body.sendMnyToDetails.userId,
-      RecievedFrom:"-----",
-      userId: req.body.from,
-      firstName: req.body.sendMnyToDetails.firstName,
-      lastName: req.body.sendMnyToDetails.lastName,
-      mailId: req.body.sendMnyToDetails.mailId,
-      Amount: req.body.total,
-    })
+                                      recievedIncome: parseFloat(parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
+                                  
+                                    }},{new:true}).then(user2 => {
+                                    
+                                                  const fundSt1 = new FundStatement({
+                                                    Sendto: req.body.sendMnyToDetails.userId,
+                                                    RecievedFrom:"-----",
+                                                    userId: req.body.from,
+                                                    firstName: req.body.sendMnyToDetails.firstName,
+                                                    lastName: req.body.sendMnyToDetails.lastName,
+                                                    mailId: req.body.sendMnyToDetails.mailId,
+                                                    Amount: req.body.total,
+                                                
+                                                  })
 
-   
+                                                   //recieved details
+                                                  const fundSt2 = new FundStatement({
+                                                    Sendto: "-----",
+                                                    RecievedFrom: req.body.from,
+                                                    userId: req.body.sendMnyToDetails.userId,
+                                                    firstName: user.firstName,
+                                                    lastName: user.lastName,
+                                                    mailId: user.mailId,
+                                                    Amount: req.body.total,
+                                                  })
 
-    fundSt.save()
-   
+
+                                                  fundSt1.save().then(res => {console.log(" ")}).catch(err => {console.log(err.message)})
+                                                  fundSt2.save().then(res => console.log(" ")).catch(err => console.log(err.message))
+                                                  res.send({status:1,user})
+                                
+                                    }).catch(err => {
+                                                        res.json({status: 0})
+                                    })
+
+                             }
+                             else
+                             {
+                                res.json({status: 0})
+                             }
+                    
+                }).catch(err =>  {  res.json({status: 0}) })
+
+                 // console.log(parseFloat(parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)));
+
+                  
+                  //sender details
+                
+  }
+  catch(err)
+  {
+       console.log(err.message);
+       res.json({status: 0})
+  }
 
 });
 
@@ -583,95 +798,138 @@ router.post('/sendFund/update', (req,res) => {
 router.post('/sendFund/pinWallet', (req,res) => {
   console.log(req.body);
   //  sendMnyTo:this.state.sendMnyTo,
-  const date = new Date();
-  const today = date.toLocaleDateString();
 
-  let percent = (parseFloat(parseFloat(req.body.levelamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.recievedamount))*0.05)
-  console.log(percent);
-  User.findByIdAndUpdate({ _id: req.body._id },
-    {$inc: {
-      levelIncome: -parseFloat(req.body.levelamount),
-      autoPoolIncome:-parseFloat(req.body.autoamount),
-      fundSharingIncome:-parseFloat(req.body.fundamount),
-      recievedIncome:-parseFloat(req.body.recievedamount),
-      pinBalance: req.body.pinBalance
-  }},{new:true})
-    .then(user => {
-      if(user){
-        console.log(user);
+try{
+          const date = new Date();
+          const today = date.toLocaleDateString();
 
-        // Daily Report
-        
-        dailyReport.findOneAndUpdate({
+          let percent = (parseFloat(parseFloat(req.body.levelamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.recievedamount))*0.05)
+          console.log(percent);
+          User.findByIdAndUpdate({ _id: req.body._id },
+            {$inc: {
+              levelIncome: -parseFloat(req.body.levelamount),
+              autoPoolIncome:-parseFloat(req.body.autoamount),
+              fundSharingIncome:-parseFloat(req.body.fundamount),
+              recievedIncome:-parseFloat(req.body.recievedamount),
+              pinBalance: req.body.pinBalance
+          }},{new:true})
+            .then(user => {
 
-          dateId : today
+                            if(user){
+                                      console.log(user);
 
-        },{
+                                      // Daily Report
+                                      
+                                      dailyReport.findOneAndUpdate({
 
-          $inc : { funtToPinPercent :parseFloat(percent) }
+                                        dateId : today
 
-        },{new: true}).then(document => {
-          if(!document){
-            const report =  new DailyReport({
-    
-              dateId: today,
-              LevelPinsIncome:  0,
-              PoolOnePinsIncome:  req.body.total,
-              PoolTwoPinsIncome: 0,
-              PoolThreePinsIncome: 0,
-              PoolFourPinsIncome:  0,
-              PoolFivePinsIncome:  0,
-              PoolSixPinsIncome:  0,
-              PoolSevenPinsIncome: 0,
-              PoolEightPinsIncome:  0,
-              PoolNinePinsIncome:  0,
-              PoolTenPinsIncome:  0,
-              withdrawpercentage: 0,
-              funtToPinPercent : 0,
-              //Spend 
-              LevelOutSpend: 0,
-              FundSharing:  0,
-              PoolOutgo: 0,
-              withdraw: 0,
-              //Others
-              Balance : 0,
-              BalanceReport: [],
-              Nothing: 0,
-      
+                                      },{
+
+                                        $inc : { funtToPinPercent :parseFloat(percent) }
+
+                                      },{new: true}).then(document => {
+                                                          if(!document){
+                                                                    const report =  new DailyReport({
+                                                            
+                                                                      dateId: today,
+                                                                      LevelPinsIncome:  0,
+                                                                      PoolOnePinsIncome:  req.body.total,
+                                                                      PoolTwoPinsIncome: 0,
+                                                                      PoolThreePinsIncome: 0,
+                                                                      PoolFourPinsIncome:  0,
+                                                                      PoolFivePinsIncome:  0,
+                                                                      PoolSixPinsIncome:  0,
+                                                                      PoolSevenPinsIncome: 0,
+                                                                      PoolEightPinsIncome:  0,
+                                                                      PoolNinePinsIncome:  0,
+                                                                      PoolTenPinsIncome:  0,
+                                                                      withdrawpercentage: 0,
+                                                                      funtToPinPercent : 0,
+                                                                      //Spend 
+                                                                      LevelOutSpend: 0,
+                                                                      FundSharing:  0,
+                                                                      PoolOutgo: 0,
+                                                                      withdraw: 0,
+                                                                      //Others
+                                                                      Balance : 0,
+                                                                      BalanceReport: [],
+                                                                      Nothing: 0,
+                                                              
+                                                                    })
+                                                              
+                                                                  report.save()
+                                                                  .then(res => {
+                                                                                console.log(res);
+                                                                                //creaate fund statement
+                                                                                const fundSt = new FundStatement({
+                                                                                  Sendto: "Pin Wallet",
+                                                                                  RecievedFrom: req.body.useid,
+                                                                                  userId: req.body.useid,
+                                                                                  firstName:user.firstName,
+                                                                                  lastName: user.lastName,
+                                                                                  mailId: user.mailId,
+                                                                                  Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
+                                                                                })
+                                                                                fundSt.save().then(re => {res.send({status:1,user})}).catch(err=> {
+                                                                                   console.log(err.message);
+                                                                                   res.send({status: 0 })
+                                                                                })
+
+                                                                                
+                                                                  }).catch(err => { 
+                                                                          console.log(err);
+                                                                          res.json({status: 0})
+                                                                  })
+                                                          }
+                                                          else
+                                                          {
+
+                                                                    //creaate fund statement
+                                                                    const fundSt = new FundStatement({
+                                                                      Sendto: "Pin Wallet",
+                                                                      RecievedFrom: req.body.useid,
+                                                                      userId: req.body.useid,
+                                                                      firstName:user.firstName,
+                                                                      lastName: user.lastName,
+                                                                      mailId: user.mailId,
+                                                                      Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
+                                                                    })
+                                                                    fundSt.save().then(re => {res.send({status:1,user})}).catch(err=> {
+                                                                       console.log(err.message);
+                                                                       res.send({status: 0 })
+                                                                    })
+
+                                                          }   
+
+                                      }).catch(err => {
+                                        console.log(err.message)
+                                        res.json({status: 0})
+                                      })
+
+                                     
+
+                            }
+                             else
+                            {
+                                      res.json({status: 0})
+                            }
+              
+            }).catch(err => {
+                console.log(err.message)
+                res.json({status: 0})
             })
-      
-          report.save()
-          .then(res => {
-              console.log(res);
-          }).catch(err => { 
-              console.log(err);
-          })
-          }
-        })
+  }
+  catch(err)
+  {
+          console.log(err.message)
+          res.json({status: 0})
+  }
 
-        //creaate fund statement
-        const fundSt = new FundStatement({
-          Sendto: "Pin Wallet",
-          RecievedFrom: req.body.useid,
-          userId: req.body.useid,
-          firstName:user.firstName,
-          lastName: user.lastName,
-          mailId: user.mailId,
-          Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
-        })
-        fundSt.save()
-
-        res.send({status:1,user})
-
-      }else{
-        res.json({status: 0})
-      }
-      
-    });
 
 });
 
-//@rout get api/users
+//@rout get api/user=-09871`
 // @desc get all users
 // @acess public
 router.get('/', (req,res) => {
@@ -683,18 +941,35 @@ router.get('/', (req,res) => {
 // @desc get all users
 // @acess public
 router.post('/getSingleUserDetails', (req,res) => {
-  User.findOne({_id : req.body.userid})
-    .then(user =>{
-        console.log(user);
-      if(user)
-      {
-        res.json({status :1 , user})
-      }
-      else{
-        res.json({status : 0 })
-      }
+  
+console.log("***********************************************************");  
 
-    })
+  try{
+
+          User.findOne({_id : req.body.userid})
+          .then(user =>{
+
+                    console.log(user);
+                    if(user)
+                    {
+                      res.json({status :1 , user})
+                    }
+                    else{
+                      res.json({status : 0 })
+                    }
+
+            }).catch(err => {
+
+              console.log(err.message);
+              res.json({status : 0 })
+
+            })
+    }
+    catch(err)
+    {
+        console.log(err.message);
+        res.json({status : 0 })
+    }
 });
 
 //@rout get api/users/Direct_Members
@@ -702,17 +977,30 @@ router.post('/getSingleUserDetails', (req,res) => {
 // @acess public
 router.post('/Direct_Members', (req,res) => {
   console.log(req.body);
-  User.find({referedBy: req.body.userid})
-    .then(users => {
-      console.log(users);
-        if(users){
-          res.json({status: 1 ,users})
-        }
-        else{
-          res.json({ status:0 })
-          console.log("not found");
-        }
-    })
+  try{
+            User.find({referedBy: req.body.userid })
+            .select('-password ')
+              .then(users => {
+                console.log(users);
+                  if(users){
+                    res.json({status: 1 ,users})
+                  }
+                  else{
+                    res.json({ status:0 })
+                    console.log("not found");
+                  }
+              })
+              .catch(err => {
+                console.log(err.message);
+                res.json({ status:0 })
+              })
+
+       }
+       catch(err)
+       {
+         console.log(err.message);
+         res.json({ status:0 })
+       }
 });
 
 //@rout get api/users/getLevelArrayDetails
@@ -720,19 +1008,35 @@ router.post('/Direct_Members', (req,res) => {
 // @acess public
 router.post('/getLevelArrayDetails', (req,res) => {
   console.log(req.body);
-  User.find({userId :{ $in : req.body.useridsArray }})
-    .select('userId firstName lastName mailId joiningDate autoPoolIncome fundSharingIncome levelIncome Active')
-    .then(users => {
-      console.log(users);
-        if(users){
-          res.json({status: 1 ,users})
-        }
-        else{
-          res.json({ status:0 })
-          console.log("not found");
-        }
-    })
-});
+        try{ 
+
+                      User.find({userId :{ $in : req.body.useridsArray }})
+                      .select('userId firstName lastName mailId joiningDate autoPoolIncome fundSharingIncome levelIncome Active')
+                      .then(users => {
+
+                              console.log(users);
+                                if(users){
+                                  res.json({status: 1 ,users})
+                                }
+                                else{
+                                  res.json({ status:0 })
+                                  console.log("not found");
+                                }
+
+                      })
+                      .catch(err => {
+                          console.log(err.message);
+                          res.json({status: 0 ,users})
+                      })
+
+            }
+            catch(err)
+            {
+                      console.log(err.message);
+                      res.json({status: 0 ,users})
+            }
+
+   });
 
 //@rout get api/users/All_Members
 // @desc get all users
@@ -751,37 +1055,50 @@ router.post('/All_Members', async (req,res) => {
   //         console.log("not found");
   //       }
   //   })
-    let i=0,array=[],levels=[];
-    array.push(req.body.userid)
+try{
+                let i=0,array=[],levels=[];
+                array.push(req.body.userid)
 
-    do {
-      console.log(array);
-     await User.find({referedBy: { $in :array}, Active: "true"})
-      .select('userId')
-      .then(level => {
-        console.log(level);
-        if(level)
-        {
-          
-          array = level.map(userids => {return userids.userId})
-          console.log(array);
-          console.log(i);
-          levels.push(array);
-        }
-       else
-       {
-        array = '';
-       }
-        
+                do {
 
-      })
+                console.log(array);
+                await User.find({referedBy: { $in :array}, Active: "true"})
+                  .select('userId')
+                  .then(level => {
+                    console.log(level);
+                    if(level)
+                    {
+                                            
+                          array = level.map(userids => {return userids.userId})
+                          console.log(array);
+                          console.log(i);
+                          levels.push(array);
 
-      i++
-      
-    } while (array && i < 10);
+                    }
+                    else
+                    {
+                      array = '';
+                    }
+                    
 
-    res.json({status: 1,levels})
+                  }).catch(err => {
 
+                      console.log(err.message);
+                      res.json({status: 0 ,levels})
+
+                  })
+
+                  i++
+                  
+                } while (array && i < 10);
+
+                res.json({status: 1,levels})
+    }
+    catch(err)
+    {
+      console.log(err.message);
+      res.json({status: 0,levels})
+    }
     
 });
 
@@ -790,17 +1107,28 @@ router.post('/All_Members', async (req,res) => {
 // @acess public
 router.post('/Fund_Statement', (req,res) => {
   console.log(req.body);
-  FundStatement.find({userId: req.body.userid})
-    .then(users => {
-      console.log(users);
-        if(users){
-          res.json({status: 1 ,users})
-        }
-        else{
-          res.json({ status:0 })
-          console.log("not found");
-        }
-    })
+  try{
+          FundStatement.find({userId: req.body.userid})
+            .then(users => {
+                        console.log(users);
+                        if(users){
+                               res.json({status: 1 ,users})
+                        }
+                        else{
+                                res.json({ status:0 })
+                                console.log("not found");
+                        }
+
+              }).catch(err => {
+                      console.log(err.message);
+                      res.json({ status:0 })
+              })
+    }
+    catch(err)
+    {
+       console.log(err.message);
+       res.json({ status:0 })
+    }
 });
 
 
@@ -809,17 +1137,33 @@ router.post('/Fund_Statement', (req,res) => {
 // @acess public
 router.post('/GetFundSharing', (req,res) => {
   console.log(req.body);
-  FundSharing.find({userId: req.body.userid})
-    .then(users => {
-      console.log(users);
-        if(users){
-          res.json({status: 1 ,users})
-        }
-        else{
-          res.json({ status:0 })
-          console.log("not found");
-        }
-    })
+    try{
+          FundSharing.find({userId: req.body.userid})
+          .then(users => {
+
+              console.log(users);
+
+              if(users){
+                res.json({status: 1 ,users})
+              }
+              else{
+                res.json({ status:0 })
+                console.log("not found");
+              }
+
+            }).catch(err => {
+
+                  console.log(err.message);
+                  res.json({ status:0 })
+
+            })
+    }
+    catch(err)
+    {
+         console.log(err.message);
+         res.json({ status:0 })
+    }
+
 });
 
 //@rout get api/users/GetFundSharing  - All Details
@@ -827,7 +1171,23 @@ router.post('/GetFundSharing', (req,res) => {
 // @acess public
 router.get('/GetFundSharingAll', (req,res) => {
   console.log(req.body);
-  FundSharing.find()
+  let current_datetime = new Date()
+  let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
+  let start_date  = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + (current_datetime.getDate() - 5)
+  console.log(start_date,end_date)
+  FundSharing.find( {
+    $or:
+   [
+     {
+      Date:
+      { $gte: new Date(start_date), $lte: new Date(end_date) },
+     },
+     {
+      Date:
+      { $gte: new Date(start_date), $lte: new Date(end_date).setDate(new Date(end_date).getDate() + 1) },
+     },
+   ],
+  },)
     .then(users => {
       console.log(users);
         if(users){
@@ -846,6 +1206,11 @@ router.get('/GetFundSharingAll', (req,res) => {
 router.post('/Signup_User', (req,res) => {
 
   console.log(req.body);
+try{
+
+  
+  let current_datetime = new Date()
+  let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
 
   User.findOne({userId : req.body.referedBy})
   .then(user => {
@@ -860,6 +1225,7 @@ router.post('/Signup_User', (req,res) => {
          TransitionPassword:req.body.password,
         mailId: req.body.mailId,
         referedBy: req.body.referedBy,
+        joiningDate: end_date ,
         levelTeam:[],
          levelIncome: 0,
          autoPoolIncome: 0,
@@ -868,44 +1234,52 @@ router.post('/Signup_User', (req,res) => {
         availablePins:[],
         pinBalance: 0.00,
         poolOne: false,
-      poolTwo: false,
-      poolThree: false,
-      poolFour:false,
-      poolFive: false,
-      poolSix:false,
-      poolSeven:false,
-      poolEight: false,
-      poolNine: false,
-      poolTen: false,
-      poolOnePins: [],
-      poolTwoPins: [],
-      poolThreePins: [],
-      poolFourPins: [],
-      poolFivePins: [],
-      poolSixPins: [],
-      poolSevenPins: [],
-      poolEightPins: [],
-      poolNinePins:[],
-      poolTenPins: [],
+        poolTwo: false,
+        poolThree: false,
+        poolFour:false,
+        poolFive: false,
+        poolSix:false,
+        poolSeven:false,
+        poolEight: false,
+        poolNine: false,
+        poolTen: false,
+        poolOnePins: [],
+        poolTwoPins: [],
+        poolThreePins: [],
+        poolFourPins: [],
+        poolFivePins: [],
+        poolSixPins: [],
+        poolSevenPins: [],
+        poolEightPins: [],
+        poolNinePins:[],
+        poolTenPins: [],
          bitAddress: "",
       })
 
         newUser.save()
         .then(user => {
-        if(user){
-            res.json({status:1, user})
-        }
-        else{
-          res.json({status: 0})
-        }
+              if(user){
+                  res.json({status:1, user})
+              }
+              else{
+                res.json({status: 0})
+              }
         })
-        .catch(err => console.log(err));
+        .catch(err => {console.log(err); res.json({status : 0})});
     }
     else{
       res.json({status : 3})
     }
+  }).catch(err => {
+      console.log(err);
+      res.json({status : 0})
   })
- 
+}
+catch(err)
+{
+     console.log(err);
+     res.json({status : 0})
+}
   
  });
 
@@ -917,24 +1291,32 @@ console.log(req.body);
   const userid = req.body.userid;
   const password = req.body.password;
  
-  
-  User.findOne({ userId: userid ,password :password })
-   .select('-password')
-   .then(user => 
-    {
-      console.log(user)
-      if(user)
-      {
-          res.json({status:"200",msg:"Successfull",userdetails: user.toObject()})
-          console.log("sucess");
-      }
-      else{
-        res.json({status:"101",msg:"Wrong User id OR Wrong Password"})
-        console.log("not user");
-      }
+  try{         
+          User.findOne({ userId: userid ,password :password })
+          .select('-password')
+          .then(user => 
+            {
+              console.log(user)
+              if(user)
+              {
+                  res.json({status: 200,msg:"Successfull",userdetails: user.toObject()})
+                  console.log("sucess");
+              }
+              else{
+                res.json({status: 101,msg:"Wrong User id OR Wrong Password"})
+                console.log("not user");
+              }
+            }
+            ).catch(err => {
+                console.log(err);
+                res.json({status: 101,msg:"Wrong User id OR Wrong Password"})
+            })
     }
-    )
-
+    catch(err)
+    {
+         console.log(err);
+         res.json({status: 101,msg:"Wrong User id OR Wrong Password"})
+    }
 
 });
 
@@ -945,12 +1327,7 @@ console.log(req.body);
 router.post('/ForgotPassword', (req,res) => {
   console.log(req.body);
     const userid = req.body.userid;
-    const message = {
-      from: 'gabe25@ethereal.email', // Sender address
-      to:  req.body.mail,         // List of recipients
-      subject: 'Design Your Model S | Tesla', // Subject line
-      text: 'Have the most fun you can in a car. Get your Tesla today!' // Plain text body
-    };
+ 
     
     User.findOne({ userId: userid ,mailId :req.body.mail })
      .then(user => 
@@ -958,6 +1335,12 @@ router.post('/ForgotPassword', (req,res) => {
         console.log(user)
         if(user)
         {
+          const message = {
+            from: 'gabe25@ethereal.email', // Sender address
+            to:  req.body.mail,         // List of recipients
+            subject: 'GT-password', // Subject line
+            text: `useID : ${user.userId}  || password: ${user.password}` // Plain text body
+          };
           transport.sendMail(message, function(err, info) {
             if (err) {
               console.log(err)
@@ -973,7 +1356,10 @@ router.post('/ForgotPassword', (req,res) => {
           console.log("not user");
         }
       }
-      )
+      ).catch(err =>{ 
+        console.log(err);
+        res.json({status:0})
+      })
   
   
   });
@@ -985,30 +1371,46 @@ router.post('/profileUpdate', (req,res) => {
   console.log(req.body);
     const userid = req.body.id;
    
-    
-    User.findByIdAndUpdate({ _id: userid},{
-      firstName:req.body.firstName,
-      lastName:req.body.lastName,
-      mailId:req.body.mailId,
-      country:req.body.country
-    },{new:true})
-     .select('-password')
-     .then(user => 
+  try{
+            
+            User.findByIdAndUpdate({ _id: userid},{
+              firstName:req.body.firstName,
+              lastName:req.body.lastName,
+              mailId:req.body.mailId,
+              country:req.body.country
+            },{new:true})
+            .select('-password')
+            .then(user => 
+              {
+                console.log(user)
+                if(user)
+                {
+                    res.json({status: 200 ,msg:"Successfull",userdetails: user.toObject()})
+                    console.log("sucess");
+                }
+                else{
+
+                    res.json({status: 101,msg:"User Does not exits"})
+                    console.log("not user");
+              
+                }
+              }
+              )
+            .catch(err => {
+
+               console.log(err.message);
+               res.json({status: 101,msg:"User Does not exits"})
+               console.log("not user");
+
+            })
+      }  
+      catch(err)
       {
-        console.log(user)
-        if(user)
-        {
-            res.json({status:"200",msg:"Successfull",userdetails: user.toObject()})
-            console.log("sucess");
-        }
-        else{
-          res.json({status:"101",msg:"User Does not exits"})
-          console.log("not user");
-        }
+            console.log(err.message);
+            res.json({status: 101,msg:"User Does not exits"})
+            console.log("not user");
       }
-      )
-  
-  
+
   });
 
  //@rout POST api/users/generatePin
@@ -1017,99 +1419,122 @@ router.post('/profileUpdate', (req,res) => {
 router.post('/generatePin', (req,res) => {
   console.log(req.body);
     const userid = req.body._id;
-   
-    handlegeneratePin = (number) => {
+     try{      
+            handlegeneratePin = (number) => {
 
-      let pins = [];
-     
-    
-      for (let i = 0; i < number; i++) {
-        
-        const key = short.generate()
-        pins.push(key);
-    
-        
-      }
-      console.log(pins);
-      return pins;
-    
-     }
-
-    User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-      
-      $inc:{pinBalance: -parseFloat(req.body.total)},
-      $push : {
-        availablePins: handlegeneratePin(req.body.quantity)
-      }
-     
-    },{new:true})
-     .select('-password')
-     .then(user => 
-      {
-        console.log(user)
-        if(user)
-        {
-
-          const  date = new Date();
-          const today = date.toLocaleDateString();
-          dailyReport.findOneAndUpdate({
-
-            dateId : today
-
-          },{
-
-            $inc : { LevelPinsIncome : parseFloat(req.body.total )}
-
-          },{new: true}).then(document => {
-            if(!document){
-              const report =  new DailyReport({
-       
-                dateId: today,
-                LevelPinsIncome: parseFloat( req.body.total),
-                PoolOnePinsIncome:  0,
-                PoolTwoPinsIncome: 0,
-                PoolThreePinsIncome: 0,
-                PoolFourPinsIncome:  0,
-                PoolFivePinsIncome:  0,
-                PoolSixPinsIncome:  0,
-                PoolSevenPinsIncome: 0,
-                PoolEightPinsIncome:  0,
-                PoolNinePinsIncome:  0,
-                PoolTenPinsIncome:  0,
-                withdrawpercentage: 0,
-                funtToPinPercent : 0,
-                //Spend 
-                LevelOutSpend: 0,
-                FundSharing:  0,
-                PoolOutgo: 0,
-                withdraw: 0,
-                //Others
-                Balance : 0,
-                BalanceReport: [],
-                Nothing: 0,
-        
-               })
-        
-             report.save()
-             .then(res => {
-                 console.log(res);
-             }).catch(err => { 
-                console.log(err);
-            })
+              let pins = [];
+            
+            
+              for (let i = 0; i < number; i++) {
+                
+                const key = short.uuid()
+                pins.push(key);
+            
+                
+              }
+              console.log(pins);
+              return pins;
+            
             }
-          })
 
-            res.json({status:1,userdetails: user.toObject()})
-            console.log("sucess");
-        }
-        else{
+            User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+              
+              $inc:{pinBalance: -parseFloat(req.body.total)},
+              $push : {
+                availablePins: handlegeneratePin(req.body.quantity)
+              }
+            
+            },{new:true})
+            .select('-password')
+            .then(user => 
+            {
+                        console.log(user)
+                        if(user)
+                        {
+
+                          const  date = new Date();
+                          const today = date.toLocaleDateString();
+                          dailyReport.findOneAndUpdate({
+
+                            dateId : today
+
+                          },{
+
+                            $inc : { LevelPinsIncome : parseFloat(req.body.total )}
+
+                          },{new: true}).then(document => {
+                                
+                                      if(!document){
+                                              const report =  new DailyReport({
+                                      
+                                                dateId: today,
+                                                LevelPinsIncome: parseFloat( req.body.total),
+                                                PoolOnePinsIncome:  0,
+                                                PoolTwoPinsIncome: 0,
+                                                PoolThreePinsIncome: 0,
+                                                PoolFourPinsIncome:  0,
+                                                PoolFivePinsIncome:  0,
+                                                PoolSixPinsIncome:  0,
+                                                PoolSevenPinsIncome: 0,
+                                                PoolEightPinsIncome:  0,
+                                                PoolNinePinsIncome:  0,
+                                                PoolTenPinsIncome:  0,
+                                                withdrawpercentage: 0,
+                                                funtToPinPercent : 0,
+                                                //Spend 
+                                                LevelOutSpend: 0,
+                                                FundSharing:  0,
+                                                PoolOutgo: 0,
+                                                withdraw: 0,
+                                                //Others
+                                                Balance : 0,
+                                                BalanceReport: [],
+                                                Nothing: 0,
+                                        
+                                              })
+                                        
+                                                report.save()
+                                                .then(res => {
+                                                    console.log(res);
+                                                    res.json({status:1,userdetails: user.toObject()})
+                                                }).catch(err => { 
+                                                    console.log(err.message);
+                                                    res.json({status:0,msg:"User Does not exits"})
+                                                })
+                                                }
+
+                                      else
+                                      {
+                                            res.json({status:1,userdetails: user.toObject()})
+                                            console.log("sucess");
+                                      }
+                          })
+                          .catch(err =>
+                          {
+                                console.log(err.message);
+                                res.json({status:0,msg:"User Does not exits"})
+                          })
+
+                           
+                        }
+                        else{
+                          res.json({status:0,msg:"User Does not exits"})
+                          console.log("not user");
+                        }
+              })
+              .catch(err =>
+              {
+                    console.log(err.message);
+                    res.json({status:0,msg:"User Does not exits"})
+              })
+          
+       }
+       catch(err)
+       {
+          console.log(err.message);
           res.json({status:0,msg:"User Does not exits"})
-          console.log("not user");
-        }
-      }
-      )
-  
-  
+       }
+
   });
 
   //@rout POST api/users/generateTreasurePin
@@ -1121,760 +1546,926 @@ router.post('/generateTreasurePin', (req,res) => {
     const  date = new Date();
     const today = date.toLocaleDateString();
    
-    handlegeneratePin = (number) => {
-
-      let pins =[];
-     
+  try{
     
-      for (let i = 0; i < number; i++) {
-        
-        const key = short.generate()
-        pins.push(key);
-    
-        
-      }
-      console.log(pins);
-      return pins;
-    
-     }
+            handlegeneratePin = (number) => {
 
-     switch (parseInt(req.body.treasureValue)) {
-       case 15:
-        User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-      
-          $inc:{pinBalance: -parseFloat(req.body.total)},
-          $push: {
-            poolOnePins: handlegeneratePin(req.body.quantity)
-          }
-        },{new:true})
-         .select('-password')
-         .then(user => 
-          {
-            console.log(user)
-            if(user)
-            {
-
-              
-                dailyReport.findOneAndUpdate({
-
-                  dateId : today
-
-                },{
-
-                  $inc : { PoolOnePinsIncome : req.body.total }
-
-                },{new: true}).then(document => {
-                  if(!document){
-                    const report =  new DailyReport({
+              let pins =[];
             
-                      dateId: today,
-                      LevelPinsIncome:  0,
-                      PoolOnePinsIncome:  req.body.total,
-                      PoolTwoPinsIncome: 0,
-                      PoolThreePinsIncome: 0,
-                      PoolFourPinsIncome:  0,
-                      PoolFivePinsIncome:  0,
-                      PoolSixPinsIncome:  0,
-                      PoolSevenPinsIncome: 0,
-                      PoolEightPinsIncome:  0,
-                      PoolNinePinsIncome:  0,
-                      PoolTenPinsIncome:  0,
-                      withdrawpercentage: 0,
-                      funtToPinPercent : 0,
-                      //Spend 
-                      LevelOutSpend: 0,
-                      FundSharing:  0,
-                      PoolOutgo: 0,
-                      withdraw: 0,
-                      //Others
-                      Balance : 0,
-                      BalanceReport: [],
-                      Nothing: 0,
-              
-                    })
-              
-                  report.save()
-                  .then(res => {
-                      console.log(res);
-                  }).catch(err => { 
-                      console.log(err);
-                  })
-                  }
-                })
+            
+              for (let i = 0; i < number; i++) {
                 
-                res.json({status:1,userdetails: user.toObject()})
-                console.log("sucess");
-            }
-            else{
-              res.json({status:0,msg:"User Does not exits"})
-              console.log("not user");
-            }
-          }
-          )
-         
-         break;
-
-         case 30:
-        User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-      
-          $inc:{pinBalance: -parseFloat(req.body.total)},
-          $push: {
-            poolTwoPins: handlegeneratePin(req.body.quantity)
-          }
-        },{new:true})
-         .select('-password')
-         .then(user => 
-          {
-            console.log(user)
-            if(user)
-            {
-
-              dailyReport.findOneAndUpdate({
-
-                dateId : today
-
-              },{
-
-                $inc : { PoolTwoPinsIncome : req.body.total }
-
-              },{new: true}).then(document => {
-                if(!document){
-                  const report =  new DailyReport({
-          
-                    dateId: today,
-                    LevelPinsIncome:  0,
-                    PoolOnePinsIncome:  0,
-                    PoolTwoPinsIncome: req.body.total,
-                    PoolThreePinsIncome: 0,
-                    PoolFourPinsIncome:  0,
-                    PoolFivePinsIncome:  0,
-                    PoolSixPinsIncome:  0,
-                    PoolSevenPinsIncome: 0,
-                    PoolEightPinsIncome:  0,
-                    PoolNinePinsIncome:  0,
-                    PoolTenPinsIncome:  0,
-                    withdrawpercentage: 0,
-                    funtToPinPercent : 0,
-                    //Spend 
-                    LevelOutSpend: 0,
-                    FundSharing:  0,
-                    PoolOutgo: 0,
-                    withdraw: 0,
-                    //Others
-                    Balance : 0,
-                    BalanceReport: [],
-                    Nothing: 0,
+                const key = short.uuid()
+                pins.push(key);
             
-                  })
-            
-                report.save()
-                .then(res => {
-                    console.log(res);
-                }).catch(err => { 
-                    console.log(err);
-                })
-                }
-              })
-
-                res.json({status:1,userdetails: user.toObject()})
-                console.log("sucess");
-            }
-            else{
-              res.json({status:0,msg:"User Does not exits"})
-              console.log("not user");
-            }
-          }
-          )
-         
-         break;
-     
-         case 50:
-          User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-        
-            $inc:{pinBalance: -parseFloat(req.body.total)},
-            $push: {
-              poolThreePins: handlegeneratePin(req.body.quantity)
-            }
-          },{new:true})
-           .select('-password')
-           .then(user => 
-            {
-              console.log(user)
-              if(user)
-              {
-                dailyReport.findOneAndUpdate({
-
-                  dateId : today
-
-                },{
-
-                  $inc : { PoolThreePinsIncome : req.body.total }
-
-                },{new: true}).then(document => {
-                  if(!document){
-                    const report =  new DailyReport({
-            
-                      dateId: today,
-                      LevelPinsIncome:  0,
-                      PoolOnePinsIncome:  0,
-                      PoolTwoPinsIncome: 0,
-                      PoolThreePinsIncome: req.body.total,
-                      PoolFourPinsIncome:  0,
-                      PoolFivePinsIncome:  0,
-                      PoolSixPinsIncome:  0,
-                      PoolSevenPinsIncome: 0,
-                      PoolEightPinsIncome:  0,
-                      PoolNinePinsIncome:  0,
-                      PoolTenPinsIncome:  0,
-                      withdrawpercentage: 0,
-                      funtToPinPercent : 0,
-                      //Spend 
-                      LevelOutSpend: 0,
-                      FundSharing:  0,
-                      PoolOutgo: 0,
-                      withdraw: 0,
-                      //Others
-                      Balance : 0,
-                      BalanceReport: [],
-                      Nothing: 0,
-              
-                    })
-              
-                  report.save()
-                  .then(res => {
-                      console.log(res);
-                  }).catch(err => { 
-                      console.log(err);
-                  })
-                  }
-                })
-
-                  res.json({status:1,userdetails: user.toObject()})
-                  console.log("sucess");
-              }
-              else{
-                res.json({status:0,msg:"User Does not exits"})
-                console.log("not user");
-              }
-            }
-            )
-           
-           break;
-
-           case 100:
-        User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-      
-          $inc:{pinBalance: -parseFloat(req.body.total)},
-          $push: {
-            poolFourPins: handlegeneratePin(req.body.quantity)
-          }
-        },{new:true})
-         .select('-password')
-         .then(user => 
-          {
-            console.log(user)
-            if(user)
-            {
-              dailyReport.findOneAndUpdate({
-
-                dateId : today
-
-              },{
-
-                $inc : { PoolFourPinsIncome : req.body.total }
-
-              },{new: true}).then(document => {
-                if(!document){
-                  const report =  new DailyReport({
-          
-                    dateId: today,
-                    LevelPinsIncome:  0,
-                    PoolOnePinsIncome:  0,
-                    PoolTwoPinsIncome: 0,
-                    PoolThreePinsIncome: 0,
-                    PoolFourPinsIncome:  req.body.total,
-                    PoolFivePinsIncome:  0,
-                    PoolSixPinsIncome:  0,
-                    PoolSevenPinsIncome: 0,
-                    PoolEightPinsIncome:  0,
-                    PoolNinePinsIncome:  0,
-                    PoolTenPinsIncome:  0,
-                    withdrawpercentage: 0,
-                    funtToPinPercent : 0,
-                    //Spend 
-                    LevelOutSpend: 0,
-                    FundSharing:  0,
-                    PoolOutgo: 0,
-                    withdraw: 0,
-                    //Others
-                    Balance : 0,
-                    BalanceReport: [],
-                    Nothing: 0,
-            
-                  })
-            
-                report.save()
-                .then(res => {
-                    console.log(res);
-                }).catch(err => { 
-                    console.log(err);
-                })
-                }
-              })
-
-                res.json({status:1,userdetails: user.toObject()})
-                console.log("sucess");
-            }
-            else{
-              res.json({status:0,msg:"User Does not exits"})
-              console.log("not user");
-            }
-          }
-          )
-         
-         break;
-      
-         case 150:
-          User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-        
-            $inc:{pinBalance: -parseFloat(req.body.total)},
-            $push: {
-              poolFivePins: handlegeneratePin(req.body.quantity)
-            }
-          },{new:true})
-           .select('-password')
-           .then(user => 
-            {
-              console.log(user)
-              if(user)
-              {
-
-                dailyReport.findOneAndUpdate({
-
-                  dateId : today
-
-                },{
-
-                  $inc : { PoolFivePinsIncome : req.body.total }
-
-                },{new: true}).then(document => {
-                  if(!document){
-                    const report =  new DailyReport({
-            
-                      dateId: today,
-                      LevelPinsIncome: 0,
-                      PoolOnePinsIncome:  0,
-                      PoolTwoPinsIncome: 0,
-                      PoolThreePinsIncome: 0,
-                      PoolFourPinsIncome:  0,
-                      PoolFivePinsIncome:  req.body.total,
-                      PoolSixPinsIncome:   0,
-                      PoolSevenPinsIncome: 0,
-                      PoolEightPinsIncome:  0,
-                      PoolNinePinsIncome:  0,
-                      PoolTenPinsIncome:  0,
-                      withdrawpercentage: 0,
-                      funtToPinPercent : 0,
-                      //Spend 
-                      LevelOutSpend: 0,
-                      FundSharing:  0,
-                      PoolOutgo: 0,
-                      withdraw: 0,
-                      //Others
-                      Balance : 0,
-                      BalanceReport: [],
-                      Nothing: 0,
-              
-                    })
-              
-                  report.save()
-                  .then(res => {
-                      console.log(res);
-                  }).catch(err => { 
-                      console.log(err);
-                  })
-                  }
-                })
-
-                  res.json({status:1,userdetails: user.toObject()})
-                  console.log("sucess");
-              }
-              else{
-                res.json({status:0,msg:"User Does not exits"})
-                console.log("not user");
-              }
-            }
-            )
-           
-           break;
-       
-           case 200:
-            User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-          
-              $inc:{pinBalance: -parseFloat(req.body.total)},
-              $push: {
-                poolSixPins: handlegeneratePin(req.body.quantity)
-              }
-            },{new:true})
-             .select('-password')
-             .then(user => 
-              {
-                console.log(user)
-                if(user)
-                {
-                  dailyReport.findOneAndUpdate({
-
-                    dateId : today
-  
-                  },{
-  
-                    $inc : { PoolSixPinsIncome : req.body.total }
-  
-                  },{new: true}).then(document => {
-                    if(!document){
-                      const report =  new DailyReport({
-              
-                        dateId: today,
-                        LevelPinsIncome:  0,
-                        PoolOnePinsIncome:  0,
-                        PoolTwoPinsIncome: 0,
-                        PoolThreePinsIncome: 0,
-                        PoolFourPinsIncome:  0,
-                        PoolFivePinsIncome:  0,
-                        PoolSixPinsIncome:  req.body.total,
-                        PoolSevenPinsIncome: 0,
-                        PoolEightPinsIncome:  0,
-                        PoolNinePinsIncome:  0,
-                        PoolTenPinsIncome:  0,
-                        withdrawpercentage: 0,
-                        funtToPinPercent : 0,
-                        //Spend 
-                        LevelOutSpend: 0,
-                        FundSharing:  0,
-                        PoolOutgo: 0,
-                        withdraw: 0,
-                        //Others
-                        Balance : 0,
-                        BalanceReport: [],
-                        Nothing: 0,
                 
-                      })
-                
-                    report.save()
-                    .then(res => {
-                        console.log(res);
-                    }).catch(err => { 
-                        console.log(err);
-                    })
-                    }
-                  })
-
-                    res.json({status:1,userdetails: user.toObject()})
-                    console.log("sucess");
-                }
-                else{
-                  res.json({status:0,msg:"User Does not exits"})
-                  console.log("not user");
-                }
               }
-              )
-             
-             break;
-        
-             case 300:
-              User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+              console.log(pins);
+              return pins;
             
-                $inc:{pinBalance: -parseFloat(req.body.total)},
-                $push: {
-                  poolSevenPins: handlegeneratePin(req.body.quantity)
-                }
-              },{new:true})
-               .select('-password')
-               .then(user => 
-                {
-                  console.log(user)
-                  if(user)
-                  {
-                    dailyReport.findOneAndUpdate({
+            }
 
-                      dateId : today
-    
-                    },{
-    
-                      $inc : {  PoolSevenPinsIncome : req.body.total }
-    
-                    },{new: true}).then(document => {
-                      if(!document){
-                        const report =  new DailyReport({
-                
-                          dateId: today,
-                          LevelPinsIncome:  0,
-                          PoolOnePinsIncome:  0,
-                          PoolTwoPinsIncome: 0,
-                          PoolThreePinsIncome: 0,
-                          PoolFourPinsIncome:  0,
-                          PoolFivePinsIncome:  0,
-                          PoolSixPinsIncome:  0,
-                          PoolSevenPinsIncome: req.body.total,
-                          PoolEightPinsIncome:  0,
-                          PoolNinePinsIncome:  0,
-                          PoolTenPinsIncome:  0,
-                          withdrawpercentage: 0,
-                          funtToPinPercent : 0,
-                          //Spend 
-                          LevelOutSpend: 0,
-                          FundSharing:  0,
-                          PoolOutgo: 0,
-                          withdraw: 0,
-                          //Others
-                          Balance : 0,
-                          BalanceReport: [],
-                          Nothing: 0,
-                  
-                        })
-                  
-                      report.save()
-                      .then(res => {
-                          console.log(res);
-                      }).catch(err => { 
-                          console.log(err);
-                      })
-                      }
-                    })
-
-                      res.json({status:1,userdetails: user.toObject()})
-                      console.log("sucess");
-                  }
-                  else{
-                    res.json({status:0,msg:"User Does not exits"})
-                    console.log("not user");
-                  }
-                }
-                )
-               
-               break;
-        
-               case 500:
-                User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-              
-                  $inc:{pinBalance: -parseFloat(req.body.total)},
-                  $push: {
-                    poolEightPins: handlegeneratePin(req.body.quantity)
-                  }
-                },{new:true})
-                 .select('-password')
-                 .then(user => 
-                  {
-                    console.log(user)
-                    if(user)
-                    {
-                      dailyReport.findOneAndUpdate({
-
-                        dateId : today
-      
-                      },{
-      
-                        $inc : { PoolEightPinsIncome : req.body.total }
-      
-                      },{new: true}).then(document => {
-                        if(!document){
-                          const report =  new DailyReport({
-                  
-                            dateId: today,
-                            PoolOnePinsIncome:  0,
-                            PoolTwoPinsIncome: 0,
-                            PoolThreePinsIncome: 0,
-                            PoolFourPinsIncome:  0,
-                            PoolFivePinsIncome:  0,
-                            PoolSixPinsIncome:  0,
-                            PoolSevenPinsIncome: 0,
-                            PoolEightPinsIncome:  req.body.total,
-                            PoolNinePinsIncome:  0,
-                            PoolTenPinsIncome:  0,
-                            withdrawpercentage: 0,
-                            funtToPinPercent : 0,
-                            //Spend 
-                            LevelOutSpend: 0,
-                            FundSharing:  0,
-                            PoolOutgo: 0,
-                            withdraw: 0,
-                            //Others
-                            Balance : 0,
-                            BalanceReport: [],
-                            Nothing: 0,
+            switch (parseInt(req.body.treasureValue)) {
+              case 15:
+                      User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
                     
-                          })
-                    
-                        report.save()
-                        .then(res => {
-                            console.log(res);
-                        }).catch(err => { 
-                            console.log(err);
-                        })
+                        $inc:{pinBalance: -parseFloat(req.body.total)},
+                        $push: {
+                          poolOnePins: handlegeneratePin(req.body.quantity)
                         }
-                      })
+                      },{new:true})
+                      .select('-password')
+                      .then(user => 
+                        {
+                                      console.log(user)
+                                      if(user)
+                                      {
 
-                        res.json({status:1,userdetails: user.toObject()})
-                        console.log("sucess");
-                    }
-                    else{
-                      res.json({status:0,msg:"User Does not exits"})
-                      console.log("not user");
-                    }
-                  }
-                  )
-                 
-                 break;
+                                        
+                                                dailyReport.findOneAndUpdate({
 
-                 case 750:
-                  User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-                
-                    $inc:{pinBalance: -parseFloat(req.body.total)},
-                    $push: {
-                      poolNinePins: handlegeneratePin(req.body.quantity)
-                    }
-                  },{new:true})
-                   .select('-password')
-                   .then(user => 
-                    {
-                      console.log(user)
-                      if(user)
-                      {
-                        dailyReport.findOneAndUpdate({
+                                                  dateId : today
 
-                          dateId : today
-        
-                        },{
-        
-                          $inc : { PoolNinePinsIncome : req.body.total }
-        
-                        },{new: true}).then(document => {
-                          if(!document){
-                            const report =  new DailyReport({
-                    
-                              dateId: today,
-                              LevelPinsIncome:  0,
-                              PoolOnePinsIncome:  0,
-                              PoolTwoPinsIncome: 0,
-                              PoolThreePinsIncome: 0,
-                              PoolFourPinsIncome:  0,
-                              PoolFivePinsIncome:  0,
-                              PoolSixPinsIncome:  0,
-                              PoolSevenPinsIncome: 0,
-                              PoolEightPinsIncome:  0,
-                              PoolNinePinsIncome:  req.body.total,
-                              PoolTenPinsIncome:  0,
-                              withdrawpercentage: 0,
-                              funtToPinPercent : 0,
-                              //Spend 
-                              LevelOutSpend: 0,
-                              FundSharing:  0,
-                              PoolOutgo: 0,
-                              withdraw: 0,
-                              //Others
-                              Balance : 0,
-                              BalanceReport: [],
-                              Nothing: 0,
-                      
-                            })
-                      
-                          report.save()
-                          .then(res => {
-                              console.log(res);
-                          }).catch(err => { 
-                              console.log(err);
-                          })
-                          }
+                                                },{
+
+                                                  $inc : { PoolOnePinsIncome : req.body.total }
+
+                                                },{new: true}).then(document => {
+
+                                                        if(!document){
+                                                                const report =  new DailyReport({
+                                                        
+                                                                  dateId: today,
+                                                                  LevelPinsIncome:  0,
+                                                                  PoolOnePinsIncome:  req.body.total,
+                                                                  PoolTwoPinsIncome: 0,
+                                                                  PoolThreePinsIncome: 0,
+                                                                  PoolFourPinsIncome:  0,
+                                                                  PoolFivePinsIncome:  0,
+                                                                  PoolSixPinsIncome:  0,
+                                                                  PoolSevenPinsIncome: 0,
+                                                                  PoolEightPinsIncome:  0,
+                                                                  PoolNinePinsIncome:  0,
+                                                                  PoolTenPinsIncome:  0,
+                                                                  withdrawpercentage: 0,
+                                                                  funtToPinPercent : 0,
+                                                                  //Spend 
+                                                                  LevelOutSpend: 0,
+                                                                  FundSharing:  0,
+                                                                  PoolOutgo: 0,
+                                                                  withdraw: 0,
+                                                                  //Others
+                                                                  Balance : 0,
+                                                                  BalanceReport: [],
+                                                                  Nothing: 0,
+                                                          
+                                                                })
+                                                    
+                                                                report.save()
+                                                                .then(res => {
+                                                                          console.log(res);
+                                                                          res.json({status:1,userdetails: user.toObject()})
+                                                                          console.log("sucess in");
+                                                                }).catch(err => { 
+                                                                           console.log(err);
+                                                                           console.log(err.message);
+                                                                           res.json({status:0,msg:"User Does not exits"})
+                                                                })
+                                                        }
+                                                        else
+                                                        {
+                                                              res.json({status:1,userdetails: user.toObject()})
+                                                              console.log("sucess");
+                                                        }
+
+                                                }).catch(err => {
+                                                               console.log(err.message);
+                                                               res.json({status:0,msg:"User Does not exits"})
+                                                })
+                                                
+                                      }
+                                      else{
+                                        res.json({status:0,msg:"User Does not exits"})
+                                        console.log("not user");
+                                      }
+                        }
+                        ).catch(err => {
+
+                          console.log(err.message);
+                          res.json({status:0,msg:"User Does not exits"})
+
                         })
+                      
+                break;
 
-                          res.json({status:1,userdetails: user.toObject()})
-                          console.log("sucess");
-                      }
-                      else{
-                        res.json({status:0,msg:"User Does not exits"})
-                        console.log("not user");
-                      }
-                    }
-                    )
-                   
-                   break;
+                case 30:
 
-                   case 1000:
-        User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
-      
-          $inc:{pinBalance: -parseFloat(req.body.total)},
-          $push: {
-            poolTenPins: handlegeneratePin(req.body.quantity)
-          }
-        },{new:true})
-         .select('-password')
-         .then(user => 
-          {
-            console.log(user)
-            if(user)
-            {
-              dailyReport.findOneAndUpdate({
+                        User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                      
+                          $inc:{pinBalance: -parseFloat(req.body.total)},
+                          $push: {
+                            poolTwoPins: handlegeneratePin(req.body.quantity)
+                          }
+                        },{new:true})
+                        .select('-password')
+                        .then(user => 
+                          {
+                                  console.log(user)
+                                  if(user)
+                                  {
 
-                dateId : today
+                                          dailyReport.findOneAndUpdate({
 
-              },{
+                                            dateId : today
 
-                $inc : { PoolTenPinsIncome : req.body.total }
+                                          },{
 
-              },{new: true}).then(document => {
-                if(!document){
-                  const report =  new DailyReport({
-          
-                    dateId: today,
-                    LevelPinsIncome: 0,
-                    PoolOnePinsIncome:  0,
-                    PoolTwoPinsIncome: 0,
-                    PoolThreePinsIncome: 0,
-                    PoolFourPinsIncome:  0,
-                    PoolFivePinsIncome:  0,
-                    PoolSixPinsIncome:  0,
-                    PoolSevenPinsIncome: 0,
-                    PoolEightPinsIncome:  0,
-                    PoolNinePinsIncome:  0,
-                    PoolTenPinsIncome: req.body.total,
-                    withdrawpercentage: 0,
-                    funtToPinPercent : 0,
-                    //Spend 
-                    LevelOutSpend: 0,
-                    FundSharing:  0,
-                    PoolOutgo: 0,
-                    withdraw: 0,
-                    //Others
-                    Balance : 0,
-                    BalanceReport: [],
-                    Nothing: 0,
+                                            $inc : { PoolTwoPinsIncome : req.body.total }
+
+                                          },{new: true}).then(document => {
+                                                    if(!document){
+                                                                const report =  new DailyReport({
+                                                        
+                                                                  dateId: today,
+                                                                  LevelPinsIncome:  0,
+                                                                  PoolOnePinsIncome:  0,
+                                                                  PoolTwoPinsIncome: req.body.total,
+                                                                  PoolThreePinsIncome: 0,
+                                                                  PoolFourPinsIncome:  0,
+                                                                  PoolFivePinsIncome:  0,
+                                                                  PoolSixPinsIncome:  0,
+                                                                  PoolSevenPinsIncome: 0,
+                                                                  PoolEightPinsIncome:  0,
+                                                                  PoolNinePinsIncome:  0,
+                                                                  PoolTenPinsIncome:  0,
+                                                                  withdrawpercentage: 0,
+                                                                  funtToPinPercent : 0,
+                                                                  //Spend 
+                                                                  LevelOutSpend: 0,
+                                                                  FundSharing:  0,
+                                                                  PoolOutgo: 0,
+                                                                  withdraw: 0,
+                                                                  //Others
+                                                                  Balance : 0,
+                                                                  BalanceReport: [],
+                                                                  Nothing: 0,
+                                                          
+                                                                })
+                                                          
+                                                              report.save()
+                                                              .then(res => {
+                                                                      console.log(res);
+                                                                      res.json({status:1,userdetails: user.toObject()})
+                                                                      console.log("sucess");
+
+                                                              }).catch(err => { 
+                                                                      console.log(err.message);
+                                                                      res.json({status:0,msg:"User Does not exits"})
+                                                              })
+                                                              }
+                                                    else
+                                                    {
+                                                          res.json({status:1,userdetails: user.toObject()})
+                                                          console.log("sucess");
+                                                    }
+                                          }).catch(err => {
+                                                  console.log(err.message);
+                                                  res.json({status:0,msg:"User Does not exits"})
+                                          })
+
+                                      
+                                  }
+                                  else{
+                                    res.json({status:0,msg:"User Does not exits"})
+                                    console.log("not user");
+                                  }
+                          }
+                          ).catch(err => {
+                            console.log(err.message);
+                            res.json({status:0,msg:"User Does not exits"})
+                          })
+                        
+                break;
             
-                  })
-            
-                report.save()
-                .then(res => {
-                    console.log(res);
-                }).catch(err => { 
-                    console.log(err);
-                })
-                }
-              })
+                case 50:
 
-                res.json({status:1,userdetails: user.toObject()})
-                console.log("sucess");
-            }
-            else{
-              res.json({status:0,msg:"User Does not exits"})
-              console.log("not user");
-            }
-          }
-          )
-         
-         break;
-        default:
-         break;
-     }
+                        User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                      
+                          $inc:{pinBalance: -parseFloat(req.body.total)},
+                          $push: {
+                            poolThreePins: handlegeneratePin(req.body.quantity)
+                          }
+                        },{new:true})
+                        .select('-password')
+                        .then(user => 
+                          {
+                                 console.log(user)
+                                  if(user)
+                                  {
+                                        dailyReport.findOneAndUpdate({
 
+                                          dateId : today
+
+                                        },{
+
+                                          $inc : { PoolThreePinsIncome : req.body.total }
+
+                                        },{new: true}).then(document => {
+                                            
+                                                  if(!document){
+                                                                  const report =  new DailyReport({
+                                                          
+                                                                    dateId: today,
+                                                                    LevelPinsIncome:  0,
+                                                                    PoolOnePinsIncome:  0,
+                                                                    PoolTwoPinsIncome: 0,
+                                                                    PoolThreePinsIncome: req.body.total,
+                                                                    PoolFourPinsIncome:  0,
+                                                                    PoolFivePinsIncome:  0,
+                                                                    PoolSixPinsIncome:  0,
+                                                                    PoolSevenPinsIncome: 0,
+                                                                    PoolEightPinsIncome:  0,
+                                                                    PoolNinePinsIncome:  0,
+                                                                    PoolTenPinsIncome:  0,
+                                                                    withdrawpercentage: 0,
+                                                                    funtToPinPercent : 0,
+                                                                    //Spend 
+                                                                    LevelOutSpend: 0,
+                                                                    FundSharing:  0,
+                                                                    PoolOutgo: 0,
+                                                                    withdraw: 0,
+                                                                    //Others
+                                                                    Balance : 0,
+                                                                    BalanceReport: [],
+                                                                    Nothing: 0,
+                                                            
+                                                                  })
+                                                            
+                                                                report.save()
+                                                                .then(res => {
+                                                                        console.log(res);
+                                                                        res.json({status:1,userdetails: user.toObject()})
+                                                                        console.log("sucess");
+                                                                }).catch(err => { 
+                                                                        console.log(err.message);
+                                                                        res.json({status:0,msg:"User Does not exits"})
+                                                                })
+                                                  }
+                                                  else
+                                                  {
+                                                    res.json({status:1,userdetails: user.toObject()})
+                                                    console.log("sucess");
+                                                  }
+
+                                        }).catch(err => {
+                                                console.log(err.message);
+                                                  res.json({status:0,msg:"User Does not exits"})
+                                        })
+
+                                    
+                                  }
+                                  else{
+                                    res.json({status:0,msg:"User Does not exits"})
+                                    console.log("not user");
+                                  }
+                          }
+                          ).catch(err => {
+                                    console.log(err.message);
+                                     res.json({status:0,msg:"User Does not exits"}) 
+                          })
+                        
+                  break;
+
+                  case 100:
+
+                        User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                      
+                          $inc:{pinBalance: -parseFloat(req.body.total)},
+                          $push: {
+                            poolFourPins: handlegeneratePin(req.body.quantity)
+                          }
+                        },{new:true})
+                        .select('-password')
+                        .then(user => 
+                          {
+                                    console.log(user)
+                                    if(user)
+                                    {
+                                            dailyReport.findOneAndUpdate({
+
+                                              dateId : today
+
+                                            },{
+
+                                              $inc : { PoolFourPinsIncome : req.body.total }
+
+                                            },{new: true}).then(document => {
+                                                          if(!document){
+                                                                        const report =  new DailyReport({
+                                                                
+                                                                          dateId: today,
+                                                                          LevelPinsIncome:  0,
+                                                                          PoolOnePinsIncome:  0,
+                                                                          PoolTwoPinsIncome: 0,
+                                                                          PoolThreePinsIncome: 0,
+                                                                          PoolFourPinsIncome:  req.body.total,
+                                                                          PoolFivePinsIncome:  0,
+                                                                          PoolSixPinsIncome:  0,
+                                                                          PoolSevenPinsIncome: 0,
+                                                                          PoolEightPinsIncome:  0,
+                                                                          PoolNinePinsIncome:  0,
+                                                                          PoolTenPinsIncome:  0,
+                                                                          withdrawpercentage: 0,
+                                                                          funtToPinPercent : 0,
+                                                                          //Spend 
+                                                                          LevelOutSpend: 0,
+                                                                          FundSharing:  0,
+                                                                          PoolOutgo: 0,
+                                                                          withdraw: 0,
+                                                                          //Others
+                                                                          Balance : 0,
+                                                                          BalanceReport: [],
+                                                                          Nothing: 0,
+                                                                  
+                                                                        })
+                                                                  
+                                                                      report.save()
+                                                                      .then(res => {
+                                                                          console.log(res);
+                                                                          res.json({status:1,userdetails: user.toObject()})
+                                                                          console.log("sucess");
+                                                                      }).catch(err => { 
+                                                                          console.log(err);
+                                                                          console.log(err.message);
+                                                                          res.json({status:0,msg:"User Does not exits"})
+                                                                      })
+                                                          }
+                                                          else
+                                                          {
+                                                                res.json({status:1,userdetails: user.toObject()})
+                                                                console.log("sucess");
+                                                          }
+                                            }).catch(err => {
+                                                  console.log(err.message);
+                                                  res.json({status:0,msg:"User Does not exits"})
+                                            })
+
+                                       
+                                    }
+                                    else{
+                                      res.json({status:0,msg:"User Does not exits"})
+                                      console.log("not user");
+                                    }
+                          }
+                          ).catch(err => {
+                                  console.log(err.message);
+                                  res.json({status:0,msg:"User Does not exits"})
+                          })
+                        
+                break;
+              
+                case 150:
+                          User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                        
+                            $inc:{pinBalance: -parseFloat(req.body.total)},
+                            $push: {
+                              poolFivePins: handlegeneratePin(req.body.quantity)
+                            }
+                          },{new:true})
+                          .select('-password')
+                          .then(user => 
+                            {
+                                    console.log(user)
+                                    if(user)
+                                    {
+
+                                              dailyReport.findOneAndUpdate({
+
+                                                dateId : today
+
+                                              },{
+
+                                                $inc : { PoolFivePinsIncome : req.body.total }
+
+                                              },{new: true}).then(document => {
+                                                      if(!document){
+                                                                const report =  new DailyReport({
+                                                        
+                                                                  dateId: today,
+                                                                  LevelPinsIncome: 0,
+                                                                  PoolOnePinsIncome:  0,
+                                                                  PoolTwoPinsIncome: 0,
+                                                                  PoolThreePinsIncome: 0,
+                                                                  PoolFourPinsIncome:  0,
+                                                                  PoolFivePinsIncome:  req.body.total,
+                                                                  PoolSixPinsIncome:   0,
+                                                                  PoolSevenPinsIncome: 0,
+                                                                  PoolEightPinsIncome:  0,
+                                                                  PoolNinePinsIncome:  0,
+                                                                  PoolTenPinsIncome:  0,
+                                                                  withdrawpercentage: 0,
+                                                                  funtToPinPercent : 0,
+                                                                  //Spend 
+                                                                  LevelOutSpend: 0,
+                                                                  FundSharing:  0,
+                                                                  PoolOutgo: 0,
+                                                                  withdraw: 0,
+                                                                  //Others
+                                                                  Balance : 0,
+                                                                  BalanceReport: [],
+                                                                  Nothing: 0,
+                                                          
+                                                                })
+                                                          
+                                                              report.save()
+                                                              .then(res => {
+                                                                  console.log(res);
+                                                                  res.json({status:1,userdetails: user.toObject()})
+                                                                  console.log("sucess")
+                                                              }).catch(err => { 
+                                                                          console.log(err);
+                                                                        res.json({status:0,msg:"User Does not exits"})
+                                                                      console.log("not user");
+                                                              })
+                                                      }
+                                                      else
+                                                      {
+                                                            res.json({status:1,userdetails: user.toObject()})
+                                                            console.log("sucess")
+                                                      }
+                                              }).catch(err => {
+                                                        console.log(err.message);
+                                                        res.json({status:0,msg:"User Does not exits"})  
+                                              })
+
+                                        
+                                    }
+                                    else{
+                                      res.json({status:0,msg:"User Does not exits"})
+                                      console.log("not user");
+                                    }
+                            }
+                            ).catch(err => {
+                                    console.log(err.message);
+                                    res.json({status:0,msg:"User Does not exits"})  
+                            })
+                          
+                  break;
+              
+                  case 200:
+
+                          User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                        
+                            $inc:{pinBalance: -parseFloat(req.body.total)},
+                            $push: {
+                              poolSixPins: handlegeneratePin(req.body.quantity)
+                            }
+                          },{new:true})
+                          .select('-password')
+                          .then(user => 
+                            {
+                                    console.log(user)
+                                    if(user)
+                                    {
+                                            dailyReport.findOneAndUpdate({
+
+                                              dateId : today
+                            
+                                            },{
+                            
+                                              $inc : { PoolSixPinsIncome : req.body.total }
+                            
+                                            },{new: true}).then(document => {
+                                                  if(!document){
+                                                            const report =  new DailyReport({
+                                                    
+                                                              dateId: today,
+                                                              LevelPinsIncome:  0,
+                                                              PoolOnePinsIncome:  0,
+                                                              PoolTwoPinsIncome: 0,
+                                                              PoolThreePinsIncome: 0,
+                                                              PoolFourPinsIncome:  0,
+                                                              PoolFivePinsIncome:  0,
+                                                              PoolSixPinsIncome:  req.body.total,
+                                                              PoolSevenPinsIncome: 0,
+                                                              PoolEightPinsIncome:  0,
+                                                              PoolNinePinsIncome:  0,
+                                                              PoolTenPinsIncome:  0,
+                                                              withdrawpercentage: 0,
+                                                              funtToPinPercent : 0,
+                                                              //Spend 
+                                                              LevelOutSpend: 0,
+                                                              FundSharing:  0,
+                                                              PoolOutgo: 0,
+                                                              withdraw: 0,
+                                                              //Others
+                                                              Balance : 0,
+                                                              BalanceReport: [],
+                                                              Nothing: 0,
+                                                      
+                                                            })
+                                                      
+                                                          report.save()
+                                                          .then(res => {
+                                                                    console.log(res);
+                                                                    res.json({status:1,userdetails: user.toObject()})
+                                                                    console.log("sucess");
+                                                          }).catch(err => { 
+                                                                    console.log(err.message);
+                                                                    res.json({status:0,msg:"User Does not exits"})
+                                                          })
+                                                  }
+                                                  else
+                                                  {
+                                                      res.json({status:1,userdetails: user.toObject()})
+                                                      console.log("sucess");
+                                                  }
+                                            })
+                                            .catch(err => {
+                                                   console.log(err.message);
+                                                   res.json({status:0,msg:"User Does not exits"})
+                                            })
+
+                                    }
+                                    else{
+                                      res.json({status:0,msg:"User Does not exits"})
+                                      console.log("not user");
+                                    }
+                            
+                             } ).catch(err => {
+                                    console.log(err.message);
+                                    res.json({status:0,msg:"User Does not exits"})
+                            })
+                          
+                    break;
+                
+                    case 300:
+                              User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                            
+                                $inc:{pinBalance: -parseFloat(req.body.total)},
+                                $push: {
+                                  poolSevenPins: handlegeneratePin(req.body.quantity)
+                                }
+                              },{new:true})
+                              .select('-password')
+                              .then(user => 
+                                {
+                                            console.log(user)
+                                            if(user)
+                                            {
+                                                    dailyReport.findOneAndUpdate({
+
+                                                      dateId : today
+                                    
+                                                    },{
+                                    
+                                                      $inc : {  PoolSevenPinsIncome : req.body.total }
+                                    
+                                                    },{new: true}).then(document => {
+                                                            if(!document){
+                                                                        const report =  new DailyReport({
+                                                                
+                                                                          dateId: today,
+                                                                          LevelPinsIncome:  0,
+                                                                          PoolOnePinsIncome:  0,
+                                                                          PoolTwoPinsIncome: 0,
+                                                                          PoolThreePinsIncome: 0,
+                                                                          PoolFourPinsIncome:  0,
+                                                                          PoolFivePinsIncome:  0,
+                                                                          PoolSixPinsIncome:  0,
+                                                                          PoolSevenPinsIncome: req.body.total,
+                                                                          PoolEightPinsIncome:  0,
+                                                                          PoolNinePinsIncome:  0,
+                                                                          PoolTenPinsIncome:  0,
+                                                                          withdrawpercentage: 0,
+                                                                          funtToPinPercent : 0,
+                                                                          //Spend 
+                                                                          LevelOutSpend: 0,
+                                                                          FundSharing:  0,
+                                                                          PoolOutgo: 0,
+                                                                          withdraw: 0,
+                                                                          //Others
+                                                                          Balance : 0,
+                                                                          BalanceReport: [],
+                                                                          Nothing: 0,
+                                                                  
+                                                                        })
+                                                                  
+                                                                      report.save()
+                                                                      .then(res => {
+                                                                          console.log(res);
+                                                                          res.json({status:1,userdetails: user.toObject()})
+                                                                          console.log("sucess");
+                                                                      }).catch(err => { 
+                                                                          console.log(err);
+                                                                          console.log(err.message);
+                                                                          res.json({status:0,msg:"User Does not exits"})
+                                                                      })
+                                                            }
+                                                            else
+                                                            {
+
+                                                                  res.json({status:1,userdetails: user.toObject()})
+                                                                  console.log("sucess");
+                                                            }
+                                                    })
+                                                    .catch(err => {
+                                                            console.log(err.message);
+                                                            res.json({status:0,msg:"User Does not exits"})
+                                                    })
+
+                                            }
+                                            else{
+                                              res.json({status:0,msg:"User Does not exits"})
+                                              console.log("not user");
+                                            }
+                                }
+                                ).catch(err => {
+                                        console.log(err.message);
+                                        res.json({status:0,msg:"User Does not exits"})
+                                })
+                              
+                      break;
+                
+                      case 500:
+
+                                User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                              
+                                  $inc:{pinBalance: -parseFloat(req.body.total)},
+                                  $push: {
+                                    poolEightPins: handlegeneratePin(req.body.quantity)
+                                  }
+                                },{new:true})
+                                .select('-password')
+                                .then(user => 
+                                  {
+                                          console.log(user)
+                                          if(user)
+                                          {
+                                                      dailyReport.findOneAndUpdate({
+
+                                                        dateId : today
+                                      
+                                                      },{
+                                      
+                                                        $inc : { PoolEightPinsIncome : req.body.total }
+                                      
+                                                      },{new: true}).then(document => {
+
+                                                                    if(!document){
+
+                                                                          const report =  new DailyReport({
+                                                                  
+                                                                            dateId: today,
+                                                                            PoolOnePinsIncome:  0,
+                                                                            PoolTwoPinsIncome: 0,
+                                                                            PoolThreePinsIncome: 0,
+                                                                            PoolFourPinsIncome:  0,
+                                                                            PoolFivePinsIncome:  0,
+                                                                            PoolSixPinsIncome:  0,
+                                                                            PoolSevenPinsIncome: 0,
+                                                                            PoolEightPinsIncome:  req.body.total,
+                                                                            PoolNinePinsIncome:  0,
+                                                                            PoolTenPinsIncome:  0,
+                                                                            withdrawpercentage: 0,
+                                                                            funtToPinPercent : 0,
+                                                                            //Spend 
+                                                                            LevelOutSpend: 0,
+                                                                            FundSharing:  0,
+                                                                            PoolOutgo: 0,
+                                                                            withdraw: 0,
+                                                                            //Others
+                                                                            Balance : 0,
+                                                                            BalanceReport: [],
+                                                                            Nothing: 0,
+                                                                    
+                                                                          })
+                                                                
+                                                                          report.save()
+                                                                          .then(res => {
+                                                                                    console.log(res);
+                                                                                    res.json({status:1,userdetails: user.toObject()})
+                                                                                    console.log("sucess");
+                                                                          }).catch(err => { 
+                                                                                    console.log(err.message);
+                                                                                    res.json({status:0,msg:"User Does not exits"})
+                                                                          })
+                                                                     }
+                                                                    else
+                                                                    {
+                                                                            res.json({status:1,userdetails: user.toObject()})
+                                                                            console.log("sucess");
+                                                                    }
+                                                      })
+                                                      .catch(err => {
+                                                                console.log(err.message);
+                                                                res.json({status:0,msg:"User Does not exits"})
+                                                      })
+
+                                              
+                                          }
+                                          else{
+                                            res.json({status:0,msg:"User Does not exits"})
+                                            console.log("not user");
+                                          }
+                                  }
+                                  ).catch(err => {
+                                          console.log(err.message);
+                                          res.json({status:0,msg:"User Does not exits"})
+                                  })
+                                
+                                break;
+
+                        case 750:
+
+                                User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                              
+                                  $inc:{pinBalance: -parseFloat(req.body.total)},
+                                  $push: {
+                                    poolNinePins: handlegeneratePin(req.body.quantity)
+                                  }
+                                },{new:true})
+                                .select('-password')
+                                .then(user => 
+                                  {
+                                            console.log(user)
+                                            if(user)
+                                            {
+
+                                                      dailyReport.findOneAndUpdate({
+
+                                                        dateId : today
+                                      
+                                                      },{
+                                      
+                                                        $inc : { PoolNinePinsIncome : req.body.total }
+                                      
+                                                      },{new: true}).then(document => {
+
+                                                                if(!document){
+                                                                            const report =  new DailyReport({
+                                                                    
+                                                                              dateId: today,
+                                                                              LevelPinsIncome:  0,
+                                                                              PoolOnePinsIncome:  0,
+                                                                              PoolTwoPinsIncome: 0,
+                                                                              PoolThreePinsIncome: 0,
+                                                                              PoolFourPinsIncome:  0,
+                                                                              PoolFivePinsIncome:  0,
+                                                                              PoolSixPinsIncome:  0,
+                                                                              PoolSevenPinsIncome: 0,
+                                                                              PoolEightPinsIncome:  0,
+                                                                              PoolNinePinsIncome:  req.body.total,
+                                                                              PoolTenPinsIncome:  0,
+                                                                              withdrawpercentage: 0,
+                                                                              funtToPinPercent : 0,
+                                                                              //Spend 
+                                                                              LevelOutSpend: 0,
+                                                                              FundSharing:  0,
+                                                                              PoolOutgo: 0,
+                                                                              withdraw: 0,
+                                                                              //Others
+                                                                              Balance : 0,
+                                                                              BalanceReport: [],
+                                                                              Nothing: 0,
+                                                                      
+                                                                            })
+                                                                      
+                                                                          report.save()
+                                                                          .then(res => {
+                                                                                  res.json({status:1,userdetails: user.toObject()})
+                                                                                  console.log("sucess");
+                                                                          }).catch(err => { 
+                                                                                  console.log(err.message);
+                                                                                  res.json({status:0,msg:"User Does not exits"})
+                                                                          })
+                                                                }
+                                                                else
+                                                                {
+                                                                  res.json({status:1,userdetails: user.toObject()})
+                                                                  console.log("sucess");
+                                                                }
+
+                                                      }).catch(err => {
+
+                                                                console.log(err.message);
+                                                                res.json({status:0,msg:"User Does not exits"})
+                                                                
+                                                      })
+
+                                            }
+                                            else{
+                                                  res.json({status:0,msg:"User Does not exits"})
+                                                  console.log("not user");
+                                            }
+                                  }
+                                  ).catch(err => {
+                                          console.log(err.message);
+                                          res.json({status:0,msg:"User Does not exits"})
+                                  })
+                                
+                          break;
+
+                          case 1000:
+
+                                    User.findOneAndUpdate({ _id: userid ,TransitionPassword: req.body._Password},{
+                                  
+                                      $inc:{pinBalance: -parseFloat(req.body.total)},
+                                      $push: {
+                                        poolTenPins: handlegeneratePin(req.body.quantity)
+                                      }
+                                    },{new:true})
+                                    .select('-password')
+                                    .then(user => 
+                                      {
+                                              console.log(user)
+                                              if(user)
+                                              {
+                                                        dailyReport.findOneAndUpdate({
+
+                                                          dateId : today
+
+                                                        },{
+
+                                                          $inc : { PoolTenPinsIncome : req.body.total }
+
+                                                        },{new: true}).then(document => {
+
+                                                                      if(!document){
+
+                                                                            const report =  new DailyReport({
+                                                                    
+                                                                              dateId: today,
+                                                                              LevelPinsIncome: 0,
+                                                                              PoolOnePinsIncome:  0,
+                                                                              PoolTwoPinsIncome: 0,
+                                                                              PoolThreePinsIncome: 0,
+                                                                              PoolFourPinsIncome:  0,
+                                                                              PoolFivePinsIncome:  0,
+                                                                              PoolSixPinsIncome:  0,
+                                                                              PoolSevenPinsIncome: 0,
+                                                                              PoolEightPinsIncome:  0,
+                                                                              PoolNinePinsIncome:  0,
+                                                                              PoolTenPinsIncome: req.body.total,
+                                                                              withdrawpercentage: 0,
+                                                                              funtToPinPercent : 0,
+                                                                              //Spend 
+                                                                              LevelOutSpend: 0,
+                                                                              FundSharing:  0,
+                                                                              PoolOutgo: 0,
+                                                                              withdraw: 0,
+                                                                              //Others
+                                                                              Balance : 0,
+                                                                              BalanceReport: [],
+                                                                              Nothing: 0,
+                                                                      
+                                                                            })
+                                                                  
+                                                                            report.save()
+                                                                            .then(res => {
+                                                                                        console.log(res);
+                                                                                        res.json({status:1,userdetails: user.toObject()})
+                                                                                        console.log("sucess");
+                                                                            }).catch(err => { 
+                                                                                        console.log(err.message);
+                                                                                        res.json({status:0,msg:"User Does not exits"})
+                                                                            })
+                                                                            }
+                                                                      else
+                                                                      {
+                                                                            res.json({status:1,userdetails: user.toObject()})
+                                                                            console.log("sucess");
+                                                                      }
+
+                                                        }).catch(err => {
+                                                              console.log(err.message);
+                                                              res.json({status:0,msg:"User Does not exits"})
+                                                        })
+
+                                                  
+                                              }
+                                              else{
+                                                res.json({status:0,msg:"User Does not exits"})
+                                                console.log("not user");
+                                              }
+                                      }).catch(err => {
+                                                console.log(err.message);
+                                                res.json({status:0,msg:"User Does not exits"})
+                                      })
+                                    
+                break;
+                
+                default:
+                     res.json({status:0,msg:"User Does not exits"})
+                     break;
+            }
+
+  }
+  catch(err)
+  {
+     console.log(err.message);
+     res.json({status:0,msg:"User Does not exits"})
+  }
    
   
   
@@ -1886,26 +2477,37 @@ router.post('/generateTreasurePin', (req,res) => {
 router.post('/walletAddress', (req,res) => {
   console.log(req.body);
    
-   
-    User.findOneAndUpdate({_id: req.body.id, TransitionPassword: req.body.oldPassword},{
-      bitAddress: req.body.walletAddress
-    },{new:true})
-     .select('-password')
-     .then(user => 
-      {
-        console.log(user)
-        if(user)
-        {
-            res.json({status:1,userdetails: user.toObject()})
-            console.log("sucess");
-        }
-        else{
+   try{
+            User.findOneAndUpdate({_id: req.body.id, TransitionPassword: req.body.oldPassword},{
+              bitAddress: req.body.walletAddress
+            },{new:true})
+            .select('-password')
+            .then(user => 
+              {
+                console.log(user)
+                if(user)
+                {
+                    res.json({status:1,userdetails: user.toObject()})
+                    console.log("sucess");
+                }
+                else
+                {
+                    res.json({status:0})
+                    console.log("not user");
+                }
+              }
+              ).catch(err => {
+
+                    console.log(err.message);
+                    res.json({status:0})
+
+              })
+    }
+    catch(err)
+    {
+          console.log(err.message);
           res.json({status:0})
-          console.log("not user");
-        }
-      }
-      )
-  
+    }
   
   });
 
@@ -1913,17 +2515,42 @@ router.post('/walletAddress', (req,res) => {
 // @desc delete a users
 // @acess public
 router.post('/changePassword', (req,res) => { 
-  User.findOneAndUpdate({_id: req.body.id, password: req.body.oldPassword},{
-    password: req.body.newPassword
-  },{new:true})
-  .select('-password')
-  .then(item => {
-      if(item){
-        res.json({ status: 1  })
-      }else{
-        res.json({ status: 0 })
-      }
-  })
+
+  console.log(req.body);
+
+  try
+  {
+
+            User.findOneAndUpdate({_id: req.body.id, password: req.body.oldPassword},{
+              password: req.body.newPassword
+            },{new:true})
+            .select('-password')
+            .then(item => {
+
+                if(item)
+                {
+                  res.json({ status: 1  })
+                }
+                else
+                {
+                  res.json({ status: 0 })
+                }
+
+            }).catch(err => {
+
+              console.log(err);
+              res.json({ status: 0 })
+              
+            })
+            
+  }
+  catch(err)
+  {
+       console.log(" ");
+       res.json({ status: 0 })
+  }
+
+
 });
 
 
@@ -1934,19 +2561,30 @@ router.post('/changeTransitionPassword', (req,res) => {
 
   console.log(req.body);
 
-  User.findOneAndUpdate({_id: req.body.id, TransitionPassword: req.body.oldPassword},{
-    TransitionPassword: req.body.newPassword
-  },{new:true})
-  .select('-password')
-  .then(item => {
-    console.log(item);
-      if(item){
-        
-        res.json({ status: 1  })
-      }else{
-        res.json({ status: 0 })
-      }
-  })
+  try{
+            User.findOneAndUpdate({_id: req.body.id, TransitionPassword: req.body.oldPassword},{
+              TransitionPassword: req.body.newPassword
+            },{new:true})
+            .select('-password')
+            .then(item => {
+              console.log(item);
+                if(item){
+                  res.json({ status: 1  })
+                }else{
+                  res.json({ status: 0 })
+                }
+            }).catch(err => {
+              console.log(err.message);
+              res.json({ status: 0 })
+            })
+    }
+    catch
+    {
+         console.log(" ");
+         res.json({ status: 0 })
+    }
+
+
 });
 
 //@rout Delete api/users

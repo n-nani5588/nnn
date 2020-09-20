@@ -3,6 +3,7 @@ import './fundWallet.css'
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import axios from  'axios';
+import Loader from 'react-loader-spinner';
 
 class SendFund extends React.Component{
 
@@ -18,6 +19,8 @@ class SendFund extends React.Component{
             autoPoolIncome: parseFloat( this.userdata.autoPoolIncome.$numberDecimal),
             fundSharingIncome: parseFloat( this.userdata.fundSharingIncome.$numberDecimal),
             recievedIncome: parseFloat( this.userdata.recievedIncome.$numberDecimal),
+            Active : this.userdata.Active.toLowerCase() === "true" ? true : false,
+            levelTeam : this.userdata.levelTeam,
             _level:0.00,
             _autopool:0.00,
             _fund:0.00,
@@ -29,7 +32,9 @@ class SendFund extends React.Component{
             memberId:"",
             sendMnyTo:'',
             sendUserDetails:"",
-            disablememberfield:false
+            disablememberfield:false,
+            Loading_id : false,
+            Loading : false
         }
     }
 
@@ -41,30 +46,49 @@ class SendFund extends React.Component{
                           parseFloat( this.userdata.recievedIncome.$numberDecimal)
                           console.log(Available);
     
-     if(parseFloat(Available) > parseFloat(0.00)){
+    
           
-        // const memberName = document.getElementById('Member_Name').value;
-        //  if(!memberName){
-        //     this.setState({buttondisable:true})
-        //     const msg =  document.getElementById('Update_Msg');
-        //     msg.innerHTML = "Please Enter \"Member Id\" and click on Get details";
-        //     msg.style.display = "block";
-        //  }
-        this.setState({
-            buttondisable: true,
-            disablememberfield: false,
-            buttondisablemember: false,
-            disableCanclebutton: true
+               if(this.state.Active){
 
-        })
-      
-    }
-      else{
-        this.setState({buttondisablemember:true,buttondisable:true})
-        const msg =  document.getElementById('Update_Msg');
-        msg.innerHTML = "SORYY ! can't transfer money due to low balance";
-        msg.style.display = "block";
-      }
+                        if(this.state.levelTeam.length > 4){
+
+                                    if(parseFloat(Available) > parseFloat(0.00) ){
+                                            
+                                                    this.setState({
+                                                
+                                                        buttondisable: true,
+                                                        disablememberfield: false,
+                                                        buttondisablemember: false,
+                                                        disableCanclebutton: true
+
+                                                    })
+                                        }
+                                        else{
+                                            this.setState({buttondisablemember:true,buttondisable:true})
+                                            const msg =  document.getElementById('Update_Msg');
+                                            msg.innerHTML = "SORYY ! can't transfer money due to low balance";
+                                            msg.style.display = "block";
+                                        }           
+                        }
+                        else
+                        {
+                            this.setState({buttondisablemember:true,buttondisable:true})
+                            const msg =  document.getElementById('Update_Msg');
+                            msg.innerHTML = "Please Join 4 Menbers to use this feature";
+                            msg.style.display = "block";
+                        }
+
+               } 
+               else
+               {
+
+                        this.setState({buttondisablemember:true,buttondisable:true})
+                        const msg =  document.getElementById('Update_Msg');
+                        msg.innerHTML = "Account is not Active";
+                        msg.style.display = "block";
+
+               }
+   
         
     }
 
@@ -94,96 +118,168 @@ class SendFund extends React.Component{
     }
 
     handleSubmit = async (e)=> {
+
+        this.setState({
+            Loading : true
+        })
             e.preventDefault();
-            const id = document.getElementById('Member_Id').value
-            
-            if(id === this.state.memberId){
-               
-                if( parseFloat(0.00) < parseFloat(e.target._Send.value)  ){
-                    
-                    if(parseFloat(e.target._Send.value) <= parseFloat(e.target._Available.value)){
-                     //await code
-                     console.log("in axios");
-                      document.getElementById('ERR_MSG').innerHTML = "";
-                      await axios.post('/api/users/sendFund/update',{
-                        
-                        //updating Values
-                        sendMnyTo:this.state.sendMnyTo,
-                        sendMnyToDetails: this.state.sendUserDetails,
-                        from: this.state.user_ID,
-                        total:e.target._Send.value,
-                        sendMnyFrom:this.state.sendMnyFrom,
-                        levelamount:e.target._level.value,
-                        autoamount:e.target._autopool.value,
-                        fundamount:e.target._fund.value,
-                        recievedamount:e.target._recieved.value,
 
-                      }).then(res => {
+            try{
+                            const id = document.getElementById('Member_Id').value
+                            console.log("click");
+                            
+                            if(id === this.state.memberId){
+                            
+                                        if( parseFloat(0.00) < parseFloat(e.target._Send.value)  ){
+                                            
+                                                    if(parseFloat(e.target._Send.value) <= parseFloat(e.target._Available.value)){
+                                                    //await code
+                                                                            console.log("in axios");
+                                                                            document.getElementById('ERR_MSG').innerHTML = "";
+                                                                            await axios.post('/api/users/sendFund/update',{
+                                                                                
+                                                                                        //updating Values
+                                                                                        sendMnyTo:this.state.sendMnyTo,
+                                                                                        sendMnyToDetails: this.state.sendUserDetails,
+                                                                                        from: this.state.user_ID,
+                                                                                        total:e.target._Send.value,
+                                                                                        sendMnyFrom:this.state.sendMnyFrom,
+                                                                                        levelamount:e.target._level.value,
+                                                                                        autoamount:e.target._autopool.value,
+                                                                                        fundamount:e.target._fund.value,
+                                                                                        recievedamount:e.target._recieved.value,
+                                                                                
 
-                        if(parseInt(res.data.status) === parseInt(1)){
-                             sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
-                             const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
-                             this.setState({
-                                sendMnyFrom:userdata._id,
-                                levelIncome: parseFloat( userdata.levelIncome.$numberDecimal),
-                                autoPoolIncome: parseFloat( userdata.autoPoolIncome.$numberDecimal),
-                                fundSharingIncome: parseFloat( userdata.fundSharingIncome.$numberDecimal),
-                                recievedIncome: parseFloat( userdata.recievedIncome.$numberDecimal),
-                                _level:0.00,
-                                _autopool:0.00,
-                                _fund:0.00,
-                                _recieved:0.00,
-                            })
-                        }else{
-                           
-                        }
-                      })
+                                                                            }).then(res => {
 
-                    }else{console.log("3");document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"}
+                                                                                        if(parseInt(res.data.status) === parseInt(1)){
+                                                                                            sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
+                                                                                            const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+                                                                                            this.setState({
+                                                                                                sendMnyFrom:userdata._id,
+                                                                                                levelIncome: parseFloat( userdata.levelIncome.$numberDecimal),
+                                                                                                autoPoolIncome: parseFloat( userdata.autoPoolIncome.$numberDecimal),
+                                                                                                fundSharingIncome: parseFloat( userdata.fundSharingIncome.$numberDecimal),
+                                                                                                recievedIncome: parseFloat( userdata.recievedIncome.$numberDecimal),
+                                                                                                _level:0.00,
+                                                                                                _autopool:0.00,
+                                                                                                _fund:0.00,
+                                                                                                _recieved:0.00,
+                                                                                                Loading : false
+                                                                                            })
+                                                                                        }else{
 
-                }else{
-                    console.log("2");
-                 document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                                                                            this.setState({
+                                                                                                Loading : false
+                                                                                            })
+                                                                                
+                                                                                         }
+                                                                            }).catch(err => {
+                                                                                
+                                                                                            this.setState({
+                                                                                                Loading : false
+                                                                                            })
+
+                                                                            })
+
+                                                    }
+                                                    else
+                                                    {
+                                                        console.log("3");document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                                        this.setState({
+                                                            Loading : false
+                                                        })
+                                                    }
+
+                                        }else{
+                                                    console.log("2");
+                                                    document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                                    this.setState({
+                                                        Loading : false
+                                                    })
+
+                                        }
+
+
+                            }else{
+                                document.getElementById('ERR_MSG').innerHTML = "Member id changed !"
+                                console.log("1");
+                                this.setState({
+                                    Loading : false
+                                })
+                            }
                 }
+                catch(err)
+                {
 
+                            this.setState({
+                                Loading : false
+                            })
 
-            }else{
-                document.getElementById('ERR_MSG').innerHTML = "Member id changed !"
-                console.log("1");
-            }
+                }
             
 
     }
 
     handleMemberId = async (e) => {
+
+        this.setState({
+            Loading_id : true
+        })
     
         e.preventDefault();
         const id = e.target._memberID.value;
-        if(id === this.userdata.userId){
-            document.getElementById('Update_Msg').innerHTML = "Can't Transfer to self Account"
-            document.getElementById('Update_Msg').style.display = "block"
-        }else{
-            await axios.get(`/api/users/sendFund/${id}` ).then(res => {
-                if(parseInt(res.data.status) === parseInt(1)){
-                    console.log(res.data.user);
-                    this.setState({
-                                sendUserDetails: res.data.user,
-                                memberName : res.data.user.firstName+""+res.data.user.lastName,
-                                memberId: res.data.user.userId,
-                                sendMnyTo: res.data.user._id,
-                                buttondisable:false,
-                                disablememberfield:true,
-                                buttondisablemember:true,
-                                disableCanclebutton:false
 
-                    })
-                    document.getElementById('Update_Msg').innerHTML = "Enter Amount"
-                    document.getElementById('Update_Msg').style.display = "block"
-                }else{
-                    document.getElementById('Update_Msg').innerHTML = "Enter valid MemberId and click Get details !"
-                    document.getElementById('Update_Msg').style.display = "block"
-                }
-            })
+        try{
+            const id = e.target._memberID.value;
+
+                        
+                        if(id === this.userdata.userId){
+                            document.getElementById('Update_Msg').innerHTML = "Can't Transfer to self Account"
+                            document.getElementById('Update_Msg').style.display = "block"
+                        }else{
+
+                            await axios.get(`/api/users/sendFund/${id}` )
+                            .then(res => {
+                                               if(parseInt(res.data.status) === parseInt(1)){
+                                                        console.log(res.data.user);
+                                                        this.setState({
+                                                                    sendUserDetails: res.data.user,
+                                                                    memberName : res.data.user.firstName+""+res.data.user.lastName,
+                                                                    memberId: res.data.user.userId,
+                                                                    sendMnyTo: res.data.user._id,
+                                                                    buttondisable:false,
+                                                                    disablememberfield:true,
+                                                                    buttondisablemember:true,
+                                                                    disableCanclebutton:false,
+                                                                    Loading_id : false
+
+                                                        })
+                                                        document.getElementById('Update_Msg').innerHTML = "Enter Amount"
+                                                        document.getElementById('Update_Msg').style.display = "block"
+                                                }
+                                                else
+                                                {
+                                                        document.getElementById('Update_Msg').innerHTML = "Enter valid MemberId and click Get details !"
+                                                        document.getElementById('Update_Msg').style.display = "block"
+                                                        this.setState({
+                                                            Loading_id : false
+                                                        })
+                                                }
+
+                            }).catch(err => {
+
+                                        this.setState({
+                                            Loading_id : false
+                                        })
+                            })
+                        }
+        }
+        catch(err)
+        {
+                this.setState({
+                    Loading_id : false
+                })
         }
         
     }
@@ -233,9 +329,9 @@ class SendFund extends React.Component{
                                             <button
                                             type="submit"
                                             className="btn  btn-sm"
-                                            disabled={this.state.buttondisablemember}
+                                            disabled={this.state.buttondisablemember || this.state.Loading_id}
                                             >
-                                                Get Details
+                                               {this.state.Loading_id ? (<div> <Loader type="ThreeDots" color="#39AD5D" height={30} width={30} /></div>) : "confirm id"}  
                                             </button>
 
                                             <button
@@ -243,7 +339,7 @@ class SendFund extends React.Component{
                                             disabled={this.state.disableCanclebutton}
                                             className="btn btn-sm"
                                             >
-                                               change id
+                                              change id
                                             </button>
                                         </div>
                                         </Grid>
@@ -288,7 +384,7 @@ class SendFund extends React.Component{
 
                                     <div className="Send_Fund_body_Total">
 
-                                    <input type="text" readOnly value="AVAILBLE FUND" className="form-control"></input>
+                                    <input type="text" readOnly value="AVAILABLE FUND" className="form-control"></input>
                                     <input type="text" name="_Available" id="Available_Balance" value={(parseFloat(this.state.recievedIncome)+parseFloat(this.state.fundSharingIncome)+parseFloat(this.state.levelIncome)+parseFloat(this.state.autoPoolIncome))} disabled className="form-control"></input>
                                   
 
@@ -306,8 +402,10 @@ class SendFund extends React.Component{
                                         <button 
                                         className="btn btn-success" 
                                         type = "submit"
-                                        disabled={this.state.buttondisable}
-                                        >Transfer</button>
+                                        disabled={this.state.buttondisable || this.state.Loading }
+                                        >
+                                             {this.state.Loading ? (<div> <Loader type="ThreeDots" color="#FFF" height={15} width={15} /></div>) : "Transfer"}
+                                        </button>
                                      </div>
                                 </div>
                         </Grid>

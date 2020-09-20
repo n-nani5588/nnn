@@ -11,7 +11,7 @@ class PinBalance extends React.Component {
        super();
        this.userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
         this.state = {
-            pinBalance : this.userdata.pinBalance.$numberDecimal
+            pinBalance : this.userdata.pinBalance.$numberDecimal || 0
         }
    }
 

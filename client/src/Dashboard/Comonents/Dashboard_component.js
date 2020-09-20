@@ -99,9 +99,9 @@ let newsnew ;
           <h2 className="mb-4">
             Welcome, {userdata.firstName} !
           </h2>
-          <p className="mb-4">
-          YOU ARE IN :  Rank #2
-          </p>
+          {/* <p className="mb-4"> */}
+          {/* YOU ARE IN :  Rank #2
+          </p> */}
         </div>
         <div>
           </div>
@@ -110,7 +110,7 @@ let newsnew ;
      
      <Grid container spacing={2}>
        <Grid item xs={12} justify="center" sm={11}>
-           <input className="_input_class form-control sm" value="http://gmail1234454.com/signup/543435" id="myInput"/>
+           <input className="_input_class form-control sm" value={`http://localhost:3000/signup/${userdata.userId}`} id="myInput"/>
        </Grid>
        <Grid item xs={12} sm={1}>
        <span> <button className="btn btn-sm" onClick={() => Copy_function()}>Copy</button></span>
@@ -122,7 +122,7 @@ let newsnew ;
       <div class="card bg-c-blue order-card">
                               <div className="card-block">
                                   <h6 className="m-b-20">Wallet Income</h6>
-                                  <h2 className="text-right"><i  className="fa fa-user f-left"></i><span>{userdata.recievedIncome.$numberDecimal}</span></h2>
+                                  <h2 className="text-right"><i  className="fa fa-user f-left"></i><span>${userdata.recievedIncome.$numberDecimal}</span></h2>
                                   {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
@@ -131,7 +131,7 @@ let newsnew ;
                           <div className="card bg-c-pink order-card">
                               <div className="card-block">
                                   <h6 className="m-b-20">Level Income</h6>
-                                  <h2 className="text-right"><i className="fa fa-users f-left"></i><span>{userdata.levelIncome.$numberDecimal}</span></h2>
+                                  <h2 className="text-right"><i className="fa fa-users f-left"></i><span>${userdata.levelIncome.$numberDecimal}</span></h2>
                                   {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
@@ -140,7 +140,7 @@ let newsnew ;
                           <div className="card bg-c-green order-card">
                               <div className="card-block">
                                   <h6 className="m-b-20">Treasure Income</h6>
-                                  <h2 className="text-right"><i class="fa fa-money-bill-wave f-left"></i><span>{userdata.autoPoolIncome.$numberDecimal}</span></h2>
+                                  <h2 className="text-right"><i class="fa fa-money-bill-wave f-left"></i><span>${userdata.autoPoolIncome.$numberDecimal}</span></h2>
                                   {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
@@ -150,7 +150,7 @@ let newsnew ;
                           <div className="card bg-c-yellow order-card">
                               <div className="card-block">
                                   <h6 className="m-b-20">Fund Sharing Income</h6>
-                                  <h2 className="text-right"><i class="fa fa-cart-plus f-left"></i><span>{userdata.fundSharingIncome.$numberDecimal}</span></h2>
+                                  <h2 className="text-right"><i class="fa fa-cart-plus f-left"></i><span>${userdata.fundSharingIncome.$numberDecimal}</span></h2>
                                   {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>

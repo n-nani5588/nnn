@@ -3,6 +3,7 @@ const newSchema = mongoose.Schema;
 
 //create Schema
 const userSchema = new newSchema({
+
     userId:{
         type: String,
         required: true,
@@ -38,8 +39,8 @@ const userSchema = new newSchema({
         required:true
     },
     joiningDate:{
-        type: Date,
-        default:  new Date()
+        type: String,
+        required : true
        
     },
     Active:{

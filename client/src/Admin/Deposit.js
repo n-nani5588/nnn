@@ -65,12 +65,20 @@ class DepositRequests extends React.Component {
             _amount:"",
             _addamount:"",
             balance:"",
+            Loading: false,
+            Loading_ST : false,
+            detailed_S : "",
+            detailed_T : false
 
         }
             
     }
 
     componentDidMount(){
+
+      this.setState({
+        Loading_ST : false
+      })
 
             Axios.get('/api/Admin/DepositSatements')
             .then(res => {
@@ -80,8 +88,12 @@ class DepositRequests extends React.Component {
                 }
                 else
                 {
-                    this.setState({data1 : data})
+                    this.setState({data1 : data , Loading_ST : false})
                 }
+            }).catch(err => {
+              this.setState({
+                Loading_ST: false
+              })
             })
 
             Axios.get('/api/Admin/Balance').
@@ -94,9 +106,7 @@ class DepositRequests extends React.Component {
                 })
               }
               else{
-                this.setState({
-                  
-                })
+                
               }
             })
 
@@ -120,44 +130,61 @@ class DepositRequests extends React.Component {
                         hashcode: Direct.HashCode,
                         date: Direct.date,
                         status: Direct.status?"Done":"pending",
-                        button: <BtnComponent data={details} onclick={(data) => this.handleDone(data)}></BtnComponent>
+                        button: <BtnComponent data={details} onclick={(data) => this.handlesendAmount(data)}></BtnComponent>
                         
               }
       
                data.rows.push(obj)
       } )}
 
-      this.setState({data1 : data})
+      this.setState({data1 : data, Loading_ST: false})
       
     }
 
-      handleDone = async (details) =>{
+    handlesendAmount = (data) =>{
+      
+        this.setState({
+          detailed_S : data,
+          detailed_T : true
+        })
 
-        console.log(details);
-        await Axios.post('/api/Admin/DepositDone',{
-                    userId: details._id,
-                })
-                .then(res => {
-                console.log(res.data);
-                    if(parseInt(res.data.status) === parseInt(1))
-                    {
-                        document.getElementById('Msg_disp').innerHTML = "Update Successfull"
-                    }
-                    else{
-                      document.getElementById('Msg_disp').innerHTML = "Not Updated"
-                    }
-                })
+    }
+
+      handleDone = (details) =>{
+
+        // console.log(details);
+        // await Axios.post('/api/Admin/DepositDone',{
+        //             userId: details._id,
+        //         })
+        //         .then(res => {
+        //         console.log(res.data);
+        //             if(parseInt(res.data.status) === parseInt(1))
+        //             {
+        //                 document.getElementById('Msg_disp').innerHTML = "Update Successfull"
+        //             }
+        //             else{
+        //               document.getElementById('Msg_disp').innerHTML = "Not Updated"
+        //             }
+        //         })
+         
+
+        
 
     }
 
     handleDepositSubmit = (e) => {
       
+  this.setState({
+    Loading_DC : true
+  })
+console.log(e);
       e.preventDefault();
 
       Axios.post('/api/Admin/SendDepositAmountToUser',{
 
         userid : e.target._userid.value,
-        amount: e.target._amount.value
+        amount: e.target._amount.value,
+        _id : e.target._id.value
 
       })
       .then(res => {
@@ -170,43 +197,64 @@ class DepositRequests extends React.Component {
             confirm : false,
             _userid :"",
             _amount:"",
+            Loading_DC: false
           })
 
         }
         else
         {
           document.getElementById('Msg_disp').innerHTML = res.data.msg
+          this.setState({
+            Loading_DC: false
+          })
         }
 
+      }).catch(err => {
+           this.setState({
+             Loading_DC: false
+           })
       })
 
     }
 
     handleAddBalance =(e) => {
       e.preventDefault();
-
-      Axios.post('/api/Admin/AddBalance',
+this.setState({
+  Loading : true
+})
+  
+   Axios.post('/api/Admin/AddBalance',
       {
         admin : e.target._selectadmin.value,
         addamount : e.target._addamount.value
       }
       )
       .then(res => {
-
+        console.log(res);
         if(parseInt(res.data.status) === parseInt(1)){
 
           document.getElementById('Msg_disp1').innerHTML = res.data.msg
           this.setState({
             _addamount :"",
-            addconfirm : false
+            addconfirm : false,
+            balance : res.data.users.Balance.$numberDecimal,
+            Loading: false
           })
 
         }
         else
         {
           document.getElementById('Msg_disp1').innerHTML = res.data.msg
+          this.setState({
+            Loading: false
+          })
         }
 
+
+      }).catch(err => {
+          this.setState({
+            Loading: false
+          })
       })
     }
 
@@ -243,7 +291,7 @@ class DepositRequests extends React.Component {
                         <input
                         onChange={(e) => this.handleChange(e)}
                         value={this.state._addamount}
-                        type="number" min="0" max={this.state.balance} name="_addamount"  className="form-control"></input>
+                        type="number" min="0"  name="_addamount"  className="form-control"></input>
                         {
                               !this.state.addconfirm &&  
                               <button 
@@ -266,8 +314,9 @@ class DepositRequests extends React.Component {
                           <button
                           className="btn btn-success btn-sm form-control"
                           type="submit"
+                          disabled={this.state.Loading}
                           >
-                            Confirm
+                           {this.state.Loading ? "Loading..." :  "Confirm"}
                           </button>
 
                           <button
@@ -290,90 +339,114 @@ class DepositRequests extends React.Component {
                <div style={{backgroundColor:"blue",color:"white",fontFamily:"san-serif",fontSize:"20px"}}>
                   Deposit Table
                </div>
-                                <MDBDataTable
-                                striped
-                                bordered
-                                sortable={false}
-                                theadColor="#fff"
-                                entries={7}
-                                small
-                                noBottomColumns
-                                responsiveSm
-                                responsiveMd
-                                
-                                data={this.state.data1}
-                                />
+                          {this.state.Loading_ST ? 
+                          
+                          "Loading..."
+                          
+                          : 
+                          
+                          <MDBDataTable
+                            striped
+                            bordered
+                            sortable={false}
+                            theadColor="#fff"
+                            entries={7}
+                            small
+                            noBottomColumns
+                            responsiveSm
+                            responsiveMd
+                            
+                            data={this.state.data1}
+                            />
+                          
+                          }
+                              
 
-            
+                              <div>
 
-             <div>
+<div style={{backgroundColor:"blue",color:"white",fontFamily:"san-serif",fontSize:"20px"}}>
+   send Deposit
+</div>
 
-               <div style={{backgroundColor:"blue",color:"white",fontFamily:"san-serif",fontSize:"20px"}}>
-                  send Deposit
-               </div>
+<div id='Msg_disp'>
 
-               <div id='Msg_disp'>
+</div>
 
-              </div>
+<div>
+  <form onSubmit= {(e) => this.handleDepositSubmit(e)}>
+   
+   <input 
+   onChange={(e) => this.handleChange(e)}
+   disabled
+   value={this.state.detailed_S.userId}
+   type="text" name="_userid" placeholder="EnterId" required></input>
+   
+   <input 
+   value={this.state.detailed_S.Amount}
+   onChange={(e) => this.handleChange(e)}
+   type="number" name="_amount" step="any" min="0" max={this.state.balance} required></input>
 
-               <div>
-                 <form onSubmit= {(e) => this.handleDepositSubmit(e)}>
-                  
-                  <input 
-                  onChange={(e) => this.handleChange(e)}
-                  value={this.state._userid}
-                  type="text" name="_userid" placeholder="EnterId" required></input>
-                  
-                  <input 
-                  value={this.state._amount}
-                  onChange={(e) => this.handleChange(e)}
-                  type="number" name="_amount" step="any" min="0" max={this.state.balance} required></input>
-               
-                  {
-                    !this.state.confirm &&  
-                    <button 
-                    type="button"
-                    className="btn btn-primary btn-sm"
-                    onClick={() => {
+   <input 
+   value={this.state.detailed_S.Name}
+   disabled
+   onChange={(e) => this.handleChange(e)}
+   type="text" name="_NAME" required></input>
 
-                      this.setState({
-                              confirm: true
-                      })
+   
+<input 
+   value={this.state.detailed_S._id}
+   disabled
+   onChange={(e) => this.handleChange(e)}
+   type="text" name="_id" required></input>
 
-                    }}>
-                        Send 
-                    </button>
-                  
-                  }
-                
-                  {
-                    this.state.confirm && 
-                    <div>
-                      <button
-                      className="btn btn-success btn-sm"
-                      type="submit"
-                      >
-                        Confirm
-                      </button>
+   {
+     !this.state.confirm &&  
+     <button 
+     type="button"
+     className="btn btn-primary btn-sm"
+     onClick={() => {
 
-                      <button
-                      className="btn btn-warning btn-sm"
-                      type="button"
-                      onClick={() => {
-                        this.setState({
-                          confirm: false
-                        })
-                      }}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  }
-                </form>
-               </div>
+       this.setState({
+               confirm: true
+       })
 
-             </div>
+     }}>
+         Send 
+     </button>
+   
+   }
+ 
+   {
+     this.state.confirm && 
+     <div>
+       <button
+       className="btn btn-success btn-sm"
+       type="submit"
+       disabled={this.state.Loading_DC}
+       >
+        {this.state.Loading_DC ? "Loading..." : "Confirm" }
+       </button>
 
+       <button
+       className="btn btn-warning btn-sm"
+       type="button"
+       onClick={() => {
+         this.setState({
+           confirm: false
+         })
+       }}
+       >
+         Cancel
+       </button>
+     </div>
+   }
+ </form>
+</div>
+
+</div>
+
+
+           
          </div>
          )
     }

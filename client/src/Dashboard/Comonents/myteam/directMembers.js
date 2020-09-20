@@ -57,7 +57,7 @@ const classes = makeStyles((theme) => ({
         
       },
       {
-        label: 'Mail',
+        label: 'Email',
         field: 'Mail',
         
       },
@@ -85,7 +85,7 @@ class DirectMembers extends React.Component {
     super();
     this.state={
       data1:{},
-
+      Loading : false,
     }
      
   }
@@ -93,28 +93,42 @@ class DirectMembers extends React.Component {
 
  async componentDidMount(){
 
+  this.setState({
+    Loading : true
+  })
+
   const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
   const row = data.rows;
 
          console.log(row);
+    try{
+     
+                await Axios.post('/api/users/Direct_Members',{userid: userdata.userId})
+                .then(res => {
+                  console.log(res.data.users);
+                  if(parseInt(res.data.status) === parseInt(1)){
+                    this.createTable(res.data.users);
+                    console.log(data);
+                       this.setState({data1:data , Loading : false})
+                  }
+                  else
+                  {
+                       this.setState({data1:data , Loading : false})
+                  }
+                  
+                })
+                .catch(err => {
 
-      if(row.length === 0){
-        await Axios.post('/api/users/Direct_Members',{userid: userdata.userId})
-        .then(res => {
-          console.log(res.data.users);
-          if(parseInt(res.data.status) === parseInt(1)){
-            this.createTable(res.data.users);
-            console.log(data);
-            this.setState({data1:data})
-          }
-          
-        })
-      } else{
-        this.setState({
-          data1: data
-        })
-      }
-      
+                       console.log(" ");
+                       this.setState({data1:data , Loading : false})
+                })
+     
+    }
+    catch(err)
+    {
+           console.log(" ");
+           this.setState({data1:data , Loading : false})
+    }
 
   }
 
@@ -123,7 +137,7 @@ class DirectMembers extends React.Component {
   createTable= (members)=> {
         let i = 0;
         console.log(members);
-       
+        data.rows = [];
       members.map(Direct => {
               i++
               const obj = {
@@ -157,7 +171,20 @@ class DirectMembers extends React.Component {
                  <div style={{padding:"3%"}}>
                 <React.Fragment>
       
-
+                  {
+                    this.state.Loading ? 
+                    (
+                      <div style={{
+                        width:"100%",
+                        display: "flex",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        padding: "2% 0%"
+                      }}>
+                          Loading....
+                      </div>
+                    )
+                    :
                     <MDBDataTable
                     striped
                     bordered
@@ -168,9 +195,10 @@ class DirectMembers extends React.Component {
                     noBottomColumns
                     responsiveSm
                     responsiveMd
-                    
                     data={this.state.data1}
                     />
+                  }
+                    
                     {/* <div className={classes.seeMore}>
                     
                         <Link color="primary" href="#" >

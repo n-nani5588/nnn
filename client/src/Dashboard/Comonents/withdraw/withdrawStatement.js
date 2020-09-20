@@ -91,44 +91,58 @@ class WithdrawStatement extends React.Component {
     super();
     this.state={
       data1:{},
-
+      Loading: false
     }
      
   }
 
  async componentDidMount(){
 
-   const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
-   const row = data.rows;
- 
-          console.log(row);
+  this.setState({
+    Loading: true
+  })
 
-   if(row.length === 0){
-    console.log('inside');
+  try{
+          const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
+          const row = data.rows;
+        
+                  console.log(row);
 
-  await  Axios.post('/api/Statement/withdrawStatementGet',{
-      _id: userdata._id
-    })
-    .then(res => {
+          await  Axios.post('/api/Statement/withdrawStatementGet',{
+              _id: userdata._id
+            })
+            .then(res => {
 
-      if(parseInt(res.data.status) === parseInt(1))
-      {
-        this.createTable(res.data.user);
-        console.log(data);
-       
-      }
+                        if(parseInt(res.data.status) === parseInt(1))
+                        {
 
-    })
+                                this.createTable(res.data.user);
+                                console.log(data);
+                        
+                        }
+                        else
+                        {
+                                  this.setState({
+                                    Loading: false
+                                  })
+                        }
 
-   }
-   else{
-     this.setState({
-       data1: data
-     })
-   }
-  
+            }).catch(err => {
 
+                    this.setState({
+                      Loading: false
+                    })
 
+            })
+
+    }
+    catch(err)
+    {
+       console.log(" ");
+       this.setState({
+        Loading: false
+      })
+    }
   }
 
   createTable= (members)=> {
@@ -153,7 +167,7 @@ class WithdrawStatement extends React.Component {
            data.rows.push(obj)
  
           } )
-          this.setState({data1:data})
+          this.setState({data1:data , Loading: false})
   }
   
   // componentWillUnmount(){
@@ -176,20 +190,33 @@ class WithdrawStatement extends React.Component {
                             <div style={{padding:"3%"}}>
                             <React.Fragment>
                     
-            
-                                <MDBDataTable
-                                striped
-                                bordered
-                                sortable={false}
-                                theadColor="#fff"
-                                entries={7}
-                                small
-                                noBottomColumns
-                                responsiveSm
-                                responsiveMd
-                                
-                                data={this.state.data1}
-                                />
+                            {
+                    this.state.Loading ? 
+                    (
+                      <div style={{
+                        width:"100%",
+                        display: "flex",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        padding: "2% 0%"
+                      }}>
+                          Loading....
+                      </div>
+                    )
+                    :
+                    <MDBDataTable
+                    striped
+                    bordered
+                    sortable={false}
+                    theadColor="#fff"
+                    entries={7}
+                    small
+                    noBottomColumns
+                    responsiveSm
+                    responsiveMd
+                    data={this.state.data1}
+                    />
+                  }
                                 {/* <div className={classes.seeMore}>
                                 
                                     <Link color="primary" href="#" >

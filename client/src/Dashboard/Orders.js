@@ -49,6 +49,7 @@ export default class Orders extends React.Component {
     super();
     this.state = {
       data1: {},
+      Loading: false
     }
 
   }
@@ -56,6 +57,8 @@ export default class Orders extends React.Component {
   componentDidMount(){
 
     const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+
+    this.setState({ Loading : true })
 
     Axios.get(`/api/users/GetFundSharingAll`)
     .then(res => {
@@ -67,10 +70,16 @@ export default class Orders extends React.Component {
       else
       {
 
-        this.setState({data1: data})
+        this.setState({data1: data , Loading : false })
 
       }
     })
+
+    // setTimeout(() => {
+
+    //   this.setState({ Loading : false })
+      
+    // }, 3000);
 
   }
 
@@ -91,7 +100,7 @@ export default class Orders extends React.Component {
            data.rows.push(obj)
   } )}
 
-  this.setState({data1 : data})
+  this.setState({data1 : data ,Loading : false})
 
 }
   
@@ -128,24 +137,36 @@ export default class Orders extends React.Component {
                   FUND SHARING STATEMENT
          </div>
   
-                      <MDBDataTable
-                      striped
-                      bordered
-                      sortable={false}
-                      theadColor="#fff"
-                      entries={7}
-                      small
-                      noBottomColumns
-                      responsiveSm
-                      responsiveMd
-                      data={this.state.data1}
-                      />  
+             {
+               this.state.Loading ?   
+
+               (<div style={{ width : "100%" , height:"100%",display:"flex",justifyContent:"center",alignItems:"center",padding:"2% 0%"}}>
+                    Loading...
+               </div>)
+
+               :
+
+               <MDBDataTable
+               striped
+               bordered
+               sortable={false}
+               theadColor="#fff"
+               entries={7}
+               small
+               noBottomColumns
+               responsiveSm
+               responsiveMd
+               data={this.state.data1}
+               /> 
+
+             }
+                  
   
         <div className={classes.seeMore}>
        
-          <Link color="primary" href="#" >
+          {/* <Link color="primary" href="#" >
             See more orders
-          </Link>
+          </Link> */}
         </div>
       </React.Fragment>
     

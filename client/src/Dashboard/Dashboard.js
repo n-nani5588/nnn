@@ -192,8 +192,11 @@ export default function Dashboard(props) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
-    console.log(event.currentTarget);
-    setAnchorEl(event.currentTarget);
+    console.log("logout");
+                    sessionStorage.setItem("LOGIN",JSON.stringify(false));
+                    history.push('/')
+                    window.location.reload()
+    // setAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
@@ -236,7 +239,7 @@ export default function Dashboard(props) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
             <MailIcon />
@@ -252,6 +255,7 @@ export default function Dashboard(props) {
         </IconButton>
         <p>Notifications</p>
       </MenuItem>
+       */}
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           aria-label="account of current user"
@@ -259,9 +263,9 @@ export default function Dashboard(props) {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          < ExitToAppIcon  />
         </IconButton>
-        <p>Profile</p>
+        <Typography>LOGOUT</Typography>
       </MenuItem>
     </Menu>
   );
@@ -383,9 +387,10 @@ export default function Dashboard(props) {
         </div>
         <Divider />
         <div>
+          {/*  https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png*/}
         <div className="py-4 px-3  bg-light">
               <div className="media d-flex align-items-center">
-                <img src="https://res.cloudinary.com/mhmd/image/upload/v1556074849/avatar-1_tcnd60.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm"/>
+                <img src="https://www.tenforums.com/geek/gars/images/2/types/thumb__ser.png" alt="..." width="65" class="mr-3 rounded-circle img-thumbnail shadow-sm"/>
                 <div className="media-body">
                   <h4 className="m-0" style={{fontSize:"small"}}>{props.data.userId} </h4>
                   <p className="font-weight-light text-muted mb-0">Member</p>

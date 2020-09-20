@@ -3,7 +3,7 @@ import axios from 'axios';
 import './tickets.css';
 import Displaybutton from './displayButton';
 import { MDBDataTable } from 'mdbreact';
-
+import Loader from 'react-loader-spinner';
 
 const data = {
     columns: [
@@ -49,7 +49,8 @@ class Oldtickets extends React.Component{
             messages:[],
             addvalue:"",
             ticketid:"",
-
+            Loading: false,
+            Loading_btn: false
         }
     }
 
@@ -76,25 +77,40 @@ handleClick=(data)=>{
     this.setState({
         Subject: data.Subject,
         messages: data.message,
-        ticketid: data._id
+        ticketid: data._id,
+      
     })
 
 }
 
 componentDidMount(){
 
+  this.setState({
+    Loading: true
+  })
+
+  try{
         axios.get(`/api/users/GetTickets/${this.state._userid}`)
         .then(res => {
             console.log(res.data.Tickets);
             if(parseInt(res.data.status) === parseInt(1)){
                 this.createTable(res.data.Tickets)
                 this.setState({
-                    TicketsArray: data
+                    TicketsArray: data,
+                    Loading: false
                 })
             }else{
                 document.getElementById('Update_Msg').innerHTML = "No Tickets Found"
+                this.setState({Loading: false})
             }
+        }).catch(err => {
+                 this.setState({Loading: false})
         })
+    }
+    catch(err)
+    {
+      this.setState({Loading: false})
+    }
 }
 
 handleChange = (e) => {
@@ -105,24 +121,43 @@ handleChange = (e) => {
 
 hamdleSendButton= () =>{
 
-  let obj = {
-      msgid:1,
-      message:this.state.addvalue
-  }
-  axios.post('/api/users/UpdateMessage',{
-      message: obj,
-      _id: this.state.ticketid
-  }).then(res => {
-      console.log(res.data.message);
-      if(parseInt(res.data.status) === parseInt(1)){
-          this.setState({
-              messages: res.data.Tickets.message,
-              addvalue: ""
-          })
-          this.componentDidMount()
-      }
+  this.setState({
+    Loading_btn: true
   })
-
+try{
+          let obj = {
+              msgid:1,
+              message:this.state.addvalue
+          }
+          axios.post('/api/users/UpdateMessage',{
+              message: obj,
+              _id: this.state.ticketid
+          }).then(res => {
+              console.log(res.data.message);
+              if(parseInt(res.data.status) === parseInt(1)){
+                  this.setState({
+                      messages: res.data.Tickets.message,
+                      addvalue: "",
+                      Loading_btn: false
+                  })
+                //  this.componentDidMount()
+              }else{
+                this.setState({
+                  Loading_btn: false
+                })
+              }
+          }).catch(err => {
+                this.setState({
+                  Loading_btn: false
+                })
+          })
+  }
+  catch(err)
+  {
+          this.setState({
+            Loading_btn: false
+          })
+  }
 }
 
     render(){
@@ -143,6 +178,21 @@ hamdleSendButton= () =>{
                         {/* Display Tickets Table */}
                         <div>
 
+                        {
+                    this.state.Loading ? 
+                    (
+                      <div style={{
+                        width:"100%",
+                        display: "flex",
+                        justifyContent:"center",
+                        alignItems:"center",
+                        padding: "2% 0%"
+                      }}>
+                          Loading....
+                      </div>
+                    )
+                    :
+
                            <MDBDataTable
                             striped
                             bordered
@@ -156,7 +206,7 @@ hamdleSendButton= () =>{
                             
                             data={this.state.TicketsArray}
                             />
-                            
+                    }
                         </div>
 
                         {/* Display Messages*/}
@@ -193,8 +243,9 @@ hamdleSendButton= () =>{
                               <button
                               className="btn btn-primary btn-sm"
                               onClick={() => this.hamdleSendButton()}
+                              disabled={this.state.Loading_btn}
                               >
-                                send
+                                 {this.state.Loading_btn ? (<div> <Loader type="ThreeDots" color="#FFF" height={30} width={30} /></div>) : "send"}  
                               </button>
                             
                               </div>

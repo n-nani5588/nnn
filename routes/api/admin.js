@@ -54,6 +54,9 @@ router.get('/GetTickets', (req,res) => {
         if(Tickets){
             res.json({status: 1, Tickets})
         }else{ res.json({status: 0})}
+    }).catch(err => {
+         console.log(err);
+         res.json({status: 0})
     })
 
 })
@@ -77,6 +80,10 @@ router.post('/UpdateMessage', (req,res) => {
             res.json({status: 1, Tickets})
         }else{ res.json({status: 0})}
     })
+    .catch(err => {
+        console.log(err);
+        res.json({status: 0})
+    })
 
 })
 
@@ -93,7 +100,10 @@ router.get('/getNews', (req,res) => {
             res.json({status: 1, news})
         }else{ res.json({status: 0})}
     })
-
+    .catch(err => {
+        console.log(err);
+        res.json({status: 0})
+    })
 });
 
 //@rout get api/Admin/UpdateNews
@@ -110,6 +120,9 @@ console.log(req.body.news);
         if(news){
             res.json({status: 1, news})
         }else{ res.json({status: 0})}
+    }).catch(err => {
+        console.log(err);
+        res.json({status: 0})
     })
 
 });
@@ -177,18 +190,28 @@ router.post('/Adinfo', (req,res) => {
 router.get('/Adinfo/withdraw', (req,res) => {
 
     console.log(req.body);
-
-   AdInfo.findOne({_id: '5f55298f801fd918d8463f4f'})
-   .select('withdrawRequests')
-   .sort({date : 1})
-   .then(request => {
-        if(request){
-            res.json({status: 1, request})
-        }else{
-            res.json({status: 0})
-        }
-   })
-
+try{
+                AdInfo.findOne({_id: '5f55298f801fd918d8463f4f'})
+                .select('withdrawRequests')
+                .sort({date : 1})
+                .then(request => {
+                        if(request){
+                            res.json({status: 1, request})
+                        }else{
+                            res.json({status: 0})
+                        }
+                })
+                .catch(err =>
+                {
+                    console.log(err.message);
+                    res.json({status: 0})
+                })
+    }
+    catch(err)
+    {
+        console.log(err.message);
+        res.json({status: 0})
+    }
 });
 
 //@rout get api/Admin/DepositSatements
@@ -237,20 +260,31 @@ router.get('/getUserForPin/:id', (req,res) => {
 // @acess public
 router.post('/sendPinToUser', (req,res) => {
     console.log(req.body);
-    const pin = req.body.pin
-    console.log("pin",pin);
-    Users.findByIdAndUpdate({_id: req.body._id},{
-        $push: { 
-            availablePins: pin
-         }
-        },{new:true}).then(user => {
-        console.log(user);
-        if(user){
-            res.json({status: 1, user})
-        }else{
-            res.json({status: 0})
-        }
-    })
+
+    try{
+                        const pin = req.body.pin
+                console.log("pin",pin);
+                Users.findByIdAndUpdate({_id: req.body._id},{
+                    $push: { 
+                        availablePins: pin
+                    }
+                    },{new:true}).then(user => {
+                    console.log(user);
+                    if(user){
+                        res.json({status: 1, user})
+                    }else{
+                        res.json({status: 0})
+                    }
+                }).catch(err => {
+                    console.log(err.message);
+                    res.json({status: 0})
+                })
+    }
+    catch(err)
+    {
+        console.log(err.message)
+        res.json({status: 0})
+    }
 
 });
 
@@ -275,6 +309,11 @@ router.get('/getAllUserDetails',(req,res) => {
 router.post('/getTodayUserDetails',(req,res) => {
 
     console.log(req.body);
+    let current_datetime = new Date()
+    let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + (current_datetime.getDate()+1)
+
+try{
+
     const date = new Date()
     console.log(date.toLocaleString());
     Users.find(
@@ -283,22 +322,34 @@ router.post('/getTodayUserDetails',(req,res) => {
          [
            {
             joiningDate:
-            { $gte: new Date(req.body.startDate), $lte: new Date(req.body.endDate) },
+            { $gte: req.body.startDate, $lte: req.body.endDate },
+            Active: "true"
            },
            {
             joiningDate:
-            { $gte: new Date(req.body.startDate), $lte: new Date(req.body.endDate).setDate(new Date(req.body.endDate).getDate() + 1) },
+            { $gte: req.body.startDate, $lte: end_date },
+            Active: "true"
            },
          ],
         },
       )
       .then(users => {
+          console.log(users);
         if(users){
             res.json({status: 1,users});
         }else{
             res.json({status: 0});
         }
+    }).catch(err => {
+         console.log(err.message);
+         res.json({status: 0});
     })
+}
+catch(err)
+{
+    console.log(err.message);
+    res.json({status: 0});
+}
 
 })
 
@@ -340,78 +391,96 @@ router.post('/getDailyReportDetails',(req,res) => {
 router.post('/SendFundToUser',(req,res) => {
 
     console.log(req.body);
+try{
+            Users.findOneAndUpdate({
+                userId: req.body.userid
+            },{
+                $inc: { fundSharingIncome : parseFloat(req.body.fundamount) }
+            },{new: true})
+            .then(users => {
+                if(users){
 
-    Users.findOneAndUpdate({
-        userId: req.body.userid
-    },{
-        $inc: { fundSharingIncome : parseFloat(req.body.fundamount) }
-    },{new: true})
-      .then(users => {
-        if(users){
+                        const ShareFundStmnt = new FundsharingStatement({
 
-            const ShareFundStmnt = new FundsharingStatement({
+                            userId: req.body.userid,
+                            mailId:users.mailId,
+                            message: 'Hurray ! You have been Rewarded.',
+                            Amount: req.body.fundamount,
+                    
+                        })
+                        ShareFundStmnt.save().catch(err => {console.log(err.message);  res.json({status: 0});})
 
-                userId: req.body.userid,
-                mailId:users.mailId,
-                message: 'Hurray ! You have been Rewarded.',
-                Amount: req.body.fundamount,
-        
+                        const date = new Date();
+                        const today = date.toLocaleDateString();
+                        console.log(today);
+                        DailyReport.findOneAndUpdate({dateId : today},{
+
+                            $inc: { FundSharing : parseFloat(req.body.fundamount) }
+                            
+                        })
+                        .then(document => {
+                            if(!document){
+                                    const report =  new DailyReport({
+                            
+                                    dateId: today,
+                                    LevelPinsIncome:  0,
+                                    PoolOnePinsIncome:  0,
+                                    PoolTwoPinsIncome: 0,
+                                    PoolThreePinsIncome: 0,
+                                    PoolFourPinsIncome:  0,
+                                    PoolFivePinsIncome:  0,
+                                    PoolSixPinsIncome:  0,
+                                    PoolSevenPinsIncome: 0,
+                                    PoolEightPinsIncome:  0,
+                                    PoolNinePinsIncome:  0,
+                                    PoolTenPinsIncome:  0,
+                                    withdrawpercentage:0,
+                                    funtToPinPercent : 0,
+                                    //Spend 
+                                    LevelOutSpend: 0,
+                                    FundSharing:  parseFloat(req.body.fundamount),
+                                    PoolOutgo: 0,
+                                    withdraw: 0,
+                                    //Others
+                                    Balance : 0,
+                                    BalanceReport: [],
+                                    Nothing: 0,
+                            
+                                    })
+                        
+                                    report.save()
+                                    .then(res => {
+                                        console.log(res);
+                                        res.json({status: 1,users});
+                                    }).catch(err => { 
+                                        console.log(err);
+                                        res.json({status: 0});
+                                    })
+                            }else{
+                                res.json({status: 1,users});
+                            }
+                        })
+                        .catch(err => {
+                            res.json({status: 0});
+                        })
+
+                      
+                        
+                }else{
+                    res.json({status: 0});
+                }
             })
-            ShareFundStmnt.save();
-
-            const date = new Date();
-            const today = date.toLocaleDateString();
-            DailyReport.findOneAndUpdate({dateId : today},{
-
-                $inc: { FundSharing : parseFloat(req.body.fundamount) }
-                 
-            })
-            .then(document => {
-                if(!document){
-                    const report =  new DailyReport({
-             
-                      dateId: today,
-                      LevelPinsIncome:  0,
-                      PoolOnePinsIncome:  0,
-                      PoolTwoPinsIncome: 0,
-                      PoolThreePinsIncome: 0,
-                      PoolFourPinsIncome:  0,
-                      PoolFivePinsIncome:  0,
-                      PoolSixPinsIncome:  0,
-                      PoolSevenPinsIncome: 0,
-                      PoolEightPinsIncome:  0,
-                      PoolNinePinsIncome:  0,
-                      PoolTenPinsIncome:  0,
-                      withdrawpercentage:0,
-                      funtToPinPercent : 0,
-                      //Spend 
-                      LevelOutSpend: 0,
-                      FundSharing:  parseFloat(req.body.fundamount),
-                      PoolOutgo: 0,
-                      withdraw: 0,
-                      //Others
-                      Balance : 0,
-                      BalanceReport: [],
-                      Nothing: 0,
-              
-                     })
-              
-                   report.save()
-                   .then(res => {
-                       console.log(res);
-                   }).catch(err => { 
-                      console.log(err);
-                  })
-                  }
+            .catch(err => {
+                    console.log(err.message);
+                    res.json({status: 0});
             })
 
-            res.json({status: 1,users});
-        }else{
-            res.json({status: 0});
-        }
-    })
-
-    
+}
+catch(err)
+{
+     console.log(err.message);
+     res.json({status: 0});
+}
 
 
 
@@ -432,29 +501,20 @@ router.post('/SendDepositAmountToUser',(req,res) => {
       .then(users => {
         if(users){
 
-            DepositSatements.findOneAndUpdate(
+            DepositSatements.findOneAndUpdate({ _id : req.body._id },{
+                status: true ,
+                success : "Done"
+            },{new : true})
+            .then(user => {
+                if(user){
+                    console.log("user:",user);
+                    res.json({status: 1,msg: "successful"})
+                }else
                 {
-                    userId : req.body.userid 
+                    console.log("else:", );
+                    res.json({status: 0,msg: "not done"})
                 }
-                ,
-                {
-                    success : "Success"
-                },
-                {
-                    new: true
-                }
-                )
-                .then(user => {
-
-                    if(user){
-                        res.json({status: 1,users , msg: "SucessFull"});
-                    }
-                    else{
-                        res.json({status: 0, msg: "Statement Was not updated"});
-                    }
-
-                })
-            
+            })
 
            
         }else{
@@ -551,7 +611,7 @@ router.post('/AddBalance',(req,res) => {
                                  .then(users => {
                                     res.json({status: 1, users ,msg: "SucessFull"});
                                  }).catch(err => { 
-                                    res.json({status: 1, users ,msg: "Daily report not updated"});
+                                    res.json({status: 0, users ,msg: "Daily report not updated"});
                                 })
                             }
 
@@ -559,11 +619,14 @@ router.post('/AddBalance',(req,res) => {
                         })
                     }
                     else{
-                        res.json({status: 1,users , msg: "Update not done"});
+                        res.json({status: 0,users , msg: "Update not done"});
                     }
                   
 
-                })    
+                }).catch(err => {
+                    console.log(err);
+                    res.json({status: 0,users , msg: "Update not done"});
+                })  
 
 })
 
@@ -584,6 +647,9 @@ router.get('/Balance',(req,res) => {
        else{
            res.json({status: 0})
        }
+   }).catch(err => {
+       console.log(err);
+       res.json({status: 0})
    })
 
 
@@ -597,76 +663,107 @@ router.post('/Adinfo/withdrawDone', (req,res) => {
 
     console.log(req.body);
 
-    const date = new Date();
-    const today = date.toLocaleDateString();
-    const totalPer =  parseFloat(parseFloat(req.body.Amount)-parseFloat(req.body.Total))
+    try{
+                const date = new Date();
+                const today = date.toLocaleDateString();
+                const totalPer =  parseFloat(parseFloat(req.body.Amount)-parseFloat(req.body.Total))
 
-    Withdraw.findByIdAndUpdate({_id: req.body.statement_id},{
-        Status: "Done",
-    })
-    .then(() => {
+                Withdraw.findByIdAndUpdate({_id: req.body.statement_id},{
+                    Status: "Done",
+                })
+                .then(() => {
 
-        AdInfo.findOneAndUpdate(
-            {_id: '5f55298f801fd918d8463f4f' },
-            { $pull: { withdrawRequests: { Statement_ID: req.body.statement_id } } },
-            {new: true}
-            ).then((staetment) => {
-            console.log(staetment);
+                    AdInfo.findOneAndUpdate(
+                        {_id: '5f55298f801fd918d8463f4f' },
+                        { $pull: { withdrawRequests: { Statement_ID: req.body.statement_id } } },
+                        {new: true}
+                        ).then((staetment) => {
+                        console.log(staetment);
 
-            DailyReport.findOneAndUpdate({ dateId : today},{
+                        if(statements){
 
-                $inc : {
-                    withdrawpercentage : parseFloat(totalPer),
-                    withdraw : parseFloat(req.body.Total)
-                }
+                                    DailyReport.findOneAndUpdate({ dateId : today},{
 
-            },{new : true})
-            .then(document => {
-                if(!document){
-                    const report =  new DailyReport({
-             
-                      dateId: today,
-                      LevelPinsIncome:  0,
-                      PoolOnePinsIncome:  0,
-                      PoolTwoPinsIncome: 0,
-                      PoolThreePinsIncome: 0,
-                      PoolFourPinsIncome:  0,
-                      PoolFivePinsIncome:  0,
-                      PoolSixPinsIncome:  0,
-                      PoolSevenPinsIncome: 0,
-                      PoolEightPinsIncome:  0,
-                      PoolNinePinsIncome:  0,
-                      PoolTenPinsIncome:  0,
-                      withdrawpercentage: parseFloat(totalPer),
-                      funtToPinPercent : 0,
-                      //Spend 
-                      LevelOutSpend: 0,
-                      FundSharing:  0,
-                      PoolOutgo: 0,
-                      withdraw: parseFloat(req.body.Total),
-                      //Others
-                      Balance : 0,
-                      BalanceReport: [],
-                      Nothing: 0,
-              
-                     })
-              
-                   report.save()
-                   .then(res => {
-                       console.log(res);
-                   }).catch(err => { 
-                      console.log(err);
-                  })
-                  }
-            })
+                                        $inc : {
+                                            withdrawpercentage : parseFloat(totalPer),
+                                            withdraw : parseFloat(req.body.Total)
+                                        }
 
-            res.json({status:1,staetment})
-    
-        })
+                                    },{new : true})
+                                    .then(document => {
+                                        if(!document){
+                                            const report =  new DailyReport({
+                                    
+                                            dateId: today,
+                                            LevelPinsIncome:  0,
+                                            PoolOnePinsIncome:  0,
+                                            PoolTwoPinsIncome: 0,
+                                            PoolThreePinsIncome: 0,
+                                            PoolFourPinsIncome:  0,
+                                            PoolFivePinsIncome:  0,
+                                            PoolSixPinsIncome:  0,
+                                            PoolSevenPinsIncome: 0,
+                                            PoolEightPinsIncome:  0,
+                                            PoolNinePinsIncome:  0,
+                                            PoolTenPinsIncome:  0,
+                                            withdrawpercentage: parseFloat(totalPer),
+                                            funtToPinPercent : 0,
+                                            //Spend 
+                                            LevelOutSpend: 0,
+                                            FundSharing:  0,
+                                            PoolOutgo: 0,
+                                            withdraw: parseFloat(req.body.Total),
+                                            //Others
+                                            Balance : 0,
+                                            BalanceReport: [],
+                                            Nothing: 0,
+                                    
+                                            })
+                                    
+                                                report.save()
+                                                .then(res => {
+                                                    console.log(res);
+                                                    res.json({status:1,staetment})
+                                                }).catch(err => { 
+                                                    console.log(err.message);
+                                                    res.json({status:0,staetment})
+                                                })
+                                        }
+                                        else{
+                                            res.json({status:1,staetment})
+                                            
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.log(err.message);
+                                        res.json({status:0,staetment})
+                                    })
+                        }
+                        else
+                        {
+                                     res.json({status:0,staetment})
+                        }
+                                   
+                            
+                    }).catch(err => {
+                        console.log(err.message);
+                        res.json({status:0,staetment})
 
-    })
+                    })
 
-  
+                })
+                .catch(err =>
+                {
+                        console.log(err.message);
+                        res.json({status:0,staetment})
+                })
+
+    }
+    catch(err)
+    {
+           console.log(err.message);
+           res.json({status:0,staetment})
+    }     
 
 });
 
@@ -690,6 +787,9 @@ router.post('/DepositDone', (req,res) => {
             console.log("else:",user);
             res.json({status: 0})
         }
+    }).catch(err => {
+        console.log(err);
+        res.json({status: 0})
     })
    
 });
@@ -711,6 +811,9 @@ router.post('/Auth', (req,res) => {
             console.log("else:",user);
             res.json({status: 0})
         }
+    }).catch(err => {
+        console.log(err);
+        res.json({status: 0})
     })
    
 });
