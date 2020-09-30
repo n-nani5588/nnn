@@ -28,8 +28,8 @@ const fundSchema = new newSchema({
         required: true
     },
     joiningDate:{
-        type: Date,
-        default:  new Date()
+        type: String,
+         required: true
     },
     Amount: {
         type: mongoose.Schema.Types.Decimal128,

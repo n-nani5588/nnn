@@ -9,6 +9,11 @@ import Typography from '@material-ui/core/Typography';
 import { MDBRow, MDBCol, MDBBtn } from "mdbreact";
 import axios from 'axios';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 var interval;
 
 function Copyright() {
@@ -57,7 +62,9 @@ class Profile extends React.Component {
         value: "",
         valid: false
       },
-      Loading : false
+      Loading : false,
+      Err_message: "something",
+      open: false,
     }
 
   }
@@ -107,29 +114,35 @@ class Profile extends React.Component {
                                 lname: {value:res.data.userdetails.lastName,valid:res.data.userdetails.lastName?true:false},
                                 email: {value:res.data.userdetails.mailId,valid:res.data.userdetails.mailId?true:false},
                                 country: {value:res.data.userdetails.country,valid:res.data.userdetails.country?true:false},
-                                status: {value:res.data.userdetails.Active.toLowerCase() == 'true' ? true : false ,valid:res.data.userdetails.Active.toLowerCase() == 'true' ? true : false}
+                                status: {value:res.data.userdetails.Active.toLowerCase() == 'true' ? true : false ,valid:res.data.userdetails.Active.toLowerCase() == 'true' ? true : false},
+                                Err_message : "Update Successful !",
+                                open : true, 
                               })
-                              document.getElementById('UPD_SG').innerHTML= "Update Successful !"
-                              document.getElementById('UPD_SG').style.display = "block"
+                            //   document.getElementById('UPD_SG').innerHTML= "Update Successful !"
+                            //   document.getElementById('UPD_SG').style.display = "block"
             
-                            interval =   setTimeout(() => {
-                                document.getElementById('UPD_SG').innerHTML= " "
-                                document.getElementById('UPD_SG').style.display = "none"
-                              }, 3000);
+                            // interval =   setTimeout(() => {
+                            //     document.getElementById('UPD_SG').innerHTML= " "
+                            //     document.getElementById('UPD_SG').style.display = "none"
+                            //   }, 3000);
 
 
                   }
                   else
                   {
-                              document.getElementById('UPD_SG').innerHTML= "Update UnSuccessful !"
-                              document.getElementById('UPD_SG').style.display = "block"
+                              // document.getElementById('UPD_SG').innerHTML= "Update UnSuccessful !"
+                              // document.getElementById('UPD_SG').style.display = "block"
             
-                              interval =   setTimeout(() => {
-                                document.getElementById('UPD_SG').innerHTML= " "
-                                document.getElementById('UPD_SG').style.display = "none"
-                              }, 3000);
+                              // interval =   setTimeout(() => {
+                              //   document.getElementById('UPD_SG').innerHTML= " "
+                              //   document.getElementById('UPD_SG').style.display = "none"
+                              // }, 3000);
 
-                              this.setState({Loading : false})
+                              this.setState({
+                                Loading : false,
+                                Err_message : "UnSuccessful !",
+                                open : true, 
+                              })
                     
                   }
 
@@ -147,6 +160,12 @@ class Profile extends React.Component {
     {
                 console.log(" ");
     }
+  }
+
+  handleClose = () =>{
+    this.setState({
+      open: false
+    })
   }
 
   componentWillUnmount(){
@@ -181,6 +200,21 @@ class Profile extends React.Component {
               }}>
 
            </div> 
+
+           <Snackbar
+        
+        autoHideDuration={3000}
+        open={this.state.open}
+        onClose={() => this.handleClose()}
+        message={this.state.Err_message}
+        action={
+          <React.Fragment>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>                         
+        }
+      />
             
             {/* News Report */}
             {/* <div>
@@ -585,7 +619,7 @@ class Profile extends React.Component {
             <div>
                 Loading...
             </div>
-            ) : "Submit Form" } 
+            ) : "Submit" } 
           </MDBBtn>
         </form>
 

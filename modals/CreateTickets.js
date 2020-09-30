@@ -16,8 +16,8 @@ const TicketSchema = new newSchema({
          required:true
      },
      RequestedDate:{
-        type: Date,
-        default:  new Date()
+        type: String,
+       required: true,
        
     },
     status: {

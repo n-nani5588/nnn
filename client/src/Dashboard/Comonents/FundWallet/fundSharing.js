@@ -143,7 +143,7 @@ class FundSharing extends React.Component{
             return(   <div style={{margin:"0px",padding:"2% 10%"}}>
                     <div className="Send_Fund_Container">
                             <div className="Send_Fund_header" >
-                                Fund Sharing
+                                Fund Sharing income
                             </div>
                             <div className="Send_Fund_body">
                               {/* Recent Orders */}

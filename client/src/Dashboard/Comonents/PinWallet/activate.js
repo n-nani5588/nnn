@@ -5,6 +5,11 @@ import axios from 'axios';
 import Divider from '@material-ui/core/Divider';
 import Loader from 'react-loader-spinner';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 export default class Activate extends React.Component{
 
 
@@ -23,7 +28,9 @@ export default class Activate extends React.Component{
                 disableCanclebutton:true,
                 diasablememberfield: false,
                 Loading: false,
-                Loading_id : false
+                Loading_id : false,
+                Err_message: "something",
+                open: false,
               }
               console.log(this.userdata.availablePins.length);
     }
@@ -45,8 +52,10 @@ export default class Activate extends React.Component{
 
                     if(this.state.Active){
                       console.log("active active active");
-                             document.getElementById('Update_Msg').innerHTML = "Account is Already Active!"
-                             this.setState({Loading_id: false})
+                            // document.getElementById('Update_Msg').innerHTML = "Account is Already Active!"
+                             this.setState({Loading_id: false,
+                               Err_message: "Account is Already Active!",
+                             open: true,})
                     }
                     else
                     {
@@ -81,23 +90,31 @@ export default class Activate extends React.Component{
                                                                 disablebutton:false,
                                                                 disableCanclebutton:false,
                                                                 diasablememberfield: true,
-                                                                Loading_id: false
+                                                                Loading_id: false,
+                                                                Err_message: "Enter Pin",
+                                                                open: true,
                                                                 
                                                     })
                                                     console.log(this.state.pinslength,this.state.disablebutton,this.state.pins,);
-                                                    document.getElementById('Update_Msg').innerHTML = "Enter Pin"
+                                          //          document.getElementById('Update_Msg').innerHTML = "Enter Pin"
 
                                       }
                                       else
                                       {
-                                                    document.getElementById('Update_Msg').innerHTML = "User is Active "
-                                                    this.setState({ Loading_id : false})
+                                                 //   document.getElementById('Update_Msg').innerHTML = "User is Active "
+                                                    this.setState({ Loading_id : false,
+                                                      Err_message: "User is Active ",
+                                                      open: true,
+                                                     })
                                       }
 
                         }else{
 
-                            document.getElementById('Update_Msg').innerHTML = "invalid user id"
-                            this.setState({ Loading_id : false})
+                        //    document.getElementById('Update_Msg').innerHTML = "invalid user id"
+                            this.setState({ Loading_id : false,
+                              Err_message:"invalid user id",
+                              open: true,
+                             })
                         }
                     }).catch(err => {
                             this.setState({ Loading_id : false})
@@ -114,6 +131,12 @@ export default class Activate extends React.Component{
            
         }
       
+  }
+
+  handleClose = () =>{
+    this.setState({
+      open: false
+    })
   }
 
   handleSubmit = async () => {
@@ -153,7 +176,9 @@ console.log(res.data);
                                               disablebutton:true,
                                               disableCanclebutton:true,
                                               diasablememberfield: false,
-                                              Loading:  false
+                                              Loading:  false,
+                                              Err_message: "Account Activated",
+                                              open: true,
 
                                             })
                                             console.log(this.state.pinslength,this.state.disablebutton,this.state.pins,);
@@ -163,7 +188,9 @@ console.log(res.data);
                                   {
                                     console.log("else part is going");
                                               this.setState({
-                                                Loading : false
+                                                Loading : false,
+                                                Err_message: "Error ! something Went Wrong",
+                                                open: true,
                                               })
                                   }
 
@@ -221,6 +248,21 @@ render(){
                       <div id="Update_Msg"  style={{color:"black",display:"block",borderRadius:"3px",backgroundColor:"white",padding:"5px"}}>
                         
                       </div>
+
+                      <Snackbar
+                        
+                        autoHideDuration={3000}
+                        open={this.state.open}
+                        onClose={() => this.handleClose()}
+                        message={this.state.Err_message}
+                        action={
+                          <React.Fragment>
+                            <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                              <CloseIcon fontSize="small" />
+                            </IconButton>
+                          </React.Fragment>                         
+                        }
+                      />
                   
                       <Grid  container xs={12} spacing={2}>
                       <form  onSubmit={(e) => this.handleMemberId(e)}> 

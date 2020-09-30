@@ -3,6 +3,11 @@ import axios from 'axios';
 import './tickets.css';
 import Loader from 'react-loader-spinner';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 class Tickets extends React.Component{
 
     constructor(){
@@ -13,7 +18,9 @@ class Tickets extends React.Component{
             _userid : this.userdata.userId,
             _Sub : "",
             _msg  : "",
-            Loading : false
+            Loading : false,
+            Err_message: "something",
+            open: false,
         }
     }
 
@@ -45,13 +52,17 @@ class Tickets extends React.Component{
                     this.setState({
                         _Sub : "",
                         _msg  : "",
-                        Loading: false
+                        Loading: false,
+                        Err_message : "Ticket created Successfully !",
+                        open : true, 
                     })
-                    document.getElementById('Update_Msg').innerHTML = "Ticket created Successfully !"
+                 //   document.getElementById('Update_Msg').innerHTML = "Ticket created Successfully !"
                 }else{
-                    document.getElementById('Update_Msg').innerHTML = "Sorry Sothing Went Wrong"
+                 //   document.getElementById('Update_Msg').innerHTML = "Sorry Sothing Went Wrong"
                     this.setState({
-                        Loading: false
+                        Loading: false,
+                        Err_message : "Sorry Sothing Went Wrong",
+                        open : true, 
                     })
                 }
             
@@ -70,6 +81,13 @@ class Tickets extends React.Component{
     }
     }
 
+    handleClose = () =>{
+        this.setState({
+          open: false
+        })
+      }
+
+
     render(){
         return(
             <div>
@@ -84,6 +102,20 @@ class Tickets extends React.Component{
                         <div id="Update_Msg"  style={{color:"black",display:"none",borderRadius:"3px",backgroundColor:"white",padding:"10px 5px"}}>
                         
                         </div>
+                        <Snackbar
+        
+                            autoHideDuration={3000}
+                            open={this.state.open}
+                            onClose={() => this.handleClose()}
+                            message={this.state.Err_message}
+                            action={
+                            <React.Fragment>
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                                <CloseIcon fontSize="small" />
+                                </IconButton>
+                            </React.Fragment>                         
+                            }
+                        />
                    <form  onSubmit={(e) => this.handleSubmit(e)}>
                         <div>
 
@@ -102,14 +134,14 @@ class Tickets extends React.Component{
                                 className="form-control"
                                 onChange={(e) => this.handleChange(e)}
                                 name="_Sub"
-                                placeholder="Subject"
+                                placeholder="SUBJECT"
                                 required
                                 >
                                 </input>
 
                                 <textarea
                                 className="form-control"
-                                placeholder="Enter Msg"
+                                placeholder="ENTER MESSAGE"
                                 value={this.state._msg}
                                 name="_msg"
                                 required

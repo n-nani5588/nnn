@@ -5,6 +5,11 @@ import './deposit.css';
 import Axios from 'axios';
 import Loader from 'react-loader-spinner';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 class  DirectDeposit extends React.Component {
 
     constructor(){
@@ -17,7 +22,9 @@ class  DirectDeposit extends React.Component {
             _hashCode :"",
             _transactionPassword : "",
             Loading : false,
-            Loading_btn : false
+            Loading_btn : false,
+            Err_message: "something",
+            open: false,
         }
     }
 
@@ -46,6 +53,12 @@ class  DirectDeposit extends React.Component {
         })
         
     }
+    
+    handleClose = () =>{
+        this.setState({
+          open: false
+        })
+      }
 
     handleChange = (e) => {
 
@@ -82,16 +95,20 @@ class  DirectDeposit extends React.Component {
                                         _Amount : "" ,
                                         _hashCode :"",
                                         _transactionPassword : "",
-                                        Loading_btn: false
+                                        Loading_btn: false,
+                                        Err_message : "Deposit Request Sent !",
+                                        open : true, 
 
                                     })
-                                    document.getElementById('Msg_disp').innerHTML = "Update Successful"
+                                //    document.getElementById('Msg_disp').innerHTML = "Update Successful"
                             }
                             else
                             {
-                                    document.getElementById('Msg_disp').innerHTML = "Wrong Password !!"
+                                //    document.getElementById('Msg_disp').innerHTML = "Wrong Password !!"
                                     this.setState({
-                                        Loading_btn : false
+                                        Loading_btn : false,
+                                        Err_message : "Wrong Password !",
+                                        open : true, 
                                     })
                             }
                         }).catch(err => {
@@ -137,6 +154,20 @@ class  DirectDeposit extends React.Component {
                     <div id="Msg_disp">
 
                     </div>
+                    <Snackbar
+        
+                    autoHideDuration={3000}
+                    open={this.state.open}
+                    onClose={() => this.handleClose()}
+                    message={this.state.Err_message}
+                    action={
+                    <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                        <CloseIcon fontSize="small" />
+                        </IconButton>
+                    </React.Fragment>                         
+                    }
+                />
 
                        <div className="Send_Fund_body_deposit">
                            <Grid  container xs={12} spacing={2}>

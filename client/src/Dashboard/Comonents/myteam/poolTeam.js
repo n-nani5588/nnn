@@ -5,6 +5,10 @@ import Axios from 'axios';
 import { ThemeProvider } from '@material-ui/core';
 import Loader from 'react-loader-spinner';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 
 export default class PoolTeam extends React.Component {
@@ -46,7 +50,8 @@ export default class PoolTeam extends React.Component {
             Loading_8 : false,
             Loading_9 : false,
             Loading_10 : false,
-
+            Err_message: "something",
+            open: false,
         }
     }
 
@@ -194,7 +199,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_1 : false
+                     Loading_1 : false,
+                     Err_message: "Pool One Joined",
+                    open: true,
                  })
                 
             }
@@ -226,7 +233,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_2 : false
+                     Loading_2 : false,
+                     Err_message: "Pool Two Joined",
+                    open: true,
                  })
                 
             }
@@ -258,7 +267,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_3 : false
+                     Loading_3 : false,
+                     Err_message: "Pool Three Joined",
+                    open: true,
                  })
                 
             }
@@ -289,7 +300,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_4 : false
+                     Loading_4 : false,
+                     Err_message: "Pool Four Joined",
+                    open: true,
                  })
                 
             }
@@ -320,7 +333,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_5 : false
+                     Loading_5 : false,
+                     Err_message: "Pool Five Joined",
+                    open: true,
                  })
                 
             }
@@ -351,7 +366,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_6 : false
+                     Loading_6 : false,
+                     Err_message: "Pool Six Joined",
+                    open: true,
                  })
                 
             }
@@ -381,7 +398,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_7 : false
+                     Loading_7 : false,
+                     Err_message: "Pool Seven Joined",
+                    open: true,
                  })
                 
             }
@@ -412,7 +431,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_8 : false
+                     Loading_8 : false,
+                     Err_message: "Pool Eight Joined",
+                    open: true,
                  })
                 
             }
@@ -443,7 +464,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_9 : false
+                     Loading_9 : false,
+                     Err_message: "Pool Nine Joined",
+                    open: true,
                  })
                 
             }
@@ -473,7 +496,9 @@ export default class PoolTeam extends React.Component {
                  console.log(this.state.userdata);
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
-                     Loading_10 : false
+                     Loading_10 : false,
+                     Err_message: "Pool Ten Joined",
+                    open: true,
                  })
                 
             }
@@ -484,6 +509,12 @@ export default class PoolTeam extends React.Component {
         })
     }
 
+    handleClose = () =>{
+        this.setState({
+          open: false
+        })
+      }
+      
     render(){
         let i1 = 0,i2= 0, i3 =0,i4 =0,i5 =0,i6 =0,i7 =0,i8 =0,i9 =0,i10 =0;      
         console.log('renser');
@@ -510,6 +541,21 @@ export default class PoolTeam extends React.Component {
                                 {this.userdata.Active=== "false"? "Please Active Your Account": "WIN BIG HERE"}
                             </div>
 
+                            <Snackbar
+        
+                            autoHideDuration={3000}
+                            open={this.state.open}
+                            onClose={() => this.handleClose()}
+                            message={this.state.Err_message}
+                            action={
+                            <React.Fragment>
+                                <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                                <CloseIcon fontSize="small" />
+                                </IconButton>
+                            </React.Fragment>                         
+                            }
+                        />
+
                             <div style={{width:"100%",margin:"20px 0px",display:"flex",flexDirection:"column",flexWrap:"wrap",justifyContent:"space-around"}}>
                             
                                 {/* pool-1-table  */}
@@ -519,7 +565,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                Rising Treasure
+                                                Bronze Treasure
 
                                 </div>
 
@@ -609,7 +655,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                WONDER TREASURE
+                                               Silver  TREASURE
 
                                 </div>
 
@@ -706,7 +752,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                MASTER TREASURE
+                                                Gold TREASURE
 
                                 </div>
 
@@ -788,7 +834,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                EXPERT TREASURE
+                                                Platinum TREASURE
 
                                 </div>
 
@@ -875,7 +921,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                BILLIONAIRE TREASURE
+                                                DIAMOND TREASURE
 
                                 </div>
 
@@ -955,7 +1001,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                LEGEND TREASURE
+                                                MILLION TREASURE
 
                                 </div>
 
@@ -1042,7 +1088,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                FAST TRACK TREASURE
+                                                BILLION TREASURE
 
                                 </div>
 
@@ -1122,7 +1168,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                DIAMOND TREASURE
+                                                TRILLION TREASURE
 
                                 </div>
 
@@ -1212,7 +1258,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black"}}>
 
-                                                DOUBLE DIAMOND TREASURE
+                                                CROWN TREASURE
 
                                 </div>
 
@@ -1291,7 +1337,7 @@ export default class PoolTeam extends React.Component {
                                 <div style={{padding:"1% 0px",display:"flex",alignItems:"center",justifyContent:"center",
                                 fontSize:"16px",color:"black",}}>
 
-                                                TRIPLE DIAMOND TREASURE
+                                                ACE TREASURE
 
                                 </div>
 

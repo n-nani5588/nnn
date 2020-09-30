@@ -7,6 +7,10 @@ import Link from '@material-ui/core/Link';
 import Container from "@material-ui/core/Container";
 import Typography from '@material-ui/core/Typography';
 import { MDBRow, MDBCol, MDBBtn } from "mdbreact";
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import axios from 'axios'
 
 var interval;
@@ -50,7 +54,8 @@ class UpdatePassword extends React.Component {
         valid: false
       },
       Loading : false,
-      
+      Err_message: "something",
+      open: false,
     }
 
   }
@@ -104,7 +109,7 @@ class UpdatePassword extends React.Component {
                   {
                   if(parseInt(res.data.status) === parseInt(1)){
                     
-                    const msg=  document.getElementById('Update_Msg');
+                  
 
                     this.setState({
                       oldPassword: {
@@ -120,28 +125,33 @@ class UpdatePassword extends React.Component {
                         valid: false
                       },
                       Loading : false,
+                      open : true,
+                      Err_message: "Update Succesfull !"
+
                     })
-                    document.getElementById('emailHelp').innerHTML = " ";
-                      msg.innerHTML = "Update Succesfull !"
-                      msg.style.display = "block"
-                        interval = setTimeout(() => {
-                          msg.style.display = "none"
-                        }, 3000);
+                    // document.getElementById('emailHelp').innerHTML = " ";
+                    //   msg.innerHTML = "Update Succesfull !"
+                    //   msg.style.display = "block"
+                    //     interval = setTimeout(() => {
+                    //       msg.style.display = "none"
+                    //     }, 3000);
 
 
                   }else{
-                    const msg=  document.getElementById('Update_Msg');
+                    // const msg=  document.getElementById('Update_Msg');
                     
                     this.setState({
                     
                       Loading : false,
+                      open: true,
+                      Err_message : "Wrong password Entered !"
                     })
 
-                    msg.innerHTML = "Wrong password Entered !"
-                    msg.style.display = "block"
-                    interval = setTimeout(() => {
-                      msg.style.display = "none"
-                    }, 3000);
+                    // msg.innerHTML = "Wrong password Entered !"
+                    // msg.style.display = "block"
+                    // interval = setTimeout(() => {
+                    //   msg.style.display = "none"
+                    // }, 3000);
                   }
                
                 }) .catch(res => {
@@ -182,17 +192,22 @@ handleConfirm = (e) => {
 
 }
 
-
+handleClose = () =>{
+  this.setState({
+    open: false
+  })
+}
 
     render(){
       return(
         <div style={{margin:"0px",display:"flex",justifyContent:"center",padding:"100px 0px",backgroundColor:"#fffff",color:"white",textTransform:"uppercase"}}>
             
-    
+       
+
         <Container maxWidth="lg" >
             <Grid container spacing={3}>
    
-              <div id="Update_Msg"  style={{
+              {/* <div id="Update_Msg"  style={{
               fontFamily:"sans-serif",
               fontWeight:"500",
               color:"green",
@@ -205,7 +220,21 @@ handleConfirm = (e) => {
               width:"100%"
               }}>
                   
-              </div>
+              </div> */}
+       <Snackbar
+        
+        autoHideDuration={3000}
+        open={this.state.open}
+        onClose={() => this.handleClose()}
+        message={this.state.Err_message}
+        action={
+          <React.Fragment>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>                         
+        }
+      />
   
               {/* Recent Orders */}
               <Grid item xs={12}>
@@ -291,7 +320,7 @@ handleConfirm = (e) => {
                 className="btn btn-link"
                 onMouseOver={() => this.handleViewPassword()}
                 onMouseOut={() => this.handleViewPassword()}
-                >show 
+                >show password
             </button>
             </div>
         

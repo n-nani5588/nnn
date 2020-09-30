@@ -34,7 +34,7 @@ class ForgotPassword extends React.Component {
             .then(res => {
                 console.log(res.data);
                 if(parseInt(res.data.status) === parseInt(1) ){
-                    document.getElementById('ERR_MSG').innerHTML = "mail sent"
+                    document.getElementById('ERR_MSG').innerHTML = "MAIL SENT"
                     this.setState({
                         mail:"",
                         userid:"",

@@ -72,7 +72,7 @@ render (){
              <div className="dropdown-container">
                           <Link to="/App/profile">   <span className="div_tag">Profile</span> </Link>
                           <Link to="/App/update_password">   <span className="div_tag">Update Password</span></Link>
-                          <Link to="/App/update_Transition_Password">   <span className="div_tag">Update Transition Password</span></Link>
+                          <Link to="/App/update_Transition_Password">   <span className="div_tag">Update Transaction Password</span></Link>
                           <Link to="/App/update_wallet_address">   <span className="div_tag">Update Wallet address</span></Link>
              </div> 
             <Divider/>

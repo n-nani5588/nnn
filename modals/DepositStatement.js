@@ -25,8 +25,8 @@ const DepositSchema = new newSchema({
         required : true,
     },
     date : {
-        type : Date,
-        default : new Date()
+        type : String,
+        required: true
     },
     status: {
         type : Boolean,

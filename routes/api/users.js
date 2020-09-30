@@ -13,7 +13,7 @@ const transport = nodemailer.createTransport({
   }
 });
 
-let number = 333785
+
 
 
 //user model
@@ -51,6 +51,16 @@ const dailyReport = require('../../modals/dailyReport');
 //Deposit-Statement
 const Depositstatement = require('../../modals/DepositStatement');
 
+let number;
+User.find({}).sort({_id:-1}).limit(1).then(res => 
+   { console.log(res)
+    number = res[0].userId.substring(2)
+    console.log(":::::::::::::::", number);
+  }
+  );
+
+// let number = userde
+ 
 //Create Tickets
 //@rout get api/users/CreateTickets
 // Add Ticket
@@ -58,6 +68,10 @@ const Depositstatement = require('../../modals/DepositStatement');
 router.post('/CreateTickets', (req,res) => {
 
   console.log(req.body);
+
+  let current_datetime = new Date()
+  let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
+
 
   try{
           const obj =   {
@@ -67,12 +81,13 @@ router.post('/CreateTickets', (req,res) => {
 
           const Ticket = new Tickets({
 
-              userId: req.body.userid,
-              message: obj,
-              Subject: req.body.subject,
-              status: true,
-              usermessage: true,
-              adminmessage: false,
+                    userId: req.body.userid,
+                    message: obj,
+                    Subject: req.body.subject,
+                    RequestedDate: end_date,
+                    status: true,
+                    usermessage: true,
+                    adminmessage: false,
 
           })
 
@@ -127,7 +142,13 @@ router.get('/GetTickets/:id', (req,res) => {
 
 //uuid generator 
 function randomGenerator(){
-  number = number + 1
+  if((number % 2) === 0)
+  {
+    number = parseInt(number) + 3
+  }
+  else{
+    number = parseInt(number) + 1
+  }
   //const uui = Math.floor(100000 + Math.random() * 900000)
   return "GT"+number
 }
@@ -182,62 +203,62 @@ router.get('/sendFund/:id', (req,res) => {
 });
 
 ///test Route
-router.post('/test', (req,res) => {
+// router.post('/test', (req,res) => {
 
-  const data = [{userID: 1,ReferedBy: "",  levelamount:"0.00" },
-  {userID: 2, ReferedBy: 1,  levelamount:0.00, Active: "false" },
-  {userID: 3, ReferedBy: 2,  levelamount:0.00, Active: "false" },
-  {userID: 4, ReferedBy: 3,  levelamount:0.00, Active: "false" },
-  {userID: 5, ReferedBy: 4,  levelamount:0.00, Active: "false" },
-  {userID: 6, ReferedBy: 5,  levelamount:0.00, Active: "false" },
-  {userID: 7, ReferedBy: 6,  levelamount:0.00, Active: "false" },
-  {userID: 8, ReferedBy: 7,  levelamount:0.00, Active: "false" },
-  {userID: 9, ReferedBy: 8,  levelamount:0.00, Active: "false" },
-  {userID: 10,ReferedBy: 9,  levelamount:0.00, Active: "false" },
-  {userID: 11,ReferedBy: 10,  levelamount:0.00, Active: "false" },
-  {userID: 12,ReferedBy: 11,  levelamount:0.00, Active: "false" },
-  {userID: 13,ReferedBy: 12,  levelamount:0.00, Active: "false" },
-]
+//   const data = [{userID: 1,ReferedBy: "",  levelamount:"0.00" },
+//   {userID: 2, ReferedBy: 1,  levelamount:0.00, Active: "false" },
+//   {userID: 3, ReferedBy: 2,  levelamount:0.00, Active: "false" },
+//   {userID: 4, ReferedBy: 3,  levelamount:0.00, Active: "false" },
+//   {userID: 5, ReferedBy: 4,  levelamount:0.00, Active: "false" },
+//   {userID: 6, ReferedBy: 5,  levelamount:0.00, Active: "false" },
+//   {userID: 7, ReferedBy: 6,  levelamount:0.00, Active: "false" },
+//   {userID: 8, ReferedBy: 7,  levelamount:0.00, Active: "false" },
+//   {userID: 9, ReferedBy: 8,  levelamount:0.00, Active: "false" },
+//   {userID: 10,ReferedBy: 9,  levelamount:0.00, Active: "false" },
+//   {userID: 11,ReferedBy: 10,  levelamount:0.00, Active: "false" },
+//   {userID: 12,ReferedBy: 11,  levelamount:0.00, Active: "false" },
+//   {userID: 13,ReferedBy: 12,  levelamount:0.00, Active: "false" },
+// ]
 
-handleActivateUser(13)
+// handleActivateUser(13)
 
-  function handleActivateUser (user1){
+//   function handleActivateUser (user1){
 
-    const user =  data.filter(user => 
-    {if (user.userID === user1){
-       user.Active = "true"
-       return user
-    } } )
+//     const user =  data.filter(user => 
+//     {if (user.userID === user1){
+//        user.Active = "true"
+//        return user
+//     } } )
 
-    console.log("user:",user);
-    let i = 0,ReferedBy1 = user[0].ReferedBy;
-    console.log("line: 66",ReferedBy1);
+//     console.log("user:",user);
+//     let i = 0,ReferedBy1 = user[0].ReferedBy;
+//     console.log("line: 66",ReferedBy1);
 
-  while (ReferedBy1 && i<10) {
+//   while (ReferedBy1 && i<10) {
 
-      const userupdate = data.filter(user =>  {if(user.userID === ReferedBy1) {
-        if(i===0){
-          user.levelamount = user.levelamount + 5.0;
-        }else{
-          user.levelamount = user.levelamount + 0.2;
-        }
+//       const userupdate = data.filter(user =>  {if(user.userID === ReferedBy1) {
+//         if(i===0){
+//           user.levelamount = user.levelamount + 5.0;
+//         }else{
+//           user.levelamount = user.levelamount + 0.2;
+//         }
       
         
-        ReferedBy1 = user.ReferedBy;
-        return user;
-      } } )
+//         ReferedBy1 = user.ReferedBy;
+//         return user;
+//       } } )
      
 
-      i++;
-      console.log("i :",i);
-      console.log("userupdate :",userupdate);
-      console.log("line: 79",ReferedBy1);
+//       i++;
+//       console.log("i :",i);
+//       console.log("userupdate :",userupdate);
+//       console.log("line: 79",ReferedBy1);
     
-  }
+//   }
 
-}
+// }
 
-});
+// });
 
 //@rout get api/Admin/UpdateMessage
 // Add Ticket
@@ -277,6 +298,10 @@ catch(err)
 router.post('/SubmitDeposit', (req,res) => {
   
         console.log(req.body);
+
+  let current_datetime = new Date()
+  let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
+
   try{
         User.findOne({
           userId : req.body.userid,
@@ -292,6 +317,7 @@ router.post('/SubmitDeposit', (req,res) => {
                               Amount : req.body.amount,
                               HashCode : req.body.hashcode,
                               Name : req.body.name,
+                              date: end_date,
                               SentBTCaddress : req.body.sendtobtcaddress,
                               status : false,
                               success : "processing"
@@ -712,6 +738,9 @@ router.post('/Activate_account', (req,res) => {
 router.post('/sendFund/update', (req,res) => {
   console.log(req.body);
   // sendMnyTo:this.state.sendMnyTo,
+  let current_datetime = new Date()
+  let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
+
  
   try{
   
@@ -743,6 +772,7 @@ router.post('/sendFund/update', (req,res) => {
                                                     Sendto: req.body.sendMnyToDetails.userId,
                                                     RecievedFrom:"-----",
                                                     userId: req.body.from,
+                                                    joiningDate: end_date ,
                                                     firstName: req.body.sendMnyToDetails.firstName,
                                                     lastName: req.body.sendMnyToDetails.lastName,
                                                     mailId: req.body.sendMnyToDetails.mailId,
@@ -756,6 +786,7 @@ router.post('/sendFund/update', (req,res) => {
                                                     RecievedFrom: req.body.from,
                                                     userId: req.body.sendMnyToDetails.userId,
                                                     firstName: user.firstName,
+                                                    joiningDate: end_date ,
                                                     lastName: user.lastName,
                                                     mailId: user.mailId,
                                                     Amount: req.body.total,
@@ -764,7 +795,7 @@ router.post('/sendFund/update', (req,res) => {
 
                                                   fundSt1.save().then(res => {console.log(" ")}).catch(err => {console.log(err.message)})
                                                   fundSt2.save().then(res => console.log(" ")).catch(err => console.log(err.message))
-                                                  res.send({status:1,user})
+                                                  res.json({status:1,user})
                                 
                                     }).catch(err => {
                                                         res.json({status: 0})
@@ -796,7 +827,11 @@ router.post('/sendFund/update', (req,res) => {
 // find one user
 // @acess public
 router.post('/sendFund/pinWallet', (req,res) => {
+ 
   console.log(req.body);
+  console.log("::::::::::::::::::::::::::::::::::::::::::::");
+
+  
   //  sendMnyTo:this.state.sendMnyTo,
 
 try{
@@ -805,6 +840,7 @@ try{
 
           let percent = (parseFloat(parseFloat(req.body.levelamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.recievedamount))*0.05)
           console.log(percent);
+
           User.findByIdAndUpdate({ _id: req.body._id },
             {$inc: {
               levelIncome: -parseFloat(req.body.levelamount),
@@ -826,7 +862,7 @@ try{
 
                                       },{
 
-                                        $inc : { funtToPinPercent :parseFloat(percent) }
+                                        $inc : { funtToPinPercent : parseFloat(percent) }
 
                                       },{new: true}).then(document => {
                                                           if(!document){
@@ -834,7 +870,7 @@ try{
                                                             
                                                                       dateId: today,
                                                                       LevelPinsIncome:  0,
-                                                                      PoolOnePinsIncome:  req.body.total,
+                                                                      PoolOnePinsIncome:  0,
                                                                       PoolTwoPinsIncome: 0,
                                                                       PoolThreePinsIncome: 0,
                                                                       PoolFourPinsIncome:  0,
@@ -845,7 +881,7 @@ try{
                                                                       PoolNinePinsIncome:  0,
                                                                       PoolTenPinsIncome:  0,
                                                                       withdrawpercentage: 0,
-                                                                      funtToPinPercent : 0,
+                                                                      funtToPinPercent : parseFloat(percent),
                                                                       //Spend 
                                                                       LevelOutSpend: 0,
                                                                       FundSharing:  0,
@@ -863,17 +899,17 @@ try{
                                                                                 console.log(res);
                                                                                 //creaate fund statement
                                                                                 const fundSt = new FundStatement({
-                                                                                  Sendto: "Pin Wallet",
-                                                                                  RecievedFrom: req.body.useid,
-                                                                                  userId: req.body.useid,
-                                                                                  firstName:user.firstName,
-                                                                                  lastName: user.lastName,
-                                                                                  mailId: user.mailId,
-                                                                                  Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
+                                                                                      Sendto: "Pin Wallet",
+                                                                                      RecievedFrom: req.body.useid,
+                                                                                      userId: req.body.useid,
+                                                                                      firstName:user.firstName,
+                                                                                      lastName: user.lastName,
+                                                                                      mailId: user.mailId,
+                                                                                      Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
                                                                                 })
-                                                                                fundSt.save().then(re => {res.send({status:1,user})}).catch(err=> {
+                                                                                fundSt.save().then(re => {res.json({status:1,user})}).catch(err=> {
                                                                                    console.log(err.message);
-                                                                                   res.send({status: 0 })
+                                                                                   res.json({status: 0 })
                                                                                 })
 
                                                                                 
@@ -887,17 +923,17 @@ try{
 
                                                                     //creaate fund statement
                                                                     const fundSt = new FundStatement({
-                                                                      Sendto: "Pin Wallet",
-                                                                      RecievedFrom: req.body.useid,
-                                                                      userId: req.body.useid,
-                                                                      firstName:user.firstName,
-                                                                      lastName: user.lastName,
-                                                                      mailId: user.mailId,
-                                                                      Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
+                                                                            Sendto: "Pin Wallet",
+                                                                            RecievedFrom: req.body.useid,
+                                                                            userId: req.body.useid,
+                                                                            firstName:user.firstName,
+                                                                            lastName: user.lastName,
+                                                                            mailId: user.mailId,
+                                                                            Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
                                                                     })
-                                                                    fundSt.save().then(re => {res.send({status:1,user})}).catch(err=> {
+                                                                    fundSt.save().then(re => {res.json({status:1,user})}).catch(err=> {
                                                                        console.log(err.message);
-                                                                       res.send({status: 0 })
+                                                                       res.json({status: 0 })
                                                                     })
 
                                                           }   
@@ -1062,7 +1098,7 @@ try{
                 do {
 
                 console.log(array);
-                await User.find({referedBy: { $in :array}, Active: "true"})
+                await User.find({referedBy: { $in :array}})
                   .select('userId')
                   .then(level => {
                     console.log(level);
@@ -1198,6 +1234,10 @@ router.get('/GetFundSharingAll', (req,res) => {
           console.log("not found");
         }
     })
+    .catch(err => {
+       console.log(err.message);
+       res.json({ status:0 })
+    })
 });
 
 //@rout POST api/users/Signup
@@ -1207,7 +1247,6 @@ router.post('/Signup_User', (req,res) => {
 
   console.log(req.body);
 try{
-
   
   let current_datetime = new Date()
   let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
@@ -1494,8 +1533,8 @@ router.post('/generatePin', (req,res) => {
                                               })
                                         
                                                 report.save()
-                                                .then(res => {
-                                                    console.log(res);
+                                                .then(re => {
+                                                    console.log(re);
                                                     res.json({status:1,userdetails: user.toObject()})
                                                 }).catch(err => { 
                                                     console.log(err.message);
@@ -1622,8 +1661,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                 })
                                                     
                                                                 report.save()
-                                                                .then(res => {
-                                                                          console.log(res);
+                                                                .then(re => {
+                                                                          console.log(re);
                                                                           res.json({status:1,userdetails: user.toObject()})
                                                                           console.log("sucess in");
                                                                 }).catch(err => { 
@@ -1713,8 +1752,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                 })
                                                           
                                                               report.save()
-                                                              .then(res => {
-                                                                      console.log(res);
+                                                              .then(re => {
+                                                                      console.log(re);
                                                                       res.json({status:1,userdetails: user.toObject()})
                                                                       console.log("sucess");
 
@@ -1802,8 +1841,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                   })
                                                             
                                                                 report.save()
-                                                                .then(res => {
-                                                                        console.log(res);
+                                                                .then(re => {
+                                                                        console.log(re);
                                                                         res.json({status:1,userdetails: user.toObject()})
                                                                         console.log("sucess");
                                                                 }).catch(err => { 
@@ -1890,8 +1929,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                         })
                                                                   
                                                                       report.save()
-                                                                      .then(res => {
-                                                                          console.log(res);
+                                                                      .then(re => {
+                                                                          console.log(re);
                                                                           res.json({status:1,userdetails: user.toObject()})
                                                                           console.log("sucess");
                                                                       }).catch(err => { 
@@ -1978,8 +2017,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                 })
                                                           
                                                               report.save()
-                                                              .then(res => {
-                                                                  console.log(res);
+                                                              .then(re => {
+                                                                  console.log(re);
                                                                   res.json({status:1,userdetails: user.toObject()})
                                                                   console.log("sucess")
                                                               }).catch(err => { 
@@ -2066,8 +2105,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                             })
                                                       
                                                           report.save()
-                                                          .then(res => {
-                                                                    console.log(res);
+                                                          .then(re => {
+                                                                    console.log(re);
                                                                     res.json({status:1,userdetails: user.toObject()})
                                                                     console.log("sucess");
                                                           }).catch(err => { 
@@ -2152,8 +2191,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                         })
                                                                   
                                                                       report.save()
-                                                                      .then(res => {
-                                                                          console.log(res);
+                                                                      .then(re => {
+                                                                          console.log(re);
                                                                           res.json({status:1,userdetails: user.toObject()})
                                                                           console.log("sucess");
                                                                       }).catch(err => { 
@@ -2242,8 +2281,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                           })
                                                                 
                                                                           report.save()
-                                                                          .then(res => {
-                                                                                    console.log(res);
+                                                                          .then(re => {
+                                                                                    console.log(re);
                                                                                     res.json({status:1,userdetails: user.toObject()})
                                                                                     console.log("sucess");
                                                                           }).catch(err => { 
@@ -2332,7 +2371,7 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                             })
                                                                       
                                                                           report.save()
-                                                                          .then(res => {
+                                                                          .then(re => {
                                                                                   res.json({status:1,userdetails: user.toObject()})
                                                                                   console.log("sucess");
                                                                           }).catch(err => { 
@@ -2422,8 +2461,8 @@ router.post('/generateTreasurePin', (req,res) => {
                                                                             })
                                                                   
                                                                             report.save()
-                                                                            .then(res => {
-                                                                                        console.log(res);
+                                                                            .then(re => {
+                                                                                        console.log(re);
                                                                                         res.json({status:1,userdetails: user.toObject()})
                                                                                         console.log("sucess");
                                                                             }).catch(err => { 
@@ -2569,9 +2608,9 @@ router.post('/changeTransitionPassword', (req,res) => {
             .then(item => {
               console.log(item);
                 if(item){
-                  res.json({ status: 1  })
+                    res.json({ status: 1  })
                 }else{
-                  res.json({ status: 0 })
+                    res.json({ status: 0 })
                 }
             }).catch(err => {
               console.log(err.message);

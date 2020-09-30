@@ -9,6 +9,12 @@ import Typography from '@material-ui/core/Typography';
 import { MDBRow, MDBCol, MDBBtn } from "mdbreact";
 import axios from 'axios';
 
+
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 var interval;
 
 function Copyright() {
@@ -46,7 +52,10 @@ class UpdateWalletAddress extends React.Component {
         value: "",
         valid: false
       },
-      Loading : false
+      Loading : false,
+      Err_message: "something",
+      open: false,
+     
     }
 
   }
@@ -57,6 +66,11 @@ class UpdateWalletAddress extends React.Component {
     })
   }
 
+  handleClose = () =>{
+    this.setState({
+      open: false
+    })
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -71,31 +85,35 @@ class UpdateWalletAddress extends React.Component {
               if(parseInt(res.data.status) === 1){
 
                       sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.userdetails));
-                      const msg=  document.getElementById('Update_Msg');
-                      msg.innerHTML = "Update Succesfull !"
-                      msg.style.display = "block"
-                      interval = setTimeout(() => {
-                          msg.style.display = "none"
-                        }, 3000);
+                      // const msg=  document.getElementById('Update_Msg');
+                      // msg.innerHTML = "Update Succesfull !"
+                      // msg.style.display = "block"
+                      // interval = setTimeout(() => {
+                      //     msg.style.display = "none"
+                      //   }, 3000);
 
                         this.setState({
                           Address : {value:"",valid:false},
                           Password: { value:"",valid:false},
-                          Loading : false
+                          Loading : false,
+                          Err_message: "Update Succesfull !",
+                          open: true,
                         })
                     
               }
               else
               {
-                        const msg=  document.getElementById('Update_Msg');
-                        msg.innerHTML = "Wrong password Entered !"
+                        // const msg=  document.getElementById('Update_Msg');
+                        // msg.innerHTML = "Wrong password Entered !"
                         this.setState({
-                          Loading : false
+                          Loading : false,
+                          Err_message: "Wrong password Entered !",
+                          open: true,
                         })
-                        msg.style.display = "block"
-                        interval = setTimeout(() => {
-                          msg.style.display = "none"
-                        }, 3000);
+                        // msg.style.display = "block"
+                        // interval = setTimeout(() => {
+                        //   msg.style.display = "none"
+                        // }, 3000);
               }
             }).catch(res => {
 
@@ -140,7 +158,21 @@ class UpdateWalletAddress extends React.Component {
               width:"100%"
               }}>
             </div>
-
+         
+            <Snackbar
+        
+              autoHideDuration={3000}
+              open={this.state.open}
+              onClose={() => this.handleClose()}
+              message={this.state.Err_message}
+              action={
+                <React.Fragment>
+                  <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                    <CloseIcon fontSize="small" />
+                  </IconButton>
+                </React.Fragment>                         
+              }
+            />
             {/* News Report */}
             {/* <div>
               <Grid item xs={12}>
@@ -223,7 +255,7 @@ class UpdateWalletAddress extends React.Component {
             className="btn btn-link"
             onMouseOver={() => this.handleViewPassword()}
             onMouseOut={() => this.handleViewPassword()}
-            > show </button>
+            > show password</button>
           
             </div>
          

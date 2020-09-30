@@ -5,6 +5,11 @@ import Divider from '@material-ui/core/Divider';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 class SendFundToPinWallet extends React.Component{
 
     constructor(){
@@ -13,16 +18,19 @@ class SendFundToPinWallet extends React.Component{
         console.log(this.userdata);
         this.state = {
             id: this.userdata._id,
-            levelIncome: parseFloat( this.userdata.levelIncome.$numberDecimal),
+            levelIncome: -parseFloat( this.userdata.levelIncome.$numberDecimal),
             autoPoolIncome: parseFloat( this.userdata.autoPoolIncome.$numberDecimal),
             fundSharingIncome: parseFloat( this.userdata.fundSharingIncome.$numberDecimal),
+            active : this.userdata.Active.toLowerCase() === "true" ? true : false,
             recievedIncome: parseFloat( this.userdata.recievedIncome.$numberDecimal),
             _level:0.00,
             _autopool:0.00,
             _fund:0.00,
             _recieved:0.00,
             buttondisable:false,
-            Loading : false
+            Loading : false,
+            Err_message: "something",
+            open: false,
         }
     }
 
@@ -62,6 +70,8 @@ class SendFundToPinWallet extends React.Component{
 
     handleSubmit = async (e)=> {
 
+        console.log("in submit");
+
         this.setState({
             Loading : true
         })
@@ -75,7 +85,7 @@ class SendFundToPinWallet extends React.Component{
                                         if(parseFloat(e.target._Send.value) <= parseFloat(e.target._Available.value)){
                                         //await code
                                                     console.log("in axiospin");
-                                                    document.getElementById('ERR_MSG').innerHTML = "";
+                                                   // document.getElementById('ERR_MSG').innerHTML = "";
                                                     await axios.post('/api/users/sendFund/pinWallet',{
                                                         
                                                         //updating Values
@@ -88,7 +98,7 @@ class SendFundToPinWallet extends React.Component{
                                                         pinBalance: e.target._Total.value
 
                                                     }).then(res => {
-
+console.log(res.data);
                                                                 if(parseInt(res.data.status) === parseInt(1)){
                                                                             sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
                                                                             const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
@@ -102,10 +112,13 @@ class SendFundToPinWallet extends React.Component{
                                                                                 _autopool:0.00,
                                                                                 _fund:0.00,
                                                                                 _recieved:0.00,
-                                                                                Loading : false
+                                                                                Loading : false,
+                                                                                Err_message : "Successful !",
+                                                                                open : true, 
                                                                             })
                                                                 }else{
-                                                                            this.setState({ Loading : false })
+                                                                            this.setState({ Loading : false, Err_message : "UnSuccessful !",
+                                                                            open : true,  })
                                                                 }
                                                     }).catch(err => {
 
@@ -113,14 +126,18 @@ class SendFundToPinWallet extends React.Component{
                                                     })
 
                                         }else{
-                                            console.log("3");document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
-                                            this.setState({ Loading : false})
+                                          //  console.log("3");document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                            this.setState({ Loading : false,
+                                                Err_message : "please enter valid Amount !",
+                                                open : true, })
                                         }
 
                         }else{
                                         console.log("2");
-                                        document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
-                                        this.setState({ Loading : false})
+                                     //   document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                        this.setState({ Loading : false,
+                                            Err_message :  "please enter valid Amount !",
+                                            open : true, })
                         }
         }
         catch(err)
@@ -130,10 +147,19 @@ class SendFundToPinWallet extends React.Component{
 
 }
 
+handleClose = () =>{
+    this.setState({
+      open: false
+    })
+  }
+
     render()
     {
         return(
-            <div style={{margin:"0px",padding:"2% 10%"}}>
+<div>
+        { this.state.active  &&   
+         
+           <div style={{margin:"0px",padding:"2% 10%"}}>
             <div className="Send_Fund_Container">
 
                 <div className="Send_Fund_header" >
@@ -144,6 +170,21 @@ class SendFundToPinWallet extends React.Component{
                   
                   </div>
 
+                  <Snackbar
+        
+                    autoHideDuration={3000}
+                    open={this.state.open}
+                    onClose={() => this.handleClose()}
+                    message={this.state.Err_message}
+                    action={
+                    <React.Fragment>
+                        <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                        <CloseIcon fontSize="small" />
+                        </IconButton>
+                    </React.Fragment>                         
+                    }
+                />
+
                    <div className="Send_Fund_body">
                        
                       
@@ -152,6 +193,7 @@ class SendFundToPinWallet extends React.Component{
                     {/* <Divider/> */}
                     </div>
                     <form onSubmit={(e) => this.handleSubmit(e)}>
+
                         <Grid container xs={12} spacing={2}>
                                 <div className="Send_Fund_body_ID" >
                                     <div className="Send_Fund_body_wallet">
@@ -221,7 +263,11 @@ class SendFundToPinWallet extends React.Component{
 
            </div>
         </div>
-      
+      }
+      {
+          !this.state.active  &&   <div> Please Activate Account </div>
+      }
+</div>
         )
     }
 }

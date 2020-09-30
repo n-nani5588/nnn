@@ -5,6 +5,11 @@ import './withdraw.css';
 import Axios from 'axios';
 import Loader from 'react-loader-spinner';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 class Withdrawal extends React.Component {
 
 
@@ -24,7 +29,9 @@ class Withdrawal extends React.Component {
             address: this.userdata.bitAddress,
             disablebutton: false,
             Level : this.userdata.levelTeam,
-            Loading : false
+            Loading : false,
+            Err_message: "something",
+            open: false,
         }
 
     }
@@ -90,7 +97,9 @@ class Withdrawal extends React.Component {
                                                 _fund:parseFloat(0.00),
                                                 _recieved:parseFloat(0.00),
                                                 address: res.data.user.bitAddress,
-                                                Loading: false
+                                                Loading: false,
+                                                Err_message : "Withdraw Request Sent !",
+                                                open : true, 
                                             })
                                         }
                                         else
@@ -109,14 +118,17 @@ class Withdrawal extends React.Component {
 
                     }
                     else{
-                        document.getElementById('UpD_Msg').innerHTML = "Invalid Amount"
-                        this.setState({ Loading: false })
+                      //  document.getElementById('UpD_Msg').innerHTML = "Invalid Amount"
+                        this.setState({ Loading: false ,  Err_message : "Invalid Amount",
+                        open : true, })
                     }
 
 
                 }else{
-                    document.getElementById('UpD_Msg').innerHTML = "Minium Amount should be $30"
-                    this.setState({ Loading: false })
+                 //   document.getElementById('UpD_Msg').innerHTML = "Minium Amount should be $30"
+                    this.setState({ Loading: false ,
+                        Err_message : "Minium Amount should be $30",
+                        open : true, })
                 }
             }
             catch(err)
@@ -126,6 +138,13 @@ class Withdrawal extends React.Component {
             }
       
     }
+
+    handleClose = () =>{
+        this.setState({
+          open: false
+        })
+      }
+
 
     render(){
 
@@ -175,7 +194,19 @@ class Withdrawal extends React.Component {
                             </div>
 
                             <div id="UpD_Msg"></div>
-            
+                            <Snackbar
+                                autoHideDuration={3000}
+                                open={this.state.open}
+                                onClose={() => this.handleClose()}
+                                message={this.state.Err_message}
+                                action={
+                                <React.Fragment>
+                                    <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                                    <CloseIcon fontSize="small" />
+                                    </IconButton>
+                                </React.Fragment>                         
+                                }
+                            />
             
                             <div className="Send_Fund_body">
                                 <Grid  container xs={12} spacing={2}>
@@ -197,8 +228,8 @@ class Withdrawal extends React.Component {
                                                 <div className="Send_Fund_body_wallet">
             
                                                 <input type="text" disabled value="LEVEL INCOME" className="form-control"></input>
-                                                <input type="text"  value={this.state.levelIncome} disabled className="form-control"></input>
-                                                <input type="number" value={this.state._level} onChange={(e)=> this.handleChange(e)} required name="_level" min="0" step="any" max={this.state.levelIncome}  className="form-control"></input>
+                                                <input type="text"  value={-this.state.levelIncome} disabled className="form-control"></input>
+                                                <input type="number" value={this.state._level} onChange={(e)=> this.handleChange(e)} required name="_level" min="0" step="any" max={-this.state.levelIncome}  className="form-control"></input>
             
                                                 </div >
                                                 <div className="Send_Fund_body_wallet">

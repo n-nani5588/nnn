@@ -73,9 +73,9 @@ router.post('/withdraw', (req,res) => {
                     })
 
                     withdrawStatement.save()
-                    .then(async (res)=> {
-                                    await   adInfoWiithdrawRequest(res._id);
-                                        console.log("see me:",res);
+                    .then(async (re)=> {
+                                    await   adInfoWiithdrawRequest(re._id);
+                                        console.log("see me:",re);
 
                                     await  User.findByIdAndUpdate({_id: req.body._id},{
                                             $inc: {
@@ -87,7 +87,7 @@ router.post('/withdraw', (req,res) => {
                                             .then(user => {
 
                                                         if(user){
-                                                            res.json({status:1,user})
+                                                            res.json({status:1,user: user})
                                                         }else{
                                                             res.json({status: 0})
                                                         }

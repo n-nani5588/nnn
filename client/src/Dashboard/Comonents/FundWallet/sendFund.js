@@ -5,6 +5,11 @@ import Divider from '@material-ui/core/Divider';
 import axios from  'axios';
 import Loader from 'react-loader-spinner';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 class SendFund extends React.Component{
 
 
@@ -34,7 +39,9 @@ class SendFund extends React.Component{
             sendUserDetails:"",
             disablememberfield:false,
             Loading_id : false,
-            Loading : false
+            Loading : false,
+            Err_message: "something",
+            open: false,
         }
     }
 
@@ -50,7 +57,7 @@ class SendFund extends React.Component{
           
                if(this.state.Active){
 
-                        if(this.state.levelTeam.length > 4){
+                        if(this.state.levelTeam.length > 3){
 
                                     if(parseFloat(Available) > parseFloat(0.00) ){
                                             
@@ -74,7 +81,7 @@ class SendFund extends React.Component{
                         {
                             this.setState({buttondisablemember:true,buttondisable:true})
                             const msg =  document.getElementById('Update_Msg');
-                            msg.innerHTML = "Please Join 4 Menbers to use this feature";
+                            msg.innerHTML = "please do refer 4 members to active this feature ";
                             msg.style.display = "block";
                         }
 
@@ -84,7 +91,7 @@ class SendFund extends React.Component{
 
                         this.setState({buttondisablemember:true,buttondisable:true})
                         const msg =  document.getElementById('Update_Msg');
-                        msg.innerHTML = "Account is not Active";
+                        msg.innerHTML = "Account is Inactive";
                         msg.style.display = "block";
 
                }
@@ -135,7 +142,7 @@ class SendFund extends React.Component{
                                                     if(parseFloat(e.target._Send.value) <= parseFloat(e.target._Available.value)){
                                                     //await code
                                                                             console.log("in axios");
-                                                                            document.getElementById('ERR_MSG').innerHTML = "";
+                                                                         //   document.getElementById('ERR_MSG').innerHTML = "";
                                                                             await axios.post('/api/users/sendFund/update',{
                                                                                 
                                                                                         //updating Values
@@ -152,11 +159,13 @@ class SendFund extends React.Component{
 
                                                                             }).then(res => {
 
+                                                                                console.log(res.data);
+
                                                                                         if(parseInt(res.data.status) === parseInt(1)){
                                                                                             sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
                                                                                             const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
                                                                                             this.setState({
-                                                                                                sendMnyFrom:userdata._id,
+                                                                                                sendMnyFrom: userdata._id,
                                                                                                 levelIncome: parseFloat( userdata.levelIncome.$numberDecimal),
                                                                                                 autoPoolIncome: parseFloat( userdata.autoPoolIncome.$numberDecimal),
                                                                                                 fundSharingIncome: parseFloat( userdata.fundSharingIncome.$numberDecimal),
@@ -165,12 +174,16 @@ class SendFund extends React.Component{
                                                                                                 _autopool:0.00,
                                                                                                 _fund:0.00,
                                                                                                 _recieved:0.00,
-                                                                                                Loading : false
+                                                                                                Loading : false,
+                                                                                                Err_message : "Successful !",
+                                                                                                open : true, 
                                                                                             })
                                                                                         }else{
 
                                                                                             this.setState({
-                                                                                                Loading : false
+                                                                                                Loading : false,
+                                                                                                Err_message : "UnSuccessful !",
+                                                                                                open : true, 
                                                                                             })
                                                                                 
                                                                                          }
@@ -185,27 +198,33 @@ class SendFund extends React.Component{
                                                     }
                                                     else
                                                     {
-                                                        console.log("3");document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                                        //console.log("3");document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
                                                         this.setState({
-                                                            Loading : false
+                                                            Loading : false,
+                                                            Err_message : "please enter valid Amount !",
+                                                            open : true, 
                                                         })
                                                     }
 
                                         }else{
                                                     console.log("2");
-                                                    document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
+                                                  //  document.getElementById('ERR_MSG').innerHTML = "please enter valid Amount !"
                                                     this.setState({
-                                                        Loading : false
+                                                        Loading : false,
+                                                        Err_message :  "please enter valid Amount !",
+                                                        open : true, 
                                                     })
 
                                         }
 
 
                             }else{
-                                document.getElementById('ERR_MSG').innerHTML = "Member id changed !"
+                               // document.getElementById('ERR_MSG').innerHTML = "Member id changed !"
                                 console.log("1");
                                 this.setState({
-                                    Loading : false
+                                    Loading : false,
+                                    Err_message :  "Member id changed !",
+                                    open : true, 
                                 })
                             }
                 }
@@ -235,8 +254,12 @@ class SendFund extends React.Component{
 
                         
                         if(id === this.userdata.userId){
-                            document.getElementById('Update_Msg').innerHTML = "Can't Transfer to self Account"
-                            document.getElementById('Update_Msg').style.display = "block"
+                           // document.getElementById('Update_Msg').innerHTML = "Can't Transfer to self Account"
+                           // document.getElementById('Update_Msg').style.display = "block"
+                            this.setState({
+                                Err_message : "Can't Transfer to self Account",
+                                open: true
+                            })
                         }else{
 
                             await axios.get(`/api/users/sendFund/${id}` )
@@ -252,18 +275,22 @@ class SendFund extends React.Component{
                                                                     disablememberfield:true,
                                                                     buttondisablemember:true,
                                                                     disableCanclebutton:false,
-                                                                    Loading_id : false
+                                                                    Loading_id : false,
+                                                                    Err_message : "Enter Amount",
+                                                                    open: true
 
                                                         })
-                                                        document.getElementById('Update_Msg').innerHTML = "Enter Amount"
-                                                        document.getElementById('Update_Msg').style.display = "block"
+                                                     //   document.getElementById('Update_Msg').innerHTML = "Enter Amount"
+                                                       // document.getElementById('Update_Msg').style.display = "block"
                                                 }
                                                 else
                                                 {
-                                                        document.getElementById('Update_Msg').innerHTML = "Enter valid MemberId and click Get details !"
-                                                        document.getElementById('Update_Msg').style.display = "block"
+                                                    //    document.getElementById('Update_Msg').innerHTML = "Enter valid MemberId and click Get details !"
+                                                      //  document.getElementById('Update_Msg').style.display = "block"
                                                         this.setState({
-                                                            Loading_id : false
+                                                            Loading_id : false,
+                                                            Err_message:"Enter valid MemberId and click Get details !",
+                                                            open: true
                                                         })
                                                 }
 
@@ -292,7 +319,11 @@ class SendFund extends React.Component{
             disableCanclebutton: true
         })
     }
-
+    handleClose = () =>{
+        this.setState({
+          open: false
+        })
+      }
 
     render()
     {
@@ -307,6 +338,21 @@ class SendFund extends React.Component{
                 <div id="Update_Msg"  style={{color:"black",display:"none",borderRadius:"3px",backgroundColor:"white",padding:"10px 5px"}}>
                   
               </div>
+
+              <Snackbar
+        
+        autoHideDuration={3000}
+        open={this.state.open}
+        onClose={() => this.handleClose()}
+        message={this.state.Err_message}
+        action={
+          <React.Fragment>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>                         
+        }
+      />
 
                    <div className="Send_Fund_body">
                        

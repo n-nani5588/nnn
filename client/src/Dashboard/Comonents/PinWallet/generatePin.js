@@ -13,6 +13,10 @@ import Axios from 'axios';
 import short from 'short-uuid';
 import Loader from 'react-loader-spinner';
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 const classes = makeStyles((theme) => ({
  
@@ -61,7 +65,20 @@ class GeneratePin extends React.Component {
      multiplyWith:15,
      quantity1:0,
      Loading : false,
+     active : this.userdata.Active.toLowerCase() === "true" ? true : false,
      LoadingTreasurePins: false,
+     Pool_One : this.userdata.poolOne,
+     Pool_Two : this.userdata.poolTwo,
+     Pool_Three: this.userdata.poolThree,
+     Pool_Four: this.userdata.poolFour,
+     Pool_Five : this.userdata.poolFive,
+     Pool_Six : this.userdata.poolSix,
+     Pool_Seven : this.userdata.poolSeven,
+     Pool_Eight : this.userdata.poolEight,
+     Pool_Nine : this.userdata.poolNine,
+     Pool_Ten : this.userdata.poolTen,
+     Err_message: "something",
+     open: false,
    }
 
  }
@@ -88,8 +105,6 @@ class GeneratePin extends React.Component {
   })
 
 }
-
-
 
  handleSubmit=  async (e)=> {
 
@@ -128,7 +143,9 @@ class GeneratePin extends React.Component {
                                         pinBalance:res.data.userdetails.pinBalance.$numberDecimal,
                                         quantity:0,
                                         Total:0,
-                                        Loading: false
+                                        Loading: false,
+                                        Err_message : "Active Pin Generated !",
+                                        open : true, 
                                       })
                                   
                                       document.getElementById('password_pin').value = ""
@@ -136,9 +153,11 @@ class GeneratePin extends React.Component {
                                   
                                 }else { 
                                   
-                                        document.getElementById('ERR_MSG').innerHTML = "Wrong Password"
+                           //             document.getElementById('ERR_MSG').innerHTML = "Wrong Password"
                                         this.setState({
-                                            Loading: false
+                                            Loading: false,
+                                            Err_message : "Wrong Password !",
+                                            open : true, 
                                         })
 
                                 }
@@ -153,18 +172,22 @@ class GeneratePin extends React.Component {
                   }else{
                   console.log("2");
 
-                    document.getElementById('ERR_MSG').innerHTML = "Does not have Enough Balance to Buy!"
+                 //   document.getElementById('ERR_MSG').innerHTML = "Does not have Enough Balance to Buy!"
                     this.setState({
-                      Loading: false
+                      Loading: false,
+                      Err_message :"Does not have Enough Balance to Buy!",
+                      open : true, 
                   })
                   }
 
             }
             else{
               console.log("1");
-                  document.getElementById('ERR_MSG').innerHTML = "invalid Amount"
+             ///     document.getElementById('ERR_MSG').innerHTML = "invalid Amount"
                   this.setState({
-                    Loading: false
+                    Loading: false,
+                    Err_message : "invalid Amount",
+                    open : true, 
                 })
             }
     }
@@ -214,16 +237,20 @@ class GeneratePin extends React.Component {
                                                         pinBalance:res.data.userdetails.pinBalance.$numberDecimal,
                                                         quantity1:0,
                                                         Total:0,
-                                                        LoadingTreasurePins: false
+                                                        LoadingTreasurePins: false,
+                                                        Err_message : "Treasure Pin Generated",
+                                                        open : true, 
                                                       })
                                                       document.getElementById('treasure_password').value = ""
                                                       console.log("success");
 
                                           }else { 
 
-                                                document.getElementById('ERR_MSG1').innerHTML = "Wrong Password"
+                //                                document.getElementById('ERR_MSG1').innerHTML = "Wrong Password"
                                                 this.setState({
-                                                  LoadingTreasurePins: false
+                                                  LoadingTreasurePins: false,
+                                                  Err_message : "Wrong Password",
+                                                  open : true, 
                                                 })
                                                 
                                           }
@@ -239,18 +266,22 @@ class GeneratePin extends React.Component {
                   }else{
                   console.log("2");
 
-                    document.getElementById('ERR_MSG1').innerHTML = "Does not have Enough Balance to Buy!"
+              //      document.getElementById('ERR_MSG1').innerHTML = "Does not have Enough Balance to Buy!"
                     this.setState(
-                      {LoadingTreasurePins: false}
+                      {LoadingTreasurePins: false,
+                        Err_message : "Does not have Enough Balance to Buy!",
+                    open : true, }
                     )
                   }
 
           }
           else{
                 console.log("1");
-                    document.getElementById('ERR_MSG1').innerHTML = "invalid Amount"
+              //      document.getElementById('ERR_MSG1').innerHTML = "invalid Amount"
                     this.setState(
-                      {LoadingTreasurePins: false}
+                      {LoadingTreasurePins: false,
+                        Err_message : "invalid Amount",
+                    open : true, }
                     )
           }
     }
@@ -263,6 +294,12 @@ class GeneratePin extends React.Component {
 
  }
 
+ handleClose = () =>{
+  this.setState({
+    open: false
+  })
+}
+
   render(){
 
     if(parseInt(this.state.pinBalance) > parseInt(0))
@@ -270,8 +307,24 @@ class GeneratePin extends React.Component {
           return(   <div style={{margin:"0px",padding:"2% 10%"}}>
     <div className="Send_Fund_Container">
             <div className="Send_Fund_header" >
-               Generate Pins
+               generate activation pins
             </div>
+
+            <Snackbar
+        
+        autoHideDuration={3000}
+        open={this.state.open}
+        onClose={() => this.handleClose()}
+        message={this.state.Err_message}
+        action={
+          <React.Fragment>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>                         
+        }
+      />          
+
             <div className="Send_Fund_body">
               {/* Recent Orders */}
                         <Grid item xs={12}>
@@ -289,14 +342,14 @@ class GeneratePin extends React.Component {
                           <div style={{display:"flex",margin:"2%"}}>
                            
                              <input  className="form-control"  value="Quantity" disabled></input>
-                            <input className="form-control" value={this.state.quantity} required name="_Quantity" min='0' max="1" type="number" onChange={(e)=> this.changehandle(e)}></input>
+                            <input className="form-control" value={this.state.quantity} required name="_Quantity" min='0' max="10" type="number" onChange={(e)=> this.changehandle(e)}></input>
                           </div>
                          
                              
 
                           <div style={{display:"flex",margin:"2%"}}>
                            
-                           <input  className="form-control" readOnly value="Transition Password" disabled></input>
+                           <input  className="form-control" readOnly value="Transaction Password" disabled></input>
                           <input className="form-control" id="password_pin" required name="_Password" type={this.state.passwordVisible?"text":"password"}  ></input>
 
                         </div>
@@ -325,7 +378,9 @@ class GeneratePin extends React.Component {
                     {/* </Grid> */}
                    
             </div>
-  
+          
+          
+
             <div className="Send_Fund_Container">
             <div className="Send_Fund_header" >
                Generate Treasure pins
@@ -348,16 +403,17 @@ class GeneratePin extends React.Component {
                           <div style={{display:"flex",margin:"2%"}}>
                                 <input className="form-control" value="select Treasure" disabled></input>
                                 <select onChange={(e) => this.treasure(e)} className="form-control" id="Select_Treasure">
-                                  <option value="15">Rising-Treasure</option>
-                                  <option value="30">Wonder-Treasure</option>
-                                  <option value="50">Master-Treasure</option>
-                                  <option value="100">Expert-Treasure</option>
-                                  <option value="150">Billionaire-Treasure</option>
-                                  <option value="200">Legend-Treasure</option>
-                                  <option value="300">Fasttrack-Treasure</option>
-                                  <option value="500">Diamond-Treasure</option>
-                                  <option value="750">Double-Diamond-Treasure</option>
-                                  <option value="1000">Triple-Diamond-Treasure</option>
+                                <option value="0">Select</option>
+                                 
+                                  {this.state.Pool_Two && <option value="30">Silver-Treasure</option>}
+                                 {this.state.Pool_Three && <option value="50">Gold-Treasure</option>}
+                                {this.state.Pool_Four &&  <option value="100">Platinum-Treasure</option>}
+                                 {this.state.poolFive && <option value="150">Diamond-Treasure</option>}
+                                {this.state.Pool_Six  && <option value="200">Million-Treasure</option>}
+                                {this.state.Pool_Seven &&  <option value="300">Billion-Treasure</option>}
+                                 {this.state.poolEight && <option value="500">Trillion-Treasure</option>       }
+                                 {this.state.poolNine && <option value="750">Crown-Treasure</option> }
+                                { this.state.Pool_Ten && <option value="1000">Ace-Treasure</option> }
                                 </select>
                           </div>
 
@@ -371,7 +427,7 @@ class GeneratePin extends React.Component {
 
                           <div style={{display:"flex",margin:"2%"}}>
                            
-                           <input  className="form-control" readOnly value="Transition Password" disabled></input>
+                           <input  className="form-control" readOnly value="Transaction Password" disabled></input>
                           <input className="form-control" required id="treasure_password" name="_Password1" type={this.state.passwordVisible?"text":"password"}  ></input>
 
                         </div>

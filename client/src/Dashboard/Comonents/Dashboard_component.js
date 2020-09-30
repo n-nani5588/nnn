@@ -110,7 +110,7 @@ let newsnew ;
      
      <Grid container spacing={2}>
        <Grid item xs={12} justify="center" sm={11}>
-           <input className="_input_class form-control sm" value={`http://localhost:3000/signup/${userdata.userId}`} id="myInput"/>
+           <input className="_input_class form-control sm" value={`http://localhost:3000/Refer/${userdata.userId}`} id="myInput"/>
        </Grid>
        <Grid item xs={12} sm={1}>
        <span> <button className="btn btn-sm" onClick={() => Copy_function()}>Copy</button></span>

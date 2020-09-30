@@ -67,11 +67,6 @@ const classes = makeStyles((theme) => ({
         sort: 'desc'
       },
       {
-        label: 'Deposit',
-        field: 'Deposit',
-        
-      },
-      {
         label: 'Status',
         field: 'status',
         
@@ -146,7 +141,6 @@ class DirectMembers extends React.Component {
                 Name: Direct.firstName+Direct.lastName,
                 Mail: Direct.mailId,
                 Date: new Date(Direct.joiningDate).toLocaleDateString(),
-                Deposit:parseFloat(Direct.autoPoolIncome.$numberDecimal)+parseFloat(Direct.fundSharingIncome.$numberDecimal)+parseFloat(Direct.levelIncome.$numberDecimal)+parseFloat(Direct.recievedIncome.$numberDecimal),
                 status: Direct.Active === "true"?"Active":"Inactive"
               }
 

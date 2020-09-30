@@ -67,7 +67,7 @@ const classes = makeStyles((theme) => ({
         field: 'Mail',
       },
       {
-        label: 'Joining date',
+        label: 'Date',
         field: 'Date',
         sort: 'desc'
       },

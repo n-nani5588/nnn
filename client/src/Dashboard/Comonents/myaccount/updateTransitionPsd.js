@@ -9,6 +9,11 @@ import Typography from '@material-ui/core/Typography';
 import { MDBRow, MDBCol, MDBBtn } from "mdbreact";
 import axios from 'axios'
 
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+
 var interval;
 function Copyright() {
     return (
@@ -50,7 +55,8 @@ class UpdateTransitionPassword extends React.Component {
         valid: false
       },
       Loading : false,
-      
+      Err_message: "something",
+      open: false,
     }
 
   }
@@ -80,9 +86,6 @@ class UpdateTransitionPassword extends React.Component {
               {
 
                 if(parseInt(res.data.status) === parseInt(1)){
-
-                          const msg=  document.getElementById('Update_Msg');
-                          msg.innerHTML = "Update Succesfull !"
                       
                           this.setState({
                             viewpass: false,
@@ -98,26 +101,30 @@ class UpdateTransitionPassword extends React.Component {
                               value: "",
                               valid: false
                             },
-                            Loading : false
+                            Loading : false,
+                            Err_message: "Update Succesfull !",
+                            open: true,
                           })
                         
-                          msg.style.display = "block"
-                            interval = setTimeout(() => {
-                              msg.style.display = "none"
-                            }, 3000);
+                          // msg.style.display = "block"
+                          //   interval = setTimeout(() => {
+                          //     msg.style.display = "none"
+                          //   }, 3000);
 
 
                 }else{
 
-                          const msg=  document.getElementById('Update_Msg');
+                       //   const msg=  document.getElementById('Update_Msg');
                           this.setState({
-                            Loading : false
+                            Loading : false,
+                            Err_message: "Wrong password Entered !",
+                            open: true,
                           })
-                          msg.innerHTML = "Wrong password Entered !"
-                          msg.style.display = "block"
-                          interval = setTimeout(() => {
-                            msg.style.display = "none"
-                          }, 3000);
+                          // msg.innerHTML = "Wrong password Entered !"
+                          // msg.style.display = "block"
+                          // interval = setTimeout(() => {
+                          //   msg.style.display = "none"
+                          // }, 3000);
                 }
               
               }).catch(err => {
@@ -147,6 +154,12 @@ class UpdateTransitionPassword extends React.Component {
     clearTimeout(interval);
   }
 
+  handleClose = () =>{
+    this.setState({
+      open: false
+    })
+  }
+  
 handleConfirm = (e) => {
 
 
@@ -181,6 +194,21 @@ handleConfirm = (e) => {
               }}>
                   
               </div>
+
+              <Snackbar
+        
+                autoHideDuration={3000}
+                open={this.state.open}
+                onClose={() => this.handleClose()}
+                message={this.state.Err_message}
+                action={
+                  <React.Fragment>
+                    <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </React.Fragment>                         
+                }
+              />
   
               {/* Recent Orders */}
               <Grid item xs={12}>
@@ -262,7 +290,7 @@ handleConfirm = (e) => {
             className="btn btn-link"
             onMouseOver={() => this.handleViewPassword()}
             onMouseOut={() => this.handleViewPassword()}
-            >show
+            >show password
             </button>
               
             </div>
