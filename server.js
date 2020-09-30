@@ -23,14 +23,15 @@ app.use('/api/Admin',adminRoute);
 app.use('/api/Statement',statementRoute);
 
 //Server static assests if in production
-if(process.env.NODE_ENV === 'production'){
+//if(process.env.NODE_ENV === 'production'){
   //Set static foldr
   app.use(express.static('client/build'));
 
   app.get('*',(req,res) => {
     res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
   })
-}
+  
+//}
 
 const port = process.env.PORT || 5000;
 
