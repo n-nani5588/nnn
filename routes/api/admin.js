@@ -391,6 +391,9 @@ router.post('/getDailyReportDetails',(req,res) => {
 router.post('/SendFundToUser',(req,res) => {
 
     console.log(req.body);
+    let current_datetime = new Date()
+  let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
+  
 try{
             Users.findOneAndUpdate({
                 userId: req.body.userid
@@ -404,10 +407,12 @@ try{
 
                             userId: req.body.userid,
                             mailId:users.mailId,
+                            Date: end_date,
                             message: 'Hurray ! You have been Rewarded.',
                             Amount: req.body.fundamount,
                     
                         })
+                        
                         ShareFundStmnt.save().catch(err => {console.log(err.message);  res.json({status: 0});})
 
                         const date = new Date();

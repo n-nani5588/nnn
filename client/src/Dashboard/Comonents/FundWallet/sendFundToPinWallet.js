@@ -18,7 +18,7 @@ class SendFundToPinWallet extends React.Component{
         console.log(this.userdata);
         this.state = {
             id: this.userdata._id,
-            levelIncome: -parseFloat( this.userdata.levelIncome.$numberDecimal),
+            levelIncome: parseFloat( this.userdata.levelIncome.$numberDecimal),
             autoPoolIncome: parseFloat( this.userdata.autoPoolIncome.$numberDecimal),
             fundSharingIncome: parseFloat( this.userdata.fundSharingIncome.$numberDecimal),
             active : this.userdata.Active.toLowerCase() === "true" ? true : false,

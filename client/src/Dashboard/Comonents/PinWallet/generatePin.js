@@ -325,6 +325,8 @@ class GeneratePin extends React.Component {
         }
       />          
 
+          { this.state.active 
+          &&
             <div className="Send_Fund_body">
               {/* Recent Orders */}
                         <Grid item xs={12}>
@@ -378,7 +380,7 @@ class GeneratePin extends React.Component {
                     {/* </Grid> */}
                    
             </div>
-          
+          }
           
 
             <div className="Send_Fund_Container">

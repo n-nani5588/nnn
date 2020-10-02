@@ -25,6 +25,7 @@ class SendFund extends React.Component{
             fundSharingIncome: parseFloat( this.userdata.fundSharingIncome.$numberDecimal),
             recievedIncome: parseFloat( this.userdata.recievedIncome.$numberDecimal),
             Active : this.userdata.Active.toLowerCase() === "true" ? true : false,
+            Level : this.userdata.levelTeam,
             levelTeam : this.userdata.levelTeam,
             _level:0.00,
             _autopool:0.00,

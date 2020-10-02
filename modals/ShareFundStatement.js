@@ -16,8 +16,8 @@ const FundSharingSchema = new newSchema({
         required: true
     },
     Date:{
-        type: Date,
-        default:  new Date()
+        type: String,
+        required: true
     },
     Amount:{
         type: mongoose.Schema.Types.Decimal128,

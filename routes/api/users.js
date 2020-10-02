@@ -838,6 +838,11 @@ try{
           const date = new Date();
           const today = date.toLocaleDateString();
 
+           
+          let current_datetime = new Date()
+          let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
+
+
           let percent = (parseFloat(parseFloat(req.body.levelamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.recievedamount))*0.05)
           console.log(percent);
 
@@ -904,6 +909,7 @@ try{
                                                                                       userId: req.body.useid,
                                                                                       firstName:user.firstName,
                                                                                       lastName: user.lastName,
+                                                                                      joiningDate : end_date,
                                                                                       mailId: user.mailId,
                                                                                       Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
                                                                                 })
@@ -928,6 +934,7 @@ try{
                                                                             userId: req.body.useid,
                                                                             firstName:user.firstName,
                                                                             lastName: user.lastName,
+                                                                            joiningDate: end_date,
                                                                             mailId: user.mailId,
                                                                             Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
                                                                     })
@@ -1209,6 +1216,7 @@ router.get('/GetFundSharingAll', (req,res) => {
   console.log(req.body);
   let current_datetime = new Date()
   let end_date = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getDate()
+  let end_date_1 = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + (current_datetime.getDate() + 1)
   let start_date  = current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" + (current_datetime.getDate() - 5)
   console.log(start_date,end_date)
   FundSharing.find( {
@@ -1216,16 +1224,16 @@ router.get('/GetFundSharingAll', (req,res) => {
    [
      {
       Date:
-      { $gte: new Date(start_date), $lte: new Date(end_date) },
+      { $gte: start_date, $lte:end_date },
      },
      {
       Date:
-      { $gte: new Date(start_date), $lte: new Date(end_date).setDate(new Date(end_date).getDate() + 1) },
+      { $gte: start_date, $lte: end_date_1 },
      },
    ],
   },)
     .then(users => {
-      console.log(users);
+      console.log("funs sharing :::::::::::::::::::",users);
         if(users){
           res.json({status: 1 ,users})
         }
