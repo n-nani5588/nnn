@@ -57,7 +57,7 @@ class SendFund extends React.Component{
           
                if(this.state.Active){
 
-                        if(this.state.levelTeam.length > 3){
+                       
 
                                     if(parseFloat(Available) > parseFloat(0.00) ){
                                             
@@ -75,24 +75,14 @@ class SendFund extends React.Component{
                                             const msg =  document.getElementById('Update_Msg');
                                             msg.innerHTML = "SORYY ! can't transfer money due to low balance";
                                             msg.style.display = "block";
-                                        }           
-                        }
-                        else
-                        {
-                            this.setState({buttondisablemember:true,buttondisable:true})
-                            const msg =  document.getElementById('Update_Msg');
-                            msg.innerHTML = "please do refer 4 members to active this feature ";
-                            msg.style.display = "block";
-                        }
+                                        }         
 
                } 
                else
                {
 
                         this.setState({buttondisablemember:true,buttondisable:true})
-                        const msg =  document.getElementById('Update_Msg');
-                        msg.innerHTML = "Account is Inactive";
-                        msg.style.display = "block";
+                     
 
                }
    
@@ -327,142 +317,179 @@ class SendFund extends React.Component{
 
     render()
     {
-        return(
-        <div style={{margin:"0px",padding:"2% 10%"}}>
-            <div className="Send_Fund_Container">
+    
+        if(!this.state.Active) {  
+            return(
+            <div style={{ width: "100%",
+                display:"flex",
+                justifyContent:"center",
+                alignItems:"center",
+                padding:"5%",
+                color:"black",
+                backgroundColor:"red"}}>
 
-                <div className="Send_Fund_header" >
-                     Fund Transfer
+                        PLEASE ACTIVATE YOUR ACCOUNT
+                    
+                </div>
+            )
+        }
+         else if(this.state.Level.length < 4)
+        {
+            return(
+
+                <div style={{ width: "100%",
+                display:"flex",
+                justifyContent:"center",
+                alignItems:"center",
+                padding:"5%",
+                color:"black",
+                backgroundColor:"red"}}>
+
+                        PLEASE JOIN 4 MEMBERS TO WITHDRAW MONEY
+                    
                 </div>
 
-                <div id="Update_Msg"  style={{color:"black",display:"none",borderRadius:"3px",backgroundColor:"white",padding:"10px 5px"}}>
-                  
-              </div>
-
-              <Snackbar
-        
-        autoHideDuration={3000}
-        open={this.state.open}
-        onClose={() => this.handleClose()}
-        message={this.state.Err_message}
-        action={
-          <React.Fragment>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </React.Fragment>                         
+                 )
         }
-      />
+        else
+        {
+                return(
+                <div style={{margin:"0px",padding:"2% 10%"}}>
+                    <div className="Send_Fund_Container">
 
-                   <div className="Send_Fund_body">
-                       
-                       <Grid  container xs={12} >
-                            <div  >
-                            <p style={{fontSize:"10px"}}>*Be aware of spaces while entering 
-                                        member id</p>
-                            <form className="Send_Fund_body_ID" onSubmit={(e) => this.handleMemberId(e)}>
-                                       <Grid item xs={12} sm={6} >
-                                        
-                                        <p> Member Id : </p>
-                                            <input required disabled={this.state.disablememberfield} name="_memberID" id="Member_Id" type="text" className="form-control"></input>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                        <p> Member details :</p>
-                                            <input id="Member_Name" type="text" disabled value={this.state.memberName} className="form-control"></input>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} >
-                                        <div style={{display:"flex",justifyContent:"flex-start",padding:"10px"}}>
-                                            <button
-                                            type="submit"
-                                            className="btn  btn-sm"
-                                            disabled={this.state.buttondisablemember || this.state.Loading_id}
-                                            >
-                                               {this.state.Loading_id ? (<div> <Loader type="ThreeDots" color="#39AD5D" height={30} width={30} /></div>) : "confirm id"}  
-                                            </button>
+                        <div className="Send_Fund_header" >
+                            Fund Transfer
+                        </div>
 
-                                            <button
-                                             onClick={() => this.handleCancel()}
-                                            disabled={this.state.disableCanclebutton}
-                                            className="btn btn-sm"
-                                            >
-                                              change id
-                                            </button>
-                                        </div>
-                                        </Grid>
-                          </form>
-                            </div>
-                       </Grid>
-<div style={{padding:"20px 0px"}}>
-{/* <Divider/> */}
-</div>
-                     <form onSubmit={(e) => this.handleSubmit(e)}>
-                        <Grid container xs={12} spacing={2}>
-                                <div className="Send_Fund_body_ID" >
-                                    <div className="Send_Fund_body_wallet">
+                        <div id="Update_Msg"  style={{color:"black",display:"none",borderRadius:"3px",backgroundColor:"white",padding:"10px 5px"}}>
+                        
+                    </div>
 
-                                    <input type="text" disabled value="LEVEL INCOME" className="form-control"></input>
-                                    <input type="text" readOnly value={this.state.levelIncome} className="form-control"></input>
-                                    <input type="number" required min="0" step="any" max={this.state.levelIncome} name="_level" onChange={(e) => this.handleChange(e)} value={this.state._level} className="form-control"></input>
+                    <Snackbar
+                
+                autoHideDuration={3000}
+                open={this.state.open}
+                onClose={() => this.handleClose()}
+                message={this.state.Err_message}
+                action={
+                <React.Fragment>
+                    <IconButton size="small" aria-label="close" color="inherit" onClick={() => this.handleClose()}>
+                    <CloseIcon fontSize="small" />
+                    </IconButton>
+                </React.Fragment>                         
+                }
+            />
 
-                                    </div >
-                                    <div className="Send_Fund_body_wallet">
+                        <div className="Send_Fund_body">
+                            
+                            <Grid  container xs={12} >
+                                    <div  >
+                                    <p style={{fontSize:"10px"}}>*Be aware of spaces while entering 
+                                                member id</p>
+                                    <form className="Send_Fund_body_ID" onSubmit={(e) => this.handleMemberId(e)}>
+                                            <Grid item xs={12} sm={6} >
+                                                
+                                                <p> Member Id : </p>
+                                                    <input required disabled={this.state.disablememberfield} name="_memberID" id="Member_Id" type="text" className="form-control"></input>
+                                                </Grid>
+                                                <Grid item xs={12} sm={6} >
+                                                <p> Member details :</p>
+                                                    <input id="Member_Name" type="text" disabled value={this.state.memberName} className="form-control"></input>
+                                                </Grid>
+                                                <Grid item xs={12} sm={6} >
+                                                <div style={{display:"flex",justifyContent:"flex-start",padding:"10px"}}>
+                                                    <button
+                                                    type="submit"
+                                                    className="btn  btn-sm"
+                                                    disabled={this.state.buttondisablemember || this.state.Loading_id}
+                                                    >
+                                                    {this.state.Loading_id ? (<div> <Loader type="ThreeDots" color="#39AD5D" height={30} width={30} /></div>) : "confirm id"}  
+                                                    </button>
 
-                                    <input type="text" readOnly value="AUTOPOOL INCOME" className="form-control"></input>
-                                    <input type="text" readOnly value={this.state.autoPoolIncome} className="form-control"></input>
-                                    <input type="number" required min="0" step="any" max={this.state.autoPoolIncome} name="_autopool" onChange={(e) => this.handleChange(e)} value={this.state._autopool} className="form-control"></input>
-
+                                                    <button
+                                                    onClick={() => this.handleCancel()}
+                                                    disabled={this.state.disableCanclebutton}
+                                                    className="btn btn-sm"
+                                                    >
+                                                    change id
+                                                    </button>
+                                                </div>
+                                                </Grid>
+                                </form>
                                     </div>
-                                    <div className="Send_Fund_body_wallet">
-
-                                    <input type="text" readOnly value="FSI" className="form-control"></input>
-                                    <input type="text" readOnly value={this.state.fundSharingIncome} className="form-control"></input>
-                                    <input type="number" required min="0" step="any" max={this.state.fundSharingIncome} name="_fund" onChange={(e) => this.handleChange(e)} value={this.state._fund} className="form-control"></input>
-
-                                    </div>
-
-                                    <div className="Send_Fund_body_wallet">
-
-                                    <input type="text" readOnly value="WALLET INCOME" className="form-control"></input>
-                                    <input type="text" readOnly value={this.state.recievedIncome} className="form-control"></input>
-                                    <input type="number" required min="0" step="any" max={this.state.recievedIncome} name="_recieved" onChange={(e) => this.handleChange(e)} value={this.state._recieved} className="form-control"></input>
-
-                                    </div>
-
-                                    <div className="Send_Fund_body_Total">
-
-                                    <input type="text" readOnly value="AVAILABLE FUND" className="form-control"></input>
-                                    <input type="text" name="_Available" id="Available_Balance" value={(parseFloat(this.state.recievedIncome)+parseFloat(this.state.fundSharingIncome)+parseFloat(this.state.levelIncome)+parseFloat(this.state.autoPoolIncome))} disabled className="form-control"></input>
-                                  
-
-                                    </div>
-                                    <div id="ERR_MSG"></div>
-                                    <div className="Send_Fund_body_Total">
-
-                                    <input type="text" readOnly value="TRANSFER FUND" className="form-control"></input>
-                                    <input type="text" readOnly name="_Send" value={parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._level)+parseFloat(this.state._autopool)} className="form-control"></input>
-
-
-                                    </div>
-                                    <div className="Send_Fund_body_Total">
-
-                                        <button 
-                                        className="btn btn-success" 
-                                        type = "submit"
-                                        disabled={this.state.buttondisable || this.state.Loading }
-                                        >
-                                             {this.state.Loading ? (<div> <Loader type="ThreeDots" color="#FFF" height={15} width={15} /></div>) : "Transfer"}
-                                        </button>
-                                     </div>
-                                </div>
-                        </Grid>
-                    </form>
-                   </div>
-
-
-           </div>
+                            </Grid>
+        <div style={{padding:"20px 0px"}}>
+        {/* <Divider/> */}
         </div>
-      
-      )
+                            <form onSubmit={(e) => this.handleSubmit(e)}>
+                                <Grid container xs={12} spacing={2}>
+                                        <div className="Send_Fund_body_ID" >
+                                            <div className="Send_Fund_body_wallet">
+
+                                            <input type="text" disabled value="LEVEL INCOME" className="form-control"></input>
+                                            <input type="text" readOnly value={this.state.levelIncome} className="form-control"></input>
+                                            <input type="number" required min="0" step="any" max={this.state.levelIncome} name="_level" onChange={(e) => this.handleChange(e)} value={this.state._level} className="form-control"></input>
+
+                                            </div >
+                                            <div className="Send_Fund_body_wallet">
+
+                                            <input type="text" readOnly value="AUTOPOOL INCOME" className="form-control"></input>
+                                            <input type="text" readOnly value={this.state.autoPoolIncome} className="form-control"></input>
+                                            <input type="number" required min="0" step="any" max={this.state.autoPoolIncome} name="_autopool" onChange={(e) => this.handleChange(e)} value={this.state._autopool} className="form-control"></input>
+
+                                            </div>
+                                            <div className="Send_Fund_body_wallet">
+
+                                            <input type="text" readOnly value="FSI" className="form-control"></input>
+                                            <input type="text" readOnly value={this.state.fundSharingIncome} className="form-control"></input>
+                                            <input type="number" required min="0" step="any" max={this.state.fundSharingIncome} name="_fund" onChange={(e) => this.handleChange(e)} value={this.state._fund} className="form-control"></input>
+
+                                            </div>
+
+                                            <div className="Send_Fund_body_wallet">
+
+                                            <input type="text" readOnly value="WALLET INCOME" className="form-control"></input>
+                                            <input type="text" readOnly value={this.state.recievedIncome} className="form-control"></input>
+                                            <input type="number" required min="0" step="any" max={this.state.recievedIncome} name="_recieved" onChange={(e) => this.handleChange(e)} value={this.state._recieved} className="form-control"></input>
+
+                                            </div>
+
+                                            <div className="Send_Fund_body_Total">
+
+                                            <input type="text" readOnly value="AVAILABLE FUND" className="form-control"></input>
+                                            <input type="text" name="_Available" id="Available_Balance" value={(parseFloat(this.state.recievedIncome)+parseFloat(this.state.fundSharingIncome)+parseFloat(this.state.levelIncome)+parseFloat(this.state.autoPoolIncome))} disabled className="form-control"></input>
+                                        
+
+                                            </div>
+                                            <div id="ERR_MSG"></div>
+                                            <div className="Send_Fund_body_Total">
+
+                                            <input type="text" readOnly value="TRANSFER FUND" className="form-control"></input>
+                                            <input type="text" readOnly name="_Send" value={parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._level)+parseFloat(this.state._autopool)} className="form-control"></input>
+
+
+                                            </div>
+                                            <div className="Send_Fund_body_Total">
+
+                                                <button 
+                                                className="btn btn-success" 
+                                                type = "submit"
+                                                disabled={this.state.buttondisable || this.state.Loading }
+                                                >
+                                                    {this.state.Loading ? (<div> <Loader type="ThreeDots" color="#FFF" height={15} width={15} /></div>) : "Transfer"}
+                                                </button>
+                                            </div>
+                                        </div>
+                                </Grid>
+                            </form>
+                        </div>
+
+
+                </div>
+                </div>
+            
+            )
+        }
     }
 }
 
