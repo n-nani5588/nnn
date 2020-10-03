@@ -67,16 +67,16 @@ class GeneratePin extends React.Component {
      Loading : false,
      active : this.userdata.Active.toLowerCase() === "true" ? true : false,
      LoadingTreasurePins: false,
-     Pool_One : this.userdata.poolOne,
-     Pool_Two : this.userdata.poolTwo,
-     Pool_Three: this.userdata.poolThree,
-     Pool_Four: this.userdata.poolFour,
-     Pool_Five : this.userdata.poolFive,
-     Pool_Six : this.userdata.poolSix,
-     Pool_Seven : this.userdata.poolSeven,
-     Pool_Eight : this.userdata.poolEight,
-     Pool_Nine : this.userdata.poolNine,
-     Pool_Ten : this.userdata.poolTen,
+     Pool_One : this.userdata.poolOnePins.length > 0 ? true : false,
+     Pool_Two : this.userdata.poolTwoPins.length > 0 ? true : false,
+     Pool_Three: this.userdata.poolThreePins.length > 0 ? true : false,
+     Pool_Four: this.userdata.poolFourPins.length > 0 ? true : false,
+     Pool_Five : this.userdata.poolFivePins.length > 0 ? true : false,
+     Pool_Six : this.userdata.poolSixPins.length > 0 ? true : false,
+     Pool_Seven : this.userdata.poolSevenPins.length > 0 ? true : false,
+     Pool_Eight : this.userdata.poolEightPins.length > 0 ? true : false,
+     Pool_Nine : this.userdata.poolNinePins.length > 0 ? true : false,
+     Pool_Ten : this.userdata.poolTenPins.length > 0 ? true : false,
      Err_message: "something",
      open: false,
    }
@@ -240,6 +240,16 @@ class GeneratePin extends React.Component {
                                                         LoadingTreasurePins: false,
                                                         Err_message : "Treasure Pin Generated",
                                                         open : true, 
+                                                        Pool_One : res.data.userdetails.poolOnePins.length > 0 ? true : false,
+                                                        Pool_Two : res.data.userdetails.poolTwoPins.length > 0 ? true : false,
+                                                        Pool_Three: res.data.userdetails.poolThreePins.length > 0 ? true : false,
+                                                        Pool_Four: res.data.userdetails.poolFourPins.length > 0 ? true : false,
+                                                        Pool_Five : res.data.userdetails.poolFivePins.length > 0 ? true : false,
+                                                        Pool_Six : res.data.userdetails.poolSixPins.length > 0 ? true : false,
+                                                        Pool_Seven : res.data.userdetails.poolSevenPins.length > 0 ? true : false,
+                                                        Pool_Eight : res.data.userdetails.poolEightPins.length > 0 ? true : false,
+                                                        Pool_Nine : res.data.userdetails.poolNinePins.length > 0 ? true : false,
+                                                        Pool_Ten : res.data.userdetails.poolTenPins.length > 0 ? true : false,
                                                       })
                                                       document.getElementById('treasure_password').value = ""
                                                       console.log("success");
@@ -407,15 +417,15 @@ class GeneratePin extends React.Component {
                                 <select onChange={(e) => this.treasure(e)} className="form-control" id="Select_Treasure">
                                 <option value="0">Select</option>
                                  
-                                  {this.state.Pool_Two && <option value="30">Silver-Treasure</option>}
-                                 {this.state.Pool_Three && <option value="50">Gold-Treasure</option>}
-                                {this.state.Pool_Four &&  <option value="100">Platinum-Treasure</option>}
-                                 {this.state.poolFive && <option value="150">Diamond-Treasure</option>}
-                                {this.state.Pool_Six  && <option value="200">Million-Treasure</option>}
-                                {this.state.Pool_Seven &&  <option value="300">Billion-Treasure</option>}
-                                 {this.state.poolEight && <option value="500">Trillion-Treasure</option>       }
-                                 {this.state.poolNine && <option value="750">Crown-Treasure</option> }
-                                { this.state.Pool_Ten && <option value="1000">Ace-Treasure</option> }
+                                  {!this.state.Pool_Two && <option value="30">Silver-Treasure</option>}
+                                 {!this.state.Pool_Three && <option value="50">Gold-Treasure</option>}
+                                {!this.state.Pool_Four &&  <option value="100">Platinum-Treasure</option>}
+                                 {!this.state.poolFive && <option value="150">Diamond-Treasure</option>}
+                                {!this.state.Pool_Six  && <option value="200">Million-Treasure</option>}
+                                {!this.state.Pool_Seven &&  <option value="300">Billion-Treasure</option>}
+                                 {!this.state.poolEight && <option value="500">Trillion-Treasure</option>       }
+                                 {!this.state.poolNine && <option value="750">Crown-Treasure</option> }
+                                { !this.state.Pool_Ten && <option value="1000">Ace-Treasure</option> }
                                 </select>
                           </div>
 
