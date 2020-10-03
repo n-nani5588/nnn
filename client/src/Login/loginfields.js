@@ -30,7 +30,7 @@ import Loader from 'react-loader-spinner';
                       <input type="text" pattern="[^' ']+" required id="login" className="fadeIn second inputtext-type" name="login" placeholder="User ID" />
                       <input type="password"  pattern="[^' ']+" required id="password" className="fadeIn third inputtext-type" name="password" placeholder="Password" />
                     
-                      <div className="fadeIn fourth" style={{width:"100%",justifyContent:"center",color:"white"}}>*spaces are not allowed</div>
+                      {/* <div className="fadeIn fourth" style={{width:"100%",justifyContent:"center",color:"white"}}>*spaces are not allowed</div> */}
                     
                       <button type="submit" disabled={this.props.Loading} className="fadeIn fourth Button-submit"  >
 

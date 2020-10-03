@@ -23,19 +23,19 @@ const classes  = makeStyles((theme) => ({
 let data = {
   columns: [
     {
-      label: 'Sno',
+      label: 'SNO',
       field: 'Sno',
     },
     {
-      label: 'User Id',
+      label: 'USER ID',
       field: 'userid',
     },
     {
-      label: 'Amount',
+      label: 'AMOUNT',
       field: 'amount',
     },
     {
-      label: 'Date',
+      label: 'DATE',
       field: 'date',
     },
   ],

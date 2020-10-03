@@ -266,7 +266,7 @@ render(){
                   
                       <Grid  container xs={12} spacing={2}>
                       <form  onSubmit={(e) => this.handleMemberId(e)}> 
-                      <p style={{fontSize:"10px"}}>*Be aware of spaces while entering 
+                      <p style={{fontSize:"10px"}}>*Beware of spaces while entering 
                                               member id</p>
                               <div className="Send_Fund_body_ID" >
                             
@@ -347,7 +347,7 @@ render(){
                 alignItems:"center",
                 padding:"5%",
                 color:"black",
-                backgroundColor:"red"}}>
+                backgroundColor:"#006B94"}}>
 
                         Please Activate Your Account to use this Feature
                     

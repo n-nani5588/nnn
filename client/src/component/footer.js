@@ -22,12 +22,10 @@ export default function DenseAppBar() {
                                         <div style={{
                                                       fontSize:"15px",
                                                       fontWeight:"normal"}}>
-                                          <p>
-                                        BTC Baskets isn't a bank but 
-                                        a gifting platform that is made up of 
-                                        diverse people with a common goal to empower one another.
-                                          You provide assistance to your fellow
-                                          member through your financial gift.
+                                         <p>
+                                          GENIE TREASURES is a best experienced people's
+                                          community where we build social platform and provides
+                                          best opportunity to you and your career,
                                         </p>
                                         </div>
                                 </Grid>
@@ -54,11 +52,11 @@ export default function DenseAppBar() {
 
                                                   <span >Email : Facebook@Gmail.com</span>
 
-                                                  <span>	<div class="d-flex justify-content-start social_icon">
-                                                              <span><i class="fa fa-facebook-square"></i></span>
-                                                              <span><i class="fa fa-google-plus-square"></i></span>
-                                                              <span><i class="fa fa-twitter-square"></i></span>
-                                                              <span><i class="fa fa-instagram"></i></span>
+                                                  <span>	<div className="d-flex justify-content-start social_icon">
+                                                              <span><i className="fa fa-facebook-square"></i></span>
+                                                              <span><i className="fa fa-google-plus-square"></i></span>
+                                                              <span><i className="fa fa-twitter-square"></i></span>
+                                                              <span><i className="fa fa-instagram"></i></span>
                                                           </div>
                                                   </span>
                                           </div>

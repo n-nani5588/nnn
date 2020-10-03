@@ -74,7 +74,7 @@ class SendFund extends React.Component{
                                         else{
                                             this.setState({buttondisablemember:true,buttondisable:true})
                                             const msg =  document.getElementById('Update_Msg');
-                                            msg.innerHTML = "SORYY ! can't transfer money due to low balance";
+                                            msg.innerHTML = "SORRY ! can't transfer money due to low balance";
                                             msg.style.display = "block";
                                         }         
 
@@ -327,7 +327,7 @@ class SendFund extends React.Component{
                 alignItems:"center",
                 padding:"5%",
                 color:"black",
-                backgroundColor:"red"}}>
+                backgroundColor:"#006B94"}}>
 
                         PLEASE ACTIVATE YOUR ACCOUNT
                     
@@ -344,7 +344,7 @@ class SendFund extends React.Component{
                 alignItems:"center",
                 padding:"5%",
                 color:"black",
-                backgroundColor:"red"}}>
+                backgroundColor:"#006B94"}}>
 
                         PLEASE JOIN 4 MEMBERS TO WITHDRAW MONEY
                     

@@ -157,7 +157,7 @@ class Withdrawal extends React.Component {
                     alignItems:"center",
                     padding:"5%",
                     color:"black",
-                    backgroundColor:"red"}}>
+                    backgroundColor:"#006B94"}}>
 
                             PLEASE ACTIVATE YOUR ACCOUNT
                         
@@ -174,9 +174,9 @@ class Withdrawal extends React.Component {
                     alignItems:"center",
                     padding:"5%",
                     color:"black",
-                    backgroundColor:"red"}}>
+                    backgroundColor:"#006B94"}}>
 
-                            PLEASE JOIN 4 MEMBERS TO WITHDRAW MONEY
+                            PLEASE JOIN 4 MEMBERS TO WITHDRAW FUND
                         
                     </div>
 

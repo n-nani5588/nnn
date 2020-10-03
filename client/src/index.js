@@ -24,7 +24,7 @@ ReactDOM.render(
     <Switch>
               <Route path="/" exact component={App}/>
               <Route path="/App"  component={App}/>
-              <Route path="/Refer/:id"   component={SignUpWithId} />
+              <Route path="/Reffer/:id"   component={SignUpWithId} />
               <Route path="/Admin/c91eb3dc-1ad7-489a-9465-8f5b815b8d50" exact component={Admin}/>
               <Route component={pagenotfoung}></Route>
               {/* <Route path="/Plan" component={Bussiness_plan}></Route> */}

@@ -241,7 +241,7 @@ handleClose = () =>{
                 
                                                     </div>
                 
-                                                    <div>*5% will be deducted while transfering to pin wallet</div>
+                                                    <div>*5% will be deducted while transferring to pin wallet</div>
                                                     <div className="Send_Fund_body_Total">
                 
                                                     <input type="text" readOnly value="TOTAL" className="form-control"></input>

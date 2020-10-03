@@ -153,7 +153,7 @@ class Tickets extends React.Component{
                                 className="btn btn-primary"
                                 disabled={this.state.Loading}
                                 >
-                                   {this.state.Loading ? (<div> <Loader type="ThreeDots" color="#FFF" height={30} width={30} /></div>) : "Raise Tiket"}  
+                                   {this.state.Loading ? (<div> <Loader type="ThreeDots" color="#FFF" height={30} width={30} /></div>) : "Submit"}  
                                 </button>
 
                         </div>
