@@ -200,7 +200,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_1 : false,
-                     Err_message: "Pool One Joined",
+                     Err_message: "Bronze Treasure Joined",
                     open: true,
                  })
                 
@@ -234,7 +234,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_2 : false,
-                     Err_message: "Pool Two Joined",
+                     Err_message: "Silver Treasure Joined",
                     open: true,
                  })
                 
@@ -268,7 +268,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_3 : false,
-                     Err_message: "Pool Three Joined",
+                     Err_message: "Gold Treasure Joined",
                     open: true,
                  })
                 
@@ -301,7 +301,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_4 : false,
-                     Err_message: "Pool Four Joined",
+                     Err_message: "Platinum Treasure Joined",
                     open: true,
                  })
                 
@@ -334,7 +334,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_5 : false,
-                     Err_message: "Pool Five Joined",
+                     Err_message: "Diamond Treasure Joined",
                     open: true,
                  })
                 
@@ -367,7 +367,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_6 : false,
-                     Err_message: "Pool Six Joined",
+                     Err_message: "Million Treasure Joined",
                     open: true,
                  })
                 
@@ -399,7 +399,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_7 : false,
-                     Err_message: "Pool Seven Joined",
+                     Err_message: "Billion Treasure Joined",
                     open: true,
                  })
                 
@@ -432,7 +432,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_8 : false,
-                     Err_message: "Pool Eight Joined",
+                     Err_message: "Trillion Treasure Joined",
                     open: true,
                  })
                 
@@ -465,7 +465,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_9 : false,
-                     Err_message: "Pool Nine Joined",
+                     Err_message: "Crown Treasure Joined",
                     open: true,
                  })
                 
@@ -497,7 +497,7 @@ export default class PoolTeam extends React.Component {
                  this.setState({
                      userdata:   JSON.parse(sessionStorage.getItem('USER_DETAILS')),
                      Loading_10 : false,
-                     Err_message: "Pool Ten Joined",
+                     Err_message: "Ace Treasure Joined",
                     open: true,
                  })
                 
