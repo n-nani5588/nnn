@@ -420,11 +420,11 @@ class GeneratePin extends React.Component {
                                   {!this.state.Pool_Two && <option value="30">Silver-Treasure</option>}
                                  {!this.state.Pool_Three && <option value="50">Gold-Treasure</option>}
                                 {!this.state.Pool_Four &&  <option value="100">Platinum-Treasure</option>}
-                                 {!this.state.poolFive && <option value="150">Diamond-Treasure</option>}
+                                 {!this.state.Pool_Five && <option value="150">Diamond-Treasure</option>}
                                 {!this.state.Pool_Six  && <option value="200">Million-Treasure</option>}
                                 {!this.state.Pool_Seven &&  <option value="300">Billion-Treasure</option>}
-                                 {!this.state.poolEight && <option value="500">Trillion-Treasure</option>       }
-                                 {!this.state.poolNine && <option value="750">Crown-Treasure</option> }
+                                 {!this.state.Pool_Eight && <option value="500">Trillion-Treasure</option>       }
+                                 {!this.state.Pool_Nine && <option value="750">Crown-Treasure</option> }
                                 { !this.state.Pool_Ten && <option value="1000">Ace-Treasure</option> }
                                 </select>
                           </div>
