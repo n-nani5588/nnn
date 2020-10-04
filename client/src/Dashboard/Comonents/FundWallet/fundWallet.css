@@ -7,8 +7,9 @@
     border-radius: 10px;
     font-size: small;
     text-transform: uppercase;
-  
+   
   }
+
 
   .Send_Fund_header {
       height: 8vh;
@@ -18,12 +19,30 @@
       background: linear-gradient(45deg,#2ed8b6,#59e0c5);
       border-radius: 8px;
       font-family: sans-serif;
-      font-size: 20px;
       font-weight: 700;
+      line-height: 1rem;
+      font-size: 20px;
   }
 
   .Send_Fund_body {
-      padding:3%
+      padding:3%;
+      overflow: auto;
+  }
+
+  @media only screen and (max-width: 400px) {
+    .Send_Fund_header {
+      
+      font-size: 14px;
+  }
+  }
+
+  .Send_Fund_body::-webkit-scrollbar{
+    display: none;
+  }
+
+  .Send_Fund_body{
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 
   .Send_Fund_body_ID {

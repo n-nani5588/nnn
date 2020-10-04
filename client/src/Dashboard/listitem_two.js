@@ -50,7 +50,7 @@ componentDidMount(){
 
 render (){
     return(
-        <div style={{width:"100%",height:"70vh",textTransform:"uppercase"}}>
+        <div className="Side_Nav_Scroll_Control" >
          
           {/* Slide start */}
           <div className="side_bar"> 
@@ -72,7 +72,7 @@ render (){
              <div className="dropdown-container">
                           <Link to="/App/profile">   <span className="div_tag">Profile</span> </Link>
                           <Link to="/App/update_password">   <span className="div_tag">Update Password</span></Link>
-                          <Link to="/App/update_Transition_Password">   <span className="div_tag">Update Transaction Password</span></Link>
+                          <Link to="/App/update_Transition_Password">   <span className="div_tag" style={{lineHeight:"25px"}}>Update Transaction <br/>- Password</span></Link>
                           <Link to="/App/update_wallet_address">   <span className="div_tag">Update Wallet address</span></Link>
              </div> 
             <Divider/>

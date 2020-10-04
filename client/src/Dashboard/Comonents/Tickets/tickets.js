@@ -90,10 +90,10 @@ class Tickets extends React.Component{
 
     render(){
         return(
-            <div>
+            <div style={{padding:"5%"}}>
 
                
-            <div className="Send_Fund_Container">
+            <div className="Send_Fund_Container_Ticket">
 
                         <div className="Send_Fund_header" >
                            Raise Ticket

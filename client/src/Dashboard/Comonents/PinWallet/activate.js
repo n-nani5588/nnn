@@ -264,40 +264,51 @@ render(){
                         }
                       />
                   
-                      <Grid  container xs={12} spacing={2}>
-                      <form  onSubmit={(e) => this.handleMemberId(e)}> 
+                      <Grid  container xs={12} >
                       <p style={{fontSize:"10px"}}>*Beware of spaces while entering 
                                               member id</p>
-                              <div className="Send_Fund_body_ID" >
-                            
+                      <div style={{display:"flex",justifyContent:"space-around",width:"100%"}} > 
+                      
+                      <form className="Send_Fund_body_ID" onSubmit={(e) => this.handleMemberId(e)}> 
+                     
+                                   
                                         <Grid item xs={12} sm={6} >
+                                         
                                           <p> Member Id : </p>
                                           <input required name="_memberID" disabled={this.state.diasablememberfield} id="Member_Id" type="text" className="form-control"></input>
-
+                                        
                                           </Grid>
                                           <Grid item xs={12} sm={6} >
+                                        
                                           <p> Member details :</p>
                                           <input id="Member_Name" type="text" disabled value={this.state.memberName} className="form-control"></input>
-
+                                         
                                           </Grid>
+                             
                                           <Grid item xs={12} justify="left" sm={6} >
+                                          <div style={{display:"flex",justifyContent:"center",flexWrap:"wrap",padding:"10px"}}>
+
                                                   <button
                                                   type="submit"
                                                   disabled={!this.state.disableCanclebutton}
-                                                  className="btn btn-link sm"
+                                                  className="btn btn-sm"
                                                   >
                                                       {this.state.Loading_id ? (<div> <Loader type="ThreeDots" color="#FFF" height={30} width={30} /></div>) : "confirm id"}  
                                                   </button>
                                                   <button
                                                   onClick={() => this.handleCancel()}
                                                   disabled={this.state.disableCanclebutton}
-                                                  className="btn btn-link sm"
+                                                  className="btn btn-sm"
                                                   >
                                                     Change id
                                                   </button>
+                                           </div>       
                                           </Grid>
-                              </div>
-                      </form>       
+                           
+                        
+ 
+                      </form>  
+                      </div>     
                                         <Grid item xs={12}  >
                                           <p> Enter Pin:</p>
                                               {/* <input type="text"  value="jdvsn" className="form-control"></input> */}

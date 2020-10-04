@@ -18,15 +18,15 @@ class DashboardMain extends React.Component {
 
     console.log("in did mount");
 
-    const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
-        await axios.post('/api/users/getSingleUserDetails',{userid : userdata._id})
-      .then(res => {
-          console.log(res);
-        sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
-      })
-      .catch(res => {
-          console.log(" ");
-      })
+    // const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+    //     await axios.post('/api/users/getSingleUserDetails',{userid : userdata._id})
+    //   .then(res => {
+    //       console.log(res);
+    //     sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
+    //   })
+    //   .catch(res => {
+    //       console.log(" ");
+    //   })
 
         // this.setState({
         //     Loading: true

@@ -4,6 +4,7 @@ import './tickets.css';
 import Displaybutton from './displayButton';
 import { MDBDataTable } from 'mdbreact';
 import Loader from 'react-loader-spinner';
+import signup from '../../../Signup';
 
 const data = {
     columns: [
@@ -162,10 +163,10 @@ try{
 
     render(){
         return(
-            <div>
+            <div style={{padding:"5%"}}>
 
                
-            <div className="Send_Fund_Container">
+            <div className="Send_Fund_Container_Ticket">
 
                         <div className="Send_Fund_header" >
                            Old Tickets
@@ -225,7 +226,25 @@ try{
 
                             <div>
                                 {this.state.messages && this.state.messages.map(msg => 
-                                   <div className={msg.id === 0?"":""}>{msg.message}</div>
+                                   parseInt(msg.id) === 1?
+                                   
+                                   <div className="container_Message">
+                                   <img src="https://www.tenforums.com/geek/gars/images/2/types/thumb__ser.png" alt="Avatar"  />
+                                   <p style={{float:"left"}}>{msg.message}</p>
+                                   <span class="time-right">GENIE TREASURE</span>
+                                   </div>
+                                  
+                                  
+                                   :
+                                      
+
+                                     <div className="container_Message darker">
+                                     <img src="https://www.tenforums.com/geek/gars/images/2/types/thumb__ser.png" alt="Avatar" className="right" />
+                                     <p style={{float:"right"}}>{msg.message}</p>
+                                     <span class="time-left">MEMBER</span> 
+                                     </div>
+                                  
+                                   
                                 )}
                             </div>
                             
@@ -237,6 +256,7 @@ try{
                               className="form-control"
                               value={this.state.addvalue}
                               onChange={(e)=> this.handleChange(e)}
+                              placeholder="Enter Message"
                               >
                               </input>
 

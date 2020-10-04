@@ -188,21 +188,22 @@ class  DirectDeposit extends React.Component {
                                                 <img src={this.state.QrImage} style={{height:"50%",width:"50%"}}></img>
                                                 </div>
 
-                                                
+                                         <div style={{padding:"10px"}}>   
                                                 <label>BTC Address :</label>
                                                 <input type="text" name="_bitAddress" value={this.state._bitAddress}
                                                 disabled
                                                 className="form-control"></input>
+                                            </div> 
 
-                                                
+                                             <div style={{padding:"10px"}}> 
                                                 <label>Enter Hash Code :</label>
                                                 <input type="text" name="_hashCode" 
                                                 required
                                                 value={this.state._hashCode}
                                                 onChange={(e) => this.handleChange(e)}
                                                 className="form-control"></input>
- 
-                                                
+                                            </div>
+                                               <div style={{padding:"10px"}}> 
                                                 <label>Transaction Password :</label>
                                                 <input type="password" name="_transactionPassword"
                                                 required 
@@ -210,7 +211,7 @@ class  DirectDeposit extends React.Component {
                                                 value={this.state._transactionPassword}
                                                 onChange={(e) => this.handleChange(e)}
                                                 className="form-control"></input>
-                                                                                                
+                                                </div>                                            
                                             </Grid>
                                             <div className="Send_Fund_body_Total_deposit">
     

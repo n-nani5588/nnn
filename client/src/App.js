@@ -20,6 +20,9 @@ import Admin from './Admin/index';
 import axios from 'axios';
 import ErrorBoundry from './component/ErrorBoundary';
 import NavbarPage from './component/newNav';
+
+import Deleteit from './deleteit';
+
 class App extends React.Component {
 
   constructor(){
@@ -108,6 +111,7 @@ class App extends React.Component {
             Login={ <Login ></Login>}
          ></NavbarPage> }
 
+
             {/* ========================================================================== */}
 
             {/* =========================================================================== */}
@@ -119,7 +123,7 @@ class App extends React.Component {
          {/* {this.props._login && <div> <Dashboard></Dashboard></div> }  */}
           {/* // <Dashboard></Dashboard> */}
           
-
+          {/* <Deleteit></Deleteit> */}
         </div>
       
       );

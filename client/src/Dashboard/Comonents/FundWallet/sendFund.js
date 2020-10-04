@@ -384,21 +384,25 @@ class SendFund extends React.Component{
                         <div className="Send_Fund_body">
                             
                             <Grid  container xs={12} >
-                                    <div  >
-                                    <p style={{fontSize:"10px"}}>*Be aware of spaces while entering 
+                            <p style={{fontSize:"10px"}}>*Beware of spaces while entering 
                                                 member id</p>
+                                    <div style={{display:"flex",justifyContent:"space-around",width:"100%"}} >
+                                   
                                     <form className="Send_Fund_body_ID" onSubmit={(e) => this.handleMemberId(e)}>
                                             <Grid item xs={12} sm={6} >
-                                                
+                                                <div>
                                                 <p> Member Id : </p>
                                                     <input required disabled={this.state.disablememberfield} name="_memberID" id="Member_Id" type="text" className="form-control"></input>
+                                                </div>
                                                 </Grid>
                                                 <Grid item xs={12} sm={6} >
+                                                 
                                                 <p> Member details :</p>
                                                     <input id="Member_Name" type="text" disabled value={this.state.memberName} className="form-control"></input>
+                                                    
                                                 </Grid>
                                                 <Grid item xs={12} sm={6} >
-                                                <div style={{display:"flex",justifyContent:"flex-start",padding:"10px"}}>
+                                                <div style={{display:"flex",justifyContent:"center",flexWrap:"wrap",padding:"10px"}}>
                                                     <button
                                                     type="submit"
                                                     className="btn  btn-sm"

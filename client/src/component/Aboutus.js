@@ -1,13 +1,22 @@
 import React from'react';
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+AOS.init({})
 export default class extends React.Component{
+
+
+   
+  
+
     render(){
         return(
           <div >
                         <div style={{width:"100%",marginTop:"70px "}}>
                                   <header class="section-header">
-                                    <h3>About Us</h3>
+                                  <h3>   About Us </h3> 
                                   </header>
                         </div>
                         <Grid container>
@@ -16,6 +25,7 @@ export default class extends React.Component{
                         {/* <Grid xs={12} >
                         <img src={process.env.PUBLIC_URL + '/images/imgqw.jpg'} style={{width:"450px",height:"250px",float:"left",margin:"22px 30px 12px 0px"}}></img>
                         </Grid> */}
+                     <div data-aos="zoom-in"> 
                         <p style={{letterSpacing:"1px",fontWeight:"thin"}}>GENIE TREASURES is a best experienced people's
                             community where we build social platform and provides
                             best opportunity to you and your career, if you just help
@@ -32,7 +42,7 @@ export default class extends React.Component{
                             leaving your own profession. It's going to be an additional
                             huge income for you to satisfy all of your needs and
                             interests for an honest standard of living.</p>
-                        
+                        </div>
                         {/* <p style={{textAlign:"justify",letterSpacing:"1px",fontWeight:"thin"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
                         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
                         quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.

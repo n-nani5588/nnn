@@ -410,8 +410,7 @@ export default function Dashboard(props) {
           history.push('/')
           window.location.reload()
 
-        }}
-        
+        }} 
         ></LastItemTwo>
        
         

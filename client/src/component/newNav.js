@@ -27,22 +27,16 @@ render() {
         <MDBNavbarToggler onClick={this.toggleCollapse} />
         <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
           <MDBNavbarNav left>
-            <MDBNavItem active>
-              <MDBNavLink to="#!" onClick={() => this.props.onClick1()}>Home</MDBNavLink>
+            <MDBNavItem >
+              <MDBNavLink to="#" onClick={() => this.props.onClick1()}>Home</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem>
-              <MDBNavLink to="#!" onClick={() => this.props.onClick2()}>About</MDBNavLink>
+              <MDBNavLink to="#" onClick={() => this.props.onClick2()}>About</MDBNavLink>
             </MDBNavItem>
             <MDBNavItem>
-              <MDBNavLink to="#!" onClick={() => this.props.onClick3()}>Bussiness plan</MDBNavLink>
+              <MDBNavLink to="#" onClick={() => this.props.onClick3()}>Bussiness plan</MDBNavLink>
             </MDBNavItem>
-            <MDBNavItem>
-              <MDBBox mt="1" justifyContent="center" alignContent="center">{this.props.Signup}</MDBBox>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBBox mt="1" justifyContent="center" alignContent="center">{this.props.Login}</MDBBox>
-
-            </MDBNavItem>
+       
             <MDBNavItem>
               {/* <MDBDropdown>
                 <MDBDropdownToggle nav caret>
@@ -58,17 +52,14 @@ render() {
             </MDBNavItem>
           </MDBNavbarNav>
           <MDBNavbarNav right>
-            <MDBNavItem>
-              <MDBNavLink className="waves-effect waves-light" to="#!">
-                <MDBIcon fab icon="twitter" />
-              </MDBNavLink>
+          <MDBNavItem>
+              <MDBBox mt="1" justifyContent="center" alignContent="center">{this.props.Signup}</MDBBox>
             </MDBNavItem>
             <MDBNavItem>
-              <MDBNavLink className="waves-effect waves-light" to="#!">
-                <MDBIcon fab icon="google-plus-g" />
-              </MDBNavLink>
+              <MDBBox mt="1" justifyContent="center" alignContent="center">{this.props.Login}</MDBBox>
+
             </MDBNavItem>
-            {/* <MDBNavItem>
+       {/* <MDBNavItem>
               <MDBDropdown>
                 <MDBDropdownToggle nav caret>
                   <MDBIcon icon="user" />

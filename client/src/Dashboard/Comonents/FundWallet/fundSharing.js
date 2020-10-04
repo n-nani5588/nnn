@@ -193,9 +193,7 @@ class FundSharing extends React.Component{
                                         </Paper>
                                         </Grid>
                                     {/* </Grid> */}
-                                    <Box pt={4}>
-                                        <Copyright />
-                                    </Box>
+                                   
                             </div>
                     </div>
         </div>)

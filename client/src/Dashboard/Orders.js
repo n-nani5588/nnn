@@ -133,7 +133,7 @@ export default class Orders extends React.Component {
         </Table>
         
          */}
-         <div style={{width: "100%",display:"flex",justifyContent:"center",padding:"10px 0px"}}>
+         <div style={{width: "100%",color:"#006B94",display:"flex",justifyContent:"center",padding:"10px 0px",letterSpacing:"2px",fontSize:"20px",fontWeight:"bold"}}>
                   FUND SHARING STATEMENT
          </div>
   

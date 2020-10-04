@@ -541,6 +541,18 @@ export default class PoolTeam extends React.Component {
                                 {this.userdata.Active=== "false"? "Please Active Your Account": "WIN BIG HERE"}
                             </div>
 
+                            <div style={{width:"100%",padding:"1%",fontSize:"14px",backgroundColor:"#",color:"#808080"}}>
+                                 L-1-M  :  Level-1-Members , 
+                                 L-1-A : Level-1-Amount ,
+                                 L-2-M  : <span > Level-2-Members </span>, 
+                                 L-2-A : <span> Level-2-Amount </span>,
+                                 L-3-M  : <span> Level-3-Members </span>,
+                                 L-3-A :<span> Level-3-Amount </span>
+                                 
+                            </div>
+
+
+
                             <Snackbar
         
                             autoHideDuration={3000}

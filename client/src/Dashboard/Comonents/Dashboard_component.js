@@ -16,6 +16,7 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import clsx from 'clsx';
 import Displaynews from '../../Admin/displayNews';
 import axios from 'axios'
+import { MDBAnimation } from "mdbreact";
 
 function Copyright() {
     return (
@@ -87,7 +88,7 @@ let newsnew ;
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div style={{margin:"0px",padding:"0px",backgroundColor:"#fff",color:"black"}}>
+    <div style={{margin:"0px",padding:"0px",backgroundColor:"#fff",color:"black",textTransform:"uppercase"}}>
       <Container maxWidth="lg" className={classes.container}>
 
      {/* Jubotron */}
@@ -97,7 +98,9 @@ let newsnew ;
           style={{width:"100%",paddingBottom:"30px",display:"flex",justifyContent:"flex-end"}}>
             <i className="fa fa-circle" style={{color:"green",fontSize:"10px",paddingRight:"5px",paddingTop:"4px"}} aria-hidden="true"></i>Online</div>
           <h2 className="mb-4">
+          <MDBAnimation type="fadeInLeft" duration="1s">
             Welcome, {userdata.firstName} !
+          </MDBAnimation>
           </h2>
           {/* <p className="mb-4"> */}
           {/* YOU ARE IN :  Rank #2
@@ -119,15 +122,20 @@ let newsnew ;
      
       <Grid container spacing={2}> 
                           <Grid item xs={12} sm={4} md={4} lg={3}>
-      <div class="card bg-c-blue order-card">
+                      <MDBAnimation type="zoomIn" duration="1s" delay="0s">
+                        <div class="card bg-c-blue order-card">
+                       
                               <div className="card-block">
                                   <h6 className="m-b-20">Wallet Income</h6>
                                   <h2 className="text-right"><i  className="fa fa-user f-left"></i><span>${userdata.recievedIncome.$numberDecimal}</span></h2>
                                   {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
+                    
                           </div>
-                          </Grid>
+                      </MDBAnimation>
+                         </Grid>
                           <Grid item xs={12} sm={4} md={4} lg={3}>
+                          <MDBAnimation type="zoomIn" duration="1s" delay="500ms">
                           <div className="card bg-c-pink order-card">
                               <div className="card-block">
                                   <h6 className="m-b-20">Level Income</h6>
@@ -135,8 +143,10 @@ let newsnew ;
                                   {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
+                          </MDBAnimation>
                           </Grid>
                           <Grid item xs={12} sm={4} md={4} lg={3}>
+                          <MDBAnimation type="zoomIn" duration="1s" delay="1s">
                           <div className="card bg-c-green order-card">
                               <div className="card-block">
                                   <h6 className="m-b-20">Treasure Income</h6>
@@ -144,9 +154,11 @@ let newsnew ;
                                   {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
+                          </MDBAnimation>
                           </Grid>
 
                           <Grid item xs={12} sm={4} md={4} lg={3}>
+                          <MDBAnimation type="zoomIn" duration="1s" delay="1.5s">
                           <div className="card bg-c-yellow order-card">
                               <div className="card-block">
                                   <h6 className="m-b-20">Fund Sharing Income</h6>
@@ -154,6 +166,7 @@ let newsnew ;
                                   {/* <p className="m-b-0">Completed Orders<span class="f-right">351</span></p> */}
                               </div>
                           </div>
+                          </MDBAnimation>
                           </Grid>
                           </Grid>
                         

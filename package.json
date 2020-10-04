@@ -14,12 +14,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aos": "^2.3.4",
     "bcryptjs": "^2.4.3",
     "concurrently": "^5.3.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongoose": "^5.9.28",
     "nodemailer": "^6.4.11",
+    "react-reveal": "^1.2.2",
     "short-uuid": "^3.1.1"
   },
   "devDependencies": {

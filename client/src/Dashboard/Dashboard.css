@@ -111,6 +111,24 @@
     padding: 0px 10px;
   }
   
+  .Side_Nav_Scroll_Control{
+    width: 100%;
+    height: 70vh;
+    text-transform: uppercase;
+    overflow-y: scroll;
+
+  }
+
+  .Side_Nav_Scroll_Control::-webkit-scrollbar {
+    display: none;
+}
+
+.Side_Nav_Scroll_Control
+  {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
   /* Add an active class to the active dropdown button */
   /* .active {
     background-color: green;

@@ -67,19 +67,28 @@ class GeneratePin extends React.Component {
      Loading : false,
      active : this.userdata.Active.toLowerCase() === "true" ? true : false,
      LoadingTreasurePins: false,
-     Pool_One : this.userdata.poolOnePins.length > 0 ? true : false,
-     Pool_Two : this.userdata.poolTwoPins.length > 0 ? true : false,
-     Pool_Three: this.userdata.poolThreePins.length > 0 ? true : false,
-     Pool_Four: this.userdata.poolFourPins.length > 0 ? true : false,
-     Pool_Five : this.userdata.poolFivePins.length > 0 ? true : false,
-     Pool_Six : this.userdata.poolSixPins.length > 0 ? true : false,
-     Pool_Seven : this.userdata.poolSevenPins.length > 0 ? true : false,
-     Pool_Eight : this.userdata.poolEightPins.length > 0 ? true : false,
-     Pool_Nine : this.userdata.poolNinePins.length > 0 ? true : false,
-     Pool_Ten : this.userdata.poolTenPins.length > 0 ? true : false,
      Err_message: "something",
      open: false,
    }
+
+ }
+
+ componentDidMount(){
+
+  const datao = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
+   this.setState({
+    Pool_One : datao.poolOnePins.length > 0 ? true : false,
+    Pool_Two : datao.poolTwoPins.length > 0 ? true : false,
+    Pool_Three: datao.poolThreePins.length > 0 ? true : false,
+    Pool_Four: datao.poolFourPins.length > 0 ? true : false,
+    Pool_Five : datao.poolFivePins.length > 0 ? true : false,
+    Pool_Six : datao.poolSixPins.length > 0 ? true : false,
+    Pool_Seven : datao.poolSevenPins.length > 0 ? true : false,
+    Pool_Eight : datao.poolEightPins.length > 0 ? true : false,
+    Pool_Nine : datao.poolNinePins.length > 0 ? true : false,
+    Pool_Ten : datao.poolTenPins.length > 0 ? true : false,
+   })
+
 
  }
 
@@ -312,10 +321,10 @@ class GeneratePin extends React.Component {
 
   render(){
 
-    if(parseInt(this.state.pinBalance) > parseInt(0))
+    if(this.state.active )
    {
-          return(   <div style={{margin:"0px",padding:"2% 10%"}}>
-    <div className="Send_Fund_Container">
+    return(   <div style={{margin:"0px",padding:"2% 10%"}}>
+     <div className="Send_Fund_Container">
             <div className="Send_Fund_header" >
                generate activation pins
             </div>
@@ -335,8 +344,7 @@ class GeneratePin extends React.Component {
         }
       />          
 
-          { this.state.active 
-          &&
+        
             <div className="Send_Fund_body">
               {/* Recent Orders */}
                         <Grid item xs={12}>
@@ -390,7 +398,7 @@ class GeneratePin extends React.Component {
                     {/* </Grid> */}
                    
             </div>
-          }
+      
           
 
             <div className="Send_Fund_Container">
@@ -489,7 +497,7 @@ class GeneratePin extends React.Component {
       color:"black",
       backgroundColor:"red"}}>
 
-              Low Balance
+              Please Active Your Account
           
       </div>
 
