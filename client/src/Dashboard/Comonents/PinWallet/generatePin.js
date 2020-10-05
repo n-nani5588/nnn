@@ -77,16 +77,16 @@ class GeneratePin extends React.Component {
 
   const datao = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
    this.setState({
-    Pool_One : datao.poolOnePins.length > 0 ? true : false,
-    Pool_Two : datao.poolTwoPins.length > 0 ? true : false,
-    Pool_Three: datao.poolThreePins.length > 0 ? true : false,
-    Pool_Four: datao.poolFourPins.length > 0 ? true : false,
-    Pool_Five : datao.poolFivePins.length > 0 ? true : false,
-    Pool_Six : datao.poolSixPins.length > 0 ? true : false,
-    Pool_Seven : datao.poolSevenPins.length > 0 ? true : false,
-    Pool_Eight : datao.poolEightPins.length > 0 ? true : false,
-    Pool_Nine : datao.poolNinePins.length > 0 ? true : false,
-    Pool_Ten : datao.poolTenPins.length > 0 ? true : false,
+    Pool_One :  datao.poolOne || datao.poolOnePins.length > 0 ? true : false ,
+    Pool_Two :  datao.poolTwo || datao.poolTwoPins.length > 0 ? true : false ,
+    Pool_Three: datao.poolThree || datao.poolThreePins.length > 0 ? true : false ,
+    Pool_Four: datao.poolFour   || datao.poolFourPins.length > 0 ? true : false ,
+    Pool_Five : datao.poolFive || datao.poolFivePins.length > 0 ? true : false ,
+    Pool_Six : datao.poolSix || datao.poolSixPins.length > 0 ? true : false ,
+    Pool_Seven : datao.poolSeven || datao.poolSevenPins.length > 0 ? true : false ,
+    Pool_Eight : datao.poolEight || datao.poolEightPins.length > 0 ? true : false ,
+    Pool_Nine : datao.poolNine || datao.poolNinePins.length > 0 ? true : false ,
+    Pool_Ten : datao.poolTen    || datao.poolTenPins.length > 0 ? true : false ,
    })
 
 

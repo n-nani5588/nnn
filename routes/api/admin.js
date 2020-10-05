@@ -455,8 +455,8 @@ try{
                                     })
                         
                                     report.save()
-                                    .then(res => {
-                                        console.log(res);
+                                    .then(re => {
+                                        console.log(re);
                                         res.json({status: 1,users});
                                     }).catch(err => { 
                                         console.log(err);
