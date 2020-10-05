@@ -47,9 +47,6 @@ function Copyright() {
   );
 }
 
-
-
-
 class GeneratePin extends React.Component {
 
 
