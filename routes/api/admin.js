@@ -26,7 +26,7 @@ const DepositSatements = require('../../modals/DepositStatement');
 //@rout get api/users/admin
 // Add Admin
 // @acess public
-router.post('/', (req,res) => {
+router.post('/jh', (req,res) => {
 
     const admin = new Admin({
 
@@ -38,7 +38,6 @@ router.post('/', (req,res) => {
     .catch(err => console.log(err));
 
 });
-
 
 
 //@rout get api/Admin/getTickets/UpdateMessage
@@ -110,8 +109,10 @@ router.get('/getNews', (req,res) => {
 // Add Admin
 // @acess public
 router.post('/UpdateNews', (req,res) => {
-console.log(req.body.news);
-    AdInfo.findOneAndUpdate({_id : '5f55298f801fd918d8463f4f' },{
+
+    console.log(req.body.news);
+
+    AdInfo.findOneAndUpdate({_id : '5f7b0e53d3d3591b259c85d0' },{
         news: req.body.news
     },{new: true})
     .select('news')
@@ -148,7 +149,7 @@ router.post('/ImageUpload', (req,res) => {
 
     // })
     
-            AdInfo.findOneAndUpdate({_id : '5f55298f801fd918d8463f4f' },{
+            AdInfo.findOneAndUpdate({_id : '5f7b0e53d3d3591b259c85d0' },{
                 QRimage: obj
             },{new: true})
             .select('QRimage')
@@ -191,7 +192,7 @@ router.get('/Adinfo/withdraw', (req,res) => {
 
     console.log(req.body);
 try{
-                AdInfo.findOne({_id: '5f55298f801fd918d8463f4f'})
+                AdInfo.findOne({_id: '5f7b0e53d3d3591b259c85d0'})
                 .select('withdrawRequests')
                 .sort({date : 1})
                 .then(request => {
@@ -549,7 +550,7 @@ router.post('/AddBalance',(req,res) => {
 
             AdInfo.findByIdAndUpdate(
                 {
-                    _id : "5f55298f801fd918d8463f4f"
+                    _id : "5f7b0e53d3d3591b259c85d0"
                 } ,
                 {
                    $inc : { Balance : parseFloat(req.body.addamount) },
@@ -679,7 +680,7 @@ router.post('/Adinfo/withdrawDone', (req,res) => {
                 .then(() => {
 
                     AdInfo.findOneAndUpdate(
-                        {_id: '5f55298f801fd918d8463f4f' },
+                        {_id: '5f7b0e53d3d3591b259c85d0' },
                         { $pull: { withdrawRequests: { Statement_ID: req.body.statement_id } } },
                         {new: true}
                         ).then((staetment) => {

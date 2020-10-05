@@ -323,7 +323,7 @@ class GeneratePin extends React.Component {
 
     if(this.state.active )
    {
-    return(   <div style={{margin:"0px",padding:"2% 10%"}}>
+    return(   <div style={{margin:"0px",padding:"2% 10%",textTransform:"uppercase"}}>
      <div className="Send_Fund_Container">
             <div className="Send_Fund_header" >
                generate activation pins
@@ -494,8 +494,10 @@ class GeneratePin extends React.Component {
       justifyContent:"center",
       alignItems:"center",
       padding:"5%",
-      color:"black",
-      backgroundColor:"red"}}>
+      fontFamily:"sans-serif",
+      color:"#ffff",
+      backgroundColor:"#006B94",
+      textTransform:"uppercase"}}>
 
               Please Active Your Account
           

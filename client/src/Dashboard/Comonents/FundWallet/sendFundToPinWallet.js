@@ -18,11 +18,7 @@ class SendFundToPinWallet extends React.Component{
         console.log(this.userdata);
         this.state = {
             id: this.userdata._id,
-            levelIncome: parseFloat( this.userdata.levelIncome.$numberDecimal),
-            autoPoolIncome: parseFloat( this.userdata.autoPoolIncome.$numberDecimal),
-            fundSharingIncome: parseFloat( this.userdata.fundSharingIncome.$numberDecimal),
             active : this.userdata.Active.toLowerCase() === "true" ? true : false,
-            recievedIncome: parseFloat( this.userdata.recievedIncome.$numberDecimal),
             _level:0.00,
             _autopool:0.00,
             _fund:0.00,
@@ -35,7 +31,7 @@ class SendFundToPinWallet extends React.Component{
         }
     }
 
-    componentDidMount(){
+  async  componentDidMount(){
 
         const Available = parseFloat( this.userdata.levelIncome.$numberDecimal) + 
                           parseFloat( this.userdata.autoPoolIncome.$numberDecimal)+
@@ -43,19 +39,35 @@ class SendFundToPinWallet extends React.Component{
                           parseFloat( this.userdata.recievedIncome.$numberDecimal)
                           console.log(Available);
     
-     if(parseFloat(Available) > parseFloat(0.00)){
-       
-       
-            const msg =  document.getElementById('Update_Msg');
-            msg.innerHTML = "Enter amount";
-            msg.style.display = "block";
-    
-      
-    }
-      else{
-        this.setState({buttondisablemember:true,buttondisable:true,Err_message:"SORYY ! can't transfer money due to low balance",open:true})
-   
-      }
+            if(parseFloat(Available) > parseFloat(0.00)){
+            
+            
+                    const msg =  document.getElementById('Update_Msg');
+                    msg.innerHTML = "Enter amount";
+                    msg.style.display = "block";
+            
+            
+            }
+            else{
+                this.setState({buttondisablemember:true,buttondisable:true,Err_message:"SORRY ! can't transfer money due to low balance",open:true})
+        
+            }
+
+            const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+            await axios.post('/api/users/getSingleUserDetails',{userid : userdata._id})
+          .then(res => {
+              console.log(res);
+            sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
+            this.setState({
+                levelIncome: parseFloat( res.data.user.levelIncome.$numberDecimal),
+                autoPoolIncome: parseFloat( res.data.user.autoPoolIncome.$numberDecimal),
+                fundSharingIncome: parseFloat( res.data.user.fundSharingIncome.$numberDecimal),
+                recievedIncome: parseFloat( res.data.user.recievedIncome.$numberDecimal),
+            })
+          })
+          .catch(res => {
+              console.log(" ");
+          })
         
     }
 
@@ -118,10 +130,12 @@ console.log(res.data);
                                                                 }else{
                                                                             this.setState({ Loading : false, Err_message : "UnSuccessful !",
                                                                             open : true,  })
+                                                                            window.location.reload()
                                                                 }
                                                     }).catch(err => {
 
                                                         this.setState({ Loading : false })
+                                                        window.location.reload()
                                                     })
 
                                         }else{
@@ -199,21 +213,21 @@ handleClose = () =>{
                                                 <div className="Send_Fund_body_ID" >
                                                     <div className="Send_Fund_body_wallet">
                 
-                                                    <input type="text" disabled value="LEVEL INCOME" className="form-control"></input>
+                                                    <input type="text" disabled value="LEVEL INCOME($)" className="form-control"></input>
                                                     <input type="text" readOnly value={this.state.levelIncome} className="form-control"></input>
                                                     <input type="number" required min="0" step="any" max={this.state.levelIncome} name="_level" onChange={(e) => this.handleChange(e)} value={this.state._level} className="form-control"></input>
                 
                                                     </div >
                                                     <div className="Send_Fund_body_wallet">
                 
-                                                    <input type="text" readOnly value="AUTOPOOL INCOME" className="form-control"></input>
+                                                    <input type="text" readOnly value="AUTOPOOL INCOME($)" className="form-control"></input>
                                                     <input type="text" readOnly value={this.state.autoPoolIncome} className="form-control"></input>
                                                     <input type="number" required min="0" max={this.state.autoPoolIncome} name="_autopool" onChange={(e) => this.handleChange(e)} value={this.state._autopool} className="form-control"></input>
                 
                                                     </div>
                                                     <div className="Send_Fund_body_wallet">
                 
-                                                    <input type="text" readOnly value="FSI" className="form-control"></input>
+                                                    <input type="text" readOnly value="FSI($)" className="form-control"></input>
                                                     <input type="text" readOnly value={this.state.fundSharingIncome} className="form-control"></input>
                                                     <input type="number" required min="0" max={this.state.fundSharingIncome} name="_fund" onChange={(e) => this.handleChange(e)} value={this.state._fund} className="form-control"></input>
                 
@@ -221,21 +235,21 @@ handleClose = () =>{
                                                     
                                                     <div className="Send_Fund_body_wallet">
                 
-                                                    <input type="text" readOnly value="RECEIVED FUND" className="form-control"></input>
+                                                    <input type="text" readOnly value="RECEIVED FUND($)" className="form-control"></input>
                                                     <input type="text" readOnly value={this.state.recievedIncome} className="form-control"></input>
                                                     <input type="number" required min="0" max={this.state.recievedIncome} name="_recieved" onChange={(e) => this.handleChange(e)} value={this.state._recieved} className="form-control"></input>
                 
                                                     </div>
                                                     <div className="Send_Fund_body_Total">
                 
-                                                    <input type="text" readOnly value="AVAILABLE FUND" className="form-control"></input>
+                                                    <input type="text" readOnly value="AVAILABLE FUND($)" className="form-control"></input>
                                                     <input type="text" name="_Available" id="Available_Balance" value={(parseFloat(this.state.recievedIncome)+parseFloat(this.state.fundSharingIncome)+parseFloat(this.state.levelIncome)+parseFloat(this.state.autoPoolIncome))} disabled className="form-control"></input>
                                                   
                                                     </div>
                                                     <div id="ERR_MSG"></div>
                                                     <div className="Send_Fund_body_Total">
                 
-                                                    <input type="text" readOnly value="TRANSFER FUND" className="form-control"></input>
+                                                    <input type="text" readOnly value="TRANSFER FUND($)" className="form-control"></input>
                                                     <input type="text" readOnly name="_Send" value={parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._level)+parseFloat(this.state._autopool)} className="form-control"></input>
                 
                 
@@ -244,7 +258,7 @@ handleClose = () =>{
                                                     <div>*5% will be deducted while transferring to pin wallet</div>
                                                     <div className="Send_Fund_body_Total">
                 
-                                                    <input type="text" readOnly value="TOTAL" className="form-control"></input>
+                                                    <input type="text" readOnly value="TOTAL($)" className="form-control"></input>
                                                     <input type="text" readOnly name="_Total" value={(parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._level)+parseFloat(this.state._autopool))-parseFloat((parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._level)+parseFloat(this.state._autopool))*0.05)} className="form-control"></input>
                 
                 

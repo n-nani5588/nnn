@@ -51,7 +51,7 @@ const classes = makeStyles((theme) => ({
       //   field: 'message',
       // },
       {
-        label: 'Amount',
+        label: 'Amount($)',
         field: 'amount',
       },
       {

@@ -49,10 +49,10 @@ class Login extends React.Component {
                         <div id="MSG_ERR" style={{color:"#ccc"}}></div>
 
                     <select className="form-control Margin" id="Admin_select" >
-                        <option value="5f3812eb0667b3f660f4d8f7">Admin1</option>
-                        <option value="5f3813020667b3f660f4d8f8">Admin2</option>
-                        <option value="5f3813270667b3f660f4d8f9">Admin3</option>
-                        <option value="5f38133a0667b3f660f4d8fa">Admin4</option>
+                        <option value="5f7b0a8b3b4adfda64cffeac">Admin1</option>
+                        <option value="5f7b0ac2e75bdd6fe8c6f978">Admin2</option>
+                        <option value="5f7b0a9b4df4d4cb107ae0fb">Admin3</option>
+                     
                     </select>
 
                     <input

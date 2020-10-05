@@ -590,12 +590,12 @@ export default class PoolTeam extends React.Component {
                                         <tr>
                                             <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                         </tr>
                                         <tr>
                                         <td colspan={8}> {this.state.userdata.poolOne?"Running...":"Join"}</td>
@@ -680,12 +680,12 @@ export default class PoolTeam extends React.Component {
                                         <tr>
                                             <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                         </tr>
                                         <tr >
                                         <td colspan={8}> {this.state.userdata.poolTwo?"Running...":"Join"}</td>
@@ -777,12 +777,12 @@ export default class PoolTeam extends React.Component {
                                         <tr>
                                         <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                         </tr>
                                         <tr >
                                         <td colspan={8}> {this.state.userdata.poolThree?"Running...":"Join"}</td>
@@ -859,12 +859,12 @@ export default class PoolTeam extends React.Component {
                                         <tr>
                                         <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                         </tr>
                                         <tr >
                                         <td colspan={8}> {this.state.userdata.poolFour?"Running...":"Join"}</td>
@@ -946,12 +946,12 @@ export default class PoolTeam extends React.Component {
                                         <tr>
                                         <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                         </tr>
                                         <tr >
                                         <td colspan={8}> {this.state.userdata.poolFive?"Running...":"Join"}</td>
@@ -1026,12 +1026,12 @@ export default class PoolTeam extends React.Component {
                                         <tr>
                                             <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                         </tr>
                                         <tr >
                                         <td colspan={8}> {this.state.userdata.poolSix?"Running...":"Join"}</td>
@@ -1113,12 +1113,12 @@ export default class PoolTeam extends React.Component {
                                     <tr>
                                             <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                     </tr>
                                     <tr >
                                         <td colspan={8}> {this.state.userdata.poolSeven?"Running...":"Join"}</td>
@@ -1193,12 +1193,12 @@ export default class PoolTeam extends React.Component {
                                     <tr>
                                             <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                     </tr>
                                     <tr >
                                         <td colspan={8}> {this.state.userdata.poolEight?"Running...":"Join"}</td>
@@ -1283,12 +1283,12 @@ export default class PoolTeam extends React.Component {
                                     <tr>
                                             <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                     </tr>
                                     <tr >
                                         <td colspan={8}> {this.state.userdata.poolNine?"Running...":"Join"}</td>
@@ -1362,12 +1362,12 @@ export default class PoolTeam extends React.Component {
                                     <tr>
                                             <th>Sno</th>
                                             <th>L-1-M</th>
-                                            <th>L-1-A</th>
+                                            <th>L-1-A($)</th>
                                             <th>L-2-M</th>
-                                            <th>L-2-A</th>
+                                            <th>L-2-A($)</th>
                                             <th>L-3-M</th>
-                                            <th>L-3-A</th>
-                                            <th>Total</th>
+                                            <th>L-3-A($)</th>
+                                            <th>Total($)</th>
                                     </tr>
                                     <tr >
                                         <td colspan={8}> {this.state.userdata.poolTen?"Running...":"Join"}</td>

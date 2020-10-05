@@ -17,10 +17,6 @@ class Withdrawal extends React.Component {
         super();
         this.userdata =  JSON.parse(sessionStorage.getItem('USER_DETAILS'));
         this.state = {
-            levelIncome: parseFloat( this.userdata.levelIncome.$numberDecimal),
-            autoPoolIncome: parseFloat( this.userdata.autoPoolIncome.$numberDecimal),
-            fundSharingIncome: parseFloat( this.userdata.fundSharingIncome.$numberDecimal),
-            recievedIncome: parseFloat( this.userdata.recievedIncome.$numberDecimal),
             Active : this.userdata.Active.toLowerCase() === "true" ? true : false,
             _level: parseFloat(0.00),
             _autopool:parseFloat(0.00),
@@ -36,7 +32,7 @@ class Withdrawal extends React.Component {
 
     }
 
-    componentDidMount(){
+   async componentDidMount(){
 
          if(!this.state.address)
         {
@@ -45,6 +41,24 @@ class Withdrawal extends React.Component {
                 disablebutton:true,
             })
         }
+
+        const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+        await Axios.post('/api/users/getSingleUserDetails',{userid : userdata._id})
+      .then(res => {
+          console.log(res);
+        sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
+        this.setState({
+            levelIncome: parseFloat( res.data.user.levelIncome.$numberDecimal),
+            autoPoolIncome: parseFloat( res.data.user.autoPoolIncome.$numberDecimal),
+            fundSharingIncome: parseFloat( res.data.user.fundSharingIncome.$numberDecimal),
+            recievedIncome: parseFloat( res.data.user.recievedIncome.$numberDecimal),
+            Level : res.data.user.levelTeam,
+            levelTeam : res.data.user.levelTeam,
+        })
+      })
+      .catch(res => {
+          console.log(" ");
+      })
     }
 
     handleChange = (e)=>{
@@ -107,13 +121,14 @@ class Withdrawal extends React.Component {
                                             this.setState({
                                                 Loading: false
                                             })
+                                            window.location.reload()
                                         }
                         } ).catch(err => {
 
                             this.setState({
                                 Loading: false
                             })
-
+                            window.location.reload()
                         })
 
                     }
@@ -219,7 +234,7 @@ class Withdrawal extends React.Component {
                                         </div>
                                 </Grid>
                                     <div style={{padding:"20px 0px",fontSize:"20px",fontWeight:"500"}}>
-                                    {/* <Divider/> */}Available Amount to withdraw
+                                    {/* <Divider/> */}Available Amount($) to withdraw
                                     </div>
                                     <div id="_MSG"></div>
                                     <Grid container xs={12} spacing={2}>

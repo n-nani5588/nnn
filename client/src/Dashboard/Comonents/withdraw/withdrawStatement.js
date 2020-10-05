@@ -67,7 +67,7 @@ const classes = makeStyles((theme) => ({
         field: 'recieved',
       },
       {
-        label: 'Amount',
+        label: 'Amount($)',
         field: 'amount',
       },
       {
@@ -148,7 +148,7 @@ class WithdrawStatement extends React.Component {
   createTable= (members)=> {
     console.log(members);
     let i = 0;
-   
+    data.rows = [];
       members.map(Direct => {
         console.log("in");
           i++

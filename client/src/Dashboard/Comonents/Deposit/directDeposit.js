@@ -175,7 +175,7 @@ class  DirectDeposit extends React.Component {
                                     <form onSubmit={(e) => this.handleFormSubmit(e)}>
                                            <Grid item xs={12} >
 
-                                                <label>Amount :</label>
+                                                <label>Amount($) :</label>
                                                 <input type="text" 
                                                 pattern="[0-9]+"
                                                 name="_Amount" 

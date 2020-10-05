@@ -234,7 +234,7 @@ render(){
 
   if(this.state.Active){
   return(
-          <div style={{margin:"0px",padding:"2% 10%"}}>
+          <div style={{margin:"0px",padding:"2% 10%",textTransform:"uppercase"}}>
               <div className="Send_Fund_Container">
 
                   <div className="Send_Fund_header" >
@@ -358,9 +358,10 @@ render(){
                 alignItems:"center",
                 padding:"5%",
                 color:"black",
-                backgroundColor:"#006B94"}}>
+                backgroundColor:"#006B94",
+                textTransform:"uppercase"}}>
 
-                        Please Activate Your Account to use this Feature
+                        Please Activate Your Account
                     
                 </div>
 

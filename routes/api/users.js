@@ -857,7 +857,23 @@ try{
             .then(user => {
 
                             if(user){
+                                   res.json({status:1,user})
                                       console.log(user);
+                                        //creaate fund statement
+                                        const fundSt = new FundStatement({
+                                          Sendto: "Pin Wallet",
+                                          RecievedFrom: req.body.useid,
+                                          userId: req.body.useid,
+                                          firstName:user.firstName,
+                                          lastName: user.lastName,
+                                          joiningDate : end_date,
+                                          mailId: user.mailId,
+                                          Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
+                                    })
+                                    fundSt.save().then(re => console.log(re)).catch(err=> {
+                                       console.log(err.message);
+                                       res.json({status: 0 ,user})
+                                    })
 
                                       // Daily Report
                                       
@@ -902,52 +918,16 @@ try{
                                                                   report.save()
                                                                   .then(res => {
                                                                                 console.log(res);
-                                                                                //creaate fund statement
-                                                                                const fundSt = new FundStatement({
-                                                                                      Sendto: "Pin Wallet",
-                                                                                      RecievedFrom: req.body.useid,
-                                                                                      userId: req.body.useid,
-                                                                                      firstName:user.firstName,
-                                                                                      lastName: user.lastName,
-                                                                                      joiningDate : end_date,
-                                                                                      mailId: user.mailId,
-                                                                                      Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
-                                                                                })
-                                                                                fundSt.save().then(re => {res.json({status:1,user})}).catch(err=> {
-                                                                                   console.log(err.message);
-                                                                                   res.json({status: 0 })
-                                                                                })
-
-                                                                                
                                                                   }).catch(err => { 
                                                                           console.log(err);
                                                                           res.json({status: 0})
                                                                   })
                                                           }
-                                                          else
-                                                          {
-
-                                                                    //creaate fund statement
-                                                                    const fundSt = new FundStatement({
-                                                                            Sendto: "Pin Wallet",
-                                                                            RecievedFrom: req.body.useid,
-                                                                            userId: req.body.useid,
-                                                                            firstName:user.firstName,
-                                                                            lastName: user.lastName,
-                                                                            joiningDate: end_date,
-                                                                            mailId: user.mailId,
-                                                                            Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
-                                                                    })
-                                                                    fundSt.save().then(re => {res.json({status:1,user})}).catch(err=> {
-                                                                       console.log(err.message);
-                                                                       res.json({status: 0 })
-                                                                    })
-
-                                                          }   
+                                                            
 
                                       }).catch(err => {
                                         console.log(err.message)
-                                        res.json({status: 0})
+                                        res.json({status: 0,user})
                                       })
 
                                      
@@ -955,7 +935,7 @@ try{
                             }
                              else
                             {
-                                      res.json({status: 0})
+                                      res.json({status: 0,user})
                             }
               
             }).catch(err => {
@@ -1023,6 +1003,7 @@ router.post('/Direct_Members', (req,res) => {
   try{
             User.find({referedBy: req.body.userid })
             .select('-password ')
+            .sort({joiningDate : -1})
               .then(users => {
                 console.log(users);
                   if(users){
@@ -1055,6 +1036,7 @@ router.post('/getLevelArrayDetails', (req,res) => {
 
                       User.find({userId :{ $in : req.body.useridsArray }})
                       .select('userId firstName lastName mailId joiningDate autoPoolIncome fundSharingIncome levelIncome Active')
+                      .sort({joiningDate: -1})
                       .then(users => {
 
                               console.log(users);
@@ -1152,6 +1134,7 @@ router.post('/Fund_Statement', (req,res) => {
   console.log(req.body);
   try{
           FundStatement.find({userId: req.body.userid})
+          .sort({joiningDate : -1 }) 
             .then(users => {
                         console.log(users);
                         if(users){
@@ -1182,6 +1165,7 @@ router.post('/GetFundSharing', (req,res) => {
   console.log(req.body);
     try{
           FundSharing.find({userId: req.body.userid})
+          .sort({Date : -1 }) 
           .then(users => {
 
               console.log(users);
@@ -1232,7 +1216,8 @@ router.get('/GetFundSharingAll', (req,res) => {
      },
    ],
   },)
-    .then(users => {
+  .sort({Date : -1 })  
+  .then(users => {
       console.log("funs sharing :::::::::::::::::::",users);
         if(users){
           res.json({status: 1 ,users})

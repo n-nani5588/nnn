@@ -20,10 +20,6 @@ class SendFund extends React.Component{
         this.state = {
             sendMnyFrom:this.userdata._id,
             user_ID : this.userdata.userId,
-            levelIncome: parseFloat( this.userdata.levelIncome.$numberDecimal),
-            autoPoolIncome: parseFloat( this.userdata.autoPoolIncome.$numberDecimal),
-            fundSharingIncome: parseFloat( this.userdata.fundSharingIncome.$numberDecimal),
-            recievedIncome: parseFloat( this.userdata.recievedIncome.$numberDecimal),
             Active : this.userdata.Active.toLowerCase() === "true" ? true : false,
             Level : this.userdata.levelTeam,
             levelTeam : this.userdata.levelTeam,
@@ -46,7 +42,7 @@ class SendFund extends React.Component{
         }
     }
 
-    componentDidMount(){
+  async  componentDidMount(){
 
         const Available = parseFloat( this.userdata.levelIncome.$numberDecimal) + 
                           parseFloat( this.userdata.autoPoolIncome.$numberDecimal)+
@@ -72,10 +68,14 @@ class SendFund extends React.Component{
                                                     })
                                         }
                                         else{
-                                            this.setState({buttondisablemember:true,buttondisable:true})
-                                            const msg =  document.getElementById('Update_Msg');
-                                            msg.innerHTML = "SORRY ! can't transfer money due to low balance";
-                                            msg.style.display = "block";
+                                            this.setState({buttondisablemember:true,
+                                                buttondisable:true,
+                                                Err_message: "SORRY ! can't transfer money due to low balance",
+                                                open:true
+                                            })
+                                            // const msg =  document.getElementById('Update_Msg');
+                                            // msg.innerHTML = "SORRY ! can't transfer money due to low balance";
+                                            // msg.style.display = "block";
                                         }         
 
                } 
@@ -86,6 +86,24 @@ class SendFund extends React.Component{
                      
 
                }
+
+       const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+        await axios.post('/api/users/getSingleUserDetails',{userid : userdata._id})
+      .then(res => {
+          console.log(res);
+        sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
+        this.setState({
+            levelIncome: parseFloat( res.data.user.levelIncome.$numberDecimal),
+            autoPoolIncome: parseFloat( res.data.user.autoPoolIncome.$numberDecimal),
+            fundSharingIncome: parseFloat( res.data.user.fundSharingIncome.$numberDecimal),
+            recievedIncome: parseFloat( res.data.user.recievedIncome.$numberDecimal),
+            Level : res.data.user.levelTeam,
+            levelTeam : res.data.user.levelTeam,
+        })
+      })
+      .catch(res => {
+          console.log(" ");
+      })
    
         
     }
@@ -176,6 +194,7 @@ class SendFund extends React.Component{
                                                                                                 Err_message : "UnSuccessful !",
                                                                                                 open : true, 
                                                                                             })
+                                                                                            window.location.reload()
                                                                                 
                                                                                          }
                                                                             }).catch(err => {
@@ -183,7 +202,7 @@ class SendFund extends React.Component{
                                                                                             this.setState({
                                                                                                 Loading : false
                                                                                             })
-
+                                                                                            window.location.reload()
                                                                             })
 
                                                     }
@@ -431,21 +450,21 @@ class SendFund extends React.Component{
                                         <div className="Send_Fund_body_ID" >
                                             <div className="Send_Fund_body_wallet">
 
-                                            <input type="text" disabled value="LEVEL INCOME" className="form-control"></input>
+                                            <input type="text" disabled value="LEVEL INCOME($)" className="form-control"></input>
                                             <input type="text" readOnly value={this.state.levelIncome} className="form-control"></input>
                                             <input type="number" required min="0" step="any" max={this.state.levelIncome} name="_level" onChange={(e) => this.handleChange(e)} value={this.state._level} className="form-control"></input>
 
                                             </div >
                                             <div className="Send_Fund_body_wallet">
 
-                                            <input type="text" readOnly value="AUTOPOOL INCOME" className="form-control"></input>
+                                            <input type="text" readOnly value="AUTOPOOL INCOME($)" className="form-control"></input>
                                             <input type="text" readOnly value={this.state.autoPoolIncome} className="form-control"></input>
                                             <input type="number" required min="0" step="any" max={this.state.autoPoolIncome} name="_autopool" onChange={(e) => this.handleChange(e)} value={this.state._autopool} className="form-control"></input>
 
                                             </div>
                                             <div className="Send_Fund_body_wallet">
 
-                                            <input type="text" readOnly value="FSI" className="form-control"></input>
+                                            <input type="text" readOnly value="FSI($)" className="form-control"></input>
                                             <input type="text" readOnly value={this.state.fundSharingIncome} className="form-control"></input>
                                             <input type="number" required min="0" step="any" max={this.state.fundSharingIncome} name="_fund" onChange={(e) => this.handleChange(e)} value={this.state._fund} className="form-control"></input>
 
@@ -453,7 +472,7 @@ class SendFund extends React.Component{
 
                                             <div className="Send_Fund_body_wallet">
 
-                                            <input type="text" readOnly value="WALLET INCOME" className="form-control"></input>
+                                            <input type="text" readOnly value="WALLET INCOME($)" className="form-control"></input>
                                             <input type="text" readOnly value={this.state.recievedIncome} className="form-control"></input>
                                             <input type="number" required min="0" step="any" max={this.state.recievedIncome} name="_recieved" onChange={(e) => this.handleChange(e)} value={this.state._recieved} className="form-control"></input>
 
@@ -461,7 +480,7 @@ class SendFund extends React.Component{
 
                                             <div className="Send_Fund_body_Total">
 
-                                            <input type="text" readOnly value="AVAILABLE FUND" className="form-control"></input>
+                                            <input type="text" readOnly value="AVAILABLE FUND($)" className="form-control"></input>
                                             <input type="text" name="_Available" id="Available_Balance" value={(parseFloat(this.state.recievedIncome)+parseFloat(this.state.fundSharingIncome)+parseFloat(this.state.levelIncome)+parseFloat(this.state.autoPoolIncome))} disabled className="form-control"></input>
                                         
 
@@ -469,7 +488,7 @@ class SendFund extends React.Component{
                                             <div id="ERR_MSG"></div>
                                             <div className="Send_Fund_body_Total">
 
-                                            <input type="text" readOnly value="TRANSFER FUND" className="form-control"></input>
+                                            <input type="text" readOnly value="TRANSFER FUND($)" className="form-control"></input>
                                             <input type="text" readOnly name="_Send" value={parseFloat(this.state._recieved)+parseFloat(this.state._fund)+parseFloat(this.state._level)+parseFloat(this.state._autopool)} className="form-control"></input>
 
 

@@ -12,7 +12,7 @@ import AccountBalanceWalletRoundedIcon from '@material-ui/icons/AccountBalanceWa
 import Divider from '@material-ui/core/Divider';
 import { colors } from '@material-ui/core';
 
-
+import ConfirmationNumberRoundedIcon from '@material-ui/icons/ConfirmationNumberRounded';
 
 
 export default class ListItem_Two extends React.Component {
@@ -163,7 +163,7 @@ render (){
              {/* Tickets */}
              <div className="dropdown-btn div_tag bodder_left_6">
                {/* <i className="fas fa-slider-h"></i> */}
-              <span style={{color:"#006B94"}}><MonetizationOnIcon fontSize="large"/></span> 
+              <span style={{color:"#006B94"}}><ConfirmationNumberRoundedIcon fontSize="large"/></span> 
                <span style={{textAlign:"center",paddingLeft:"22px",fontSize:"16px",fontWeight:"500"}}>Raise Tickets</span>
              </div>
              <div className="dropdown-container">

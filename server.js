@@ -36,7 +36,7 @@ app.use('/api/Statement',statementRoute);
 const port = process.env.PORT || 5000;
 
 //Connect to mongodb
-mongoose.connect('mongodb+srv://Admin:Savechanges%40%40123@democluster.8nsdo.gcp.mongodb.net/Demobase?retryWrites=true&w=majority',
+mongoose.connect('mongodb://uosd8bsmzoudszrcpqeq:EuvpgwiKsLGvUMSo0x9@bricamrnfiilngxlxjhw-mongodb.services.clever-cloud.com:2107/bricamrnfiilngxlxjhw',
 {useNewUrlParser: true, useUnifiedTopology: true,useCreateIndex: true})
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

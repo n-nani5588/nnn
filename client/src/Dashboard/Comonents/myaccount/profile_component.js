@@ -70,17 +70,28 @@ class Profile extends React.Component {
   }
 
 
-  componentDidMount(){
+ async componentDidMount(){
 
-     const userdata= JSON.parse(sessionStorage.getItem('USER_DETAILS'));
-     this.setState({
-       id:userdata._id,
-       fname :{value: userdata.firstName,valid:userdata.firstName?true:false},
-       lname: {value:userdata.lastName,valid:userdata.lastName?true:false},
-       email: {value:userdata.mailId,valid:userdata.mailId?true:false},
-       country: {value:userdata.country,valid:userdata.country?true:false},
-       status: {value:userdata.Active.toLowerCase() == 'true' ? true : false,valid:userdata.Active.toLowerCase() == 'true' ? true : false}
-     })
+     const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+
+        await axios.post('/api/users/getSingleUserDetails',{userid : userdata._id})
+      .then(res => {
+          console.log(res);
+        sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
+        this.setState({
+          id:userdata._id,
+          fname :{value: res.data.user.firstName,valid:userdata.firstName?true:false},
+          lname: {value:res.data.user.lastName,valid:userdata.lastName?true:false},
+          email: {value:res.data.user.mailId,valid:userdata.mailId?true:false},
+          country: {value:res.data.user.country,valid:userdata.country?true:false},
+          status: {value:res.data.user.Active.toLowerCase() == 'true' ? true : false,valid:userdata.Active.toLowerCase() == 'true' ? true : false}
+        })
+      })
+      .catch(res => {
+          console.log(" ");
+      })
+
+   
 
   }
 

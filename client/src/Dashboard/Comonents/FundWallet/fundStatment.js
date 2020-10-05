@@ -72,7 +72,7 @@ const classes = makeStyles((theme) => ({
         sort: 'desc'
       },
       {
-        label: 'Amount',
+        label: 'Amount($)',
         field: 'Amount',
       }
     ],

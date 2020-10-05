@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -29,6 +29,7 @@ import DashboardComponent from './Comonents/Dashboard_component';
 import { BrowserRouter as Router,Route,Switch, BrowserRouter } from "react-router-dom";
 import './Comonents/Dashboard_component.css';
 import LastItemTwo from './listitem_two'; 
+import axios from 'axios';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
@@ -177,10 +178,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+async function getResponse(){
+
+  const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'))
+  await axios.post('/api/users/getSingleUserDetails',{userid : userdata._id})
+.then(res => {
+    console.log(res);
+    sessionStorage.setItem('USER_DETAILS',JSON.stringify(res.data.user));
+  
+})
+.catch(res => {
+    console.log(" ");
+})
+
+}
+
 export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   let history = useHistory();
+
+   // Similar to componentDidMount and componentDidUpdate:
+      useEffect( () => {
+        // Update the document title using the browser API
+        getResponse()
+  
+  });
   
   // ---------------------------------------------
  // --------- START MENU OPTIONS -----------------

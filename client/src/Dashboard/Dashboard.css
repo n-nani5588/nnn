@@ -166,6 +166,7 @@
     box-sizing: border-box;
     transition: 0.5s;
     transition-property: background;
+    cursor: pointer;
   }
 
   .bodder_left_1 {

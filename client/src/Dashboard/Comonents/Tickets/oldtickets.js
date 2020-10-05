@@ -163,7 +163,7 @@ try{
 
     render(){
         return(
-            <div style={{padding:"5%"}}>
+            <div style={{padding:"5%",textTransform:"uppercase"}}>
 
                
             <div className="Send_Fund_Container_Ticket">

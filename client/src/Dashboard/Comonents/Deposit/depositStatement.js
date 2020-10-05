@@ -60,7 +60,7 @@ const classes = makeStyles((theme) => ({
         field: 'name',
       },
       {
-        label: 'Amount',
+        label: 'Amount($)',
         field: 'amount',
       },
       {
@@ -132,8 +132,8 @@ class DepositStatement extends React.Component{
                 amount : Direct.Amount,
                 name: Direct.Name,
                 date: new Date(Direct.date).toLocaleDateString(),
-                send : Direct.SentBTCaddress,
-                hash : Direct.HashCode,
+                send : <input type="text" size="10" readOnly value={Direct.HashCode}></input>,
+                hash : <input type="text" size="10" readOnly value={Direct.HashCode}></input> ,
                 userid: Direct.userId,
                 status : Direct.success
 
@@ -153,11 +153,11 @@ class DepositStatement extends React.Component{
     render()
     {
         return(   <div style={{margin:"0px",padding:"2% 10%"}}>
-                    <div className="Send_Fund_Container">
+                    <div >
                             <div className="Send_Fund_header" >
                                Deposit History
                             </div>
-                            <div className="Send_Fund_body">
+                            <div >
                               {/* Recent Orders */}
                                         <Grid item xs={12}>
                                         <Paper className={classes.paper} elevate={3}>
@@ -179,19 +179,19 @@ class DepositStatement extends React.Component{
                         
                       
                       :
-                            <MDBDataTable
-                            striped
-                            bordered
-                            sortable={false}
-                            theadColor="#fff"
-                            entries={7}
-                            small
-                            noBottomColumns
-                            responsiveSm
-                            responsiveMd
-                            
-                            data={this.state.data1}
-                            />
+                      <MDBDataTable
+                      striped
+                      bordered
+                      sortable={false}
+                      theadColor="#fff"
+                      entries={7}
+                      small
+                      noBottomColumns
+                      responsiveSm
+                      responsiveMd
+                      responsiveLg
+                      data={this.state.data1}
+                      />
                       
                       }
                                             

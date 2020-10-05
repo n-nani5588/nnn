@@ -31,7 +31,7 @@ let data = {
       field: 'userid',
     },
     {
-      label: 'AMOUNT',
+      label: 'AMOUNT($)',
       field: 'amount',
     },
     {
