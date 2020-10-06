@@ -743,7 +743,14 @@ router.post('/sendFund/update', (req,res) => {
 
  
   try{
-  
+
+    User.findById({ _id: req.body.sendMnyFrom })
+    .then(us => {
+            const reIn = parseFloat(us.recievedIncome)+parseFloat(us.fundSharingIncome)+parseFloat(us.autoPoolIncome)+parseFloat(us.levelIncome) 
+            console.log("ususuususuus ::::::::::::::::" ,reIn);
+            
+            if( parseFloat(reIn) >= parseFloat(req.body.total) )
+            {
                 User.findByIdAndUpdate({ _id: req.body.sendMnyFrom },
                 {
                     $inc: {
@@ -808,10 +815,19 @@ router.post('/sendFund/update', (req,res) => {
                              }
                     
                 }).catch(err =>  {  res.json({status: 0}) })
-
+            }
+            else
+            {
+              res.json({status: 0})
+            }
                  // console.log(parseFloat(parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)));
 
-                  
+    }
+    )
+    .catch(err => {
+      console.log(err.message);
+      res.json({status: 0})
+    })            
                   //sender details
                 
   }
@@ -846,102 +862,125 @@ try{
           let percent = (parseFloat(parseFloat(req.body.levelamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.recievedamount))*0.05)
           console.log(percent);
 
-          User.findByIdAndUpdate({ _id: req.body._id },
-            {$inc: {
-              levelIncome: -parseFloat(req.body.levelamount),
-              autoPoolIncome:-parseFloat(req.body.autoamount),
-              fundSharingIncome:-parseFloat(req.body.fundamount),
-              recievedIncome:-parseFloat(req.body.recievedamount),
-              pinBalance: req.body.pinBalance
-          }},{new:true})
-            .then(user => {
+          User.findById({ _id: req.body._id })
+          .then(us => {
+                  const total = (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount))
+                  const reIn = parseFloat(us.recievedIncome)+parseFloat(us.fundSharingIncome)+parseFloat(us.autoPoolIncome)+parseFloat(us.levelIncome) 
+                  console.log("ususuususuus ::::::::::::::::" ,reIn);
+                  
+                  if( parseFloat(reIn) >= parseFloat(total) )
+                  {
 
-                            if(user){
-                                   res.json({status:1,user})
-                                      console.log(user);
-                                        //creaate fund statement
-                                        const fundSt = new FundStatement({
-                                          Sendto: "Pin Wallet",
-                                          RecievedFrom: req.body.useid,
-                                          userId: req.body.useid,
-                                          firstName:user.firstName,
-                                          lastName: user.lastName,
-                                          joiningDate : end_date,
-                                          mailId: user.mailId,
-                                          Amount: (parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)),
-                                    })
-                                    fundSt.save().then(re => console.log(re)).catch(err=> {
-                                       console.log(err.message);
-                                       res.json({status: 0 ,user})
-                                    })
+                        User.findByIdAndUpdate({ _id: req.body._id },
+                          {$inc: {
+                            levelIncome: -parseFloat(req.body.levelamount),
+                            autoPoolIncome:-parseFloat(req.body.autoamount),
+                            fundSharingIncome:-parseFloat(req.body.fundamount),
+                            recievedIncome:-parseFloat(req.body.recievedamount),
+                            pinBalance: req.body.pinBalance
+                        }},{new:true})
+                          .then(user => {
 
-                                      // Daily Report
-                                      
-                                      dailyReport.findOneAndUpdate({
+                                          if(user){
+                                                res.json({status:1,user})
+                                                    console.log(user);
+                                                      //creaate fund statement
+                                                      const fundSt = new FundStatement({
+                                                        Sendto: "Pin Wallet",
+                                                        RecievedFrom: req.body.useid,
+                                                        userId: req.body.useid,
+                                                        firstName:user.firstName,
+                                                        lastName: user.lastName,
+                                                        joiningDate : end_date,
+                                                        mailId: user.mailId,
+                                                        Amount: total,
+                                                  })
+                                                  fundSt.save().then(re => console.log(re)).catch(err=> {
+                                                    console.log(err.message);
+                                                    res.json({status: 0 ,user})
+                                                  })
 
-                                        dateId : today
+                                                    // Daily Report
+                                                    
+                                                    dailyReport.findOneAndUpdate({
 
-                                      },{
+                                                      dateId : today
 
-                                        $inc : { funtToPinPercent : parseFloat(percent) }
+                                                    },{
 
-                                      },{new: true}).then(document => {
-                                                          if(!document){
-                                                                    const report =  new DailyReport({
-                                                            
-                                                                      dateId: today,
-                                                                      LevelPinsIncome:  0,
-                                                                      PoolOnePinsIncome:  0,
-                                                                      PoolTwoPinsIncome: 0,
-                                                                      PoolThreePinsIncome: 0,
-                                                                      PoolFourPinsIncome:  0,
-                                                                      PoolFivePinsIncome:  0,
-                                                                      PoolSixPinsIncome:  0,
-                                                                      PoolSevenPinsIncome: 0,
-                                                                      PoolEightPinsIncome:  0,
-                                                                      PoolNinePinsIncome:  0,
-                                                                      PoolTenPinsIncome:  0,
-                                                                      withdrawpercentage: 0,
-                                                                      funtToPinPercent : parseFloat(percent),
-                                                                      //Spend 
-                                                                      LevelOutSpend: 0,
-                                                                      FundSharing:  0,
-                                                                      PoolOutgo: 0,
-                                                                      withdraw: 0,
-                                                                      //Others
-                                                                      Balance : 0,
-                                                                      BalanceReport: [],
-                                                                      Nothing: 0,
-                                                              
-                                                                    })
-                                                              
-                                                                  report.save()
-                                                                  .then(res => {
-                                                                                console.log(res);
-                                                                  }).catch(err => { 
-                                                                          console.log(err);
-                                                                          res.json({status: 0})
-                                                                  })
-                                                          }
-                                                            
+                                                      $inc : { funtToPinPercent : parseFloat(percent) }
 
-                                      }).catch(err => {
-                                        console.log(err.message)
-                                        res.json({status: 0,user})
-                                      })
+                                                    },{new: true}).then(document => {
+                                                                        if(!document){
+                                                                                  const report =  new DailyReport({
+                                                                          
+                                                                                    dateId: today,
+                                                                                    LevelPinsIncome:  0,
+                                                                                    PoolOnePinsIncome:  0,
+                                                                                    PoolTwoPinsIncome: 0,
+                                                                                    PoolThreePinsIncome: 0,
+                                                                                    PoolFourPinsIncome:  0,
+                                                                                    PoolFivePinsIncome:  0,
+                                                                                    PoolSixPinsIncome:  0,
+                                                                                    PoolSevenPinsIncome: 0,
+                                                                                    PoolEightPinsIncome:  0,
+                                                                                    PoolNinePinsIncome:  0,
+                                                                                    PoolTenPinsIncome:  0,
+                                                                                    withdrawpercentage: 0,
+                                                                                    funtToPinPercent : parseFloat(percent),
+                                                                                    //Spend 
+                                                                                    LevelOutSpend: 0,
+                                                                                    FundSharing:  0,
+                                                                                    PoolOutgo: 0,
+                                                                                    withdraw: 0,
+                                                                                    //Others
+                                                                                    Balance : 0,
+                                                                                    BalanceReport: [],
+                                                                                    Nothing: 0,
+                                                                            
+                                                                                  })
+                                                                            
+                                                                                report.save()
+                                                                                .then(res => {
+                                                                                              console.log(res);
+                                                                                }).catch(err => { 
+                                                                                        console.log(err);
+                                                                                        res.json({status: 0})
+                                                                                })
+                                                                        }
+                                                                          
 
-                                     
+                                                    }).catch(err => {
+                                                      console.log(err.message)
+                                                      res.json({status: 0,user})
+                                                    })
 
-                            }
-                             else
-                            {
-                                      res.json({status: 0,user})
-                            }
-              
-            }).catch(err => {
-                console.log(err.message)
-                res.json({status: 0})
-            })
+                                                  
+
+                                          }
+                                          else
+                                          {
+                                                    res.json({status: 0,user})
+                                          }
+                            
+                          }).catch(err => {
+                              console.log(err.message)
+                              res.json({status: 0})
+                          })
+                  }
+                  else
+                  {
+                    res.json({status: 0})
+                  }
+                             // console.log(parseFloat(parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)));
+      
+          }
+          )
+          .catch(err => {
+            console.log(err.message);
+            res.json({status: 0})
+          })
+
   }
   catch(err)
   {

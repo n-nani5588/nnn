@@ -22,8 +22,8 @@ import Loader from 'react-loader-spinner';
                     {/* <!-- Tabs Titles --> */}
 
                     {/* <!-- Icon --> */}
-                    <div className="fadeIn first">
-                      <h2>Login</h2>
+                    <div  className="fadeIn first">
+                      <h3 style={{marginTop:"20px"}}>Login</h3>
                     </div>
 
                     {/* <!-- Login Form --> */}
@@ -40,7 +40,7 @@ import Loader from 'react-loader-spinner';
                     
 
                     {/* <!-- Remind Passowrd --> */}
-                      <div id="ERR_MSG" style={{color:"white"}}>
+                      <div id="ERR_MSG" style={{color:"white",fontSize:"16px"}}>
                  
                       </div>
                       <div id="formFooter">

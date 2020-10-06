@@ -2,10 +2,12 @@ import React from 'react';
 import './footer.css';
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
+import { MDBIcon } from "mdbreact";
+
 export default function DenseAppBar() {
     return (
       <div>
-           <Divider />
+          
          <footer className="footer" >
            
             <Grid container xs={12} spacing={2}>
@@ -50,13 +52,13 @@ export default function DenseAppBar() {
                                                                 fontWeight:"bold",
                                                                 marginBottom:"3%"}}> Support</span> 
 
-                                                  <span >Email : Facebook@Gmail.com</span>
+                                                  <span >Email : support@genietreasures.com</span>
 
                                                   <span>	<div className="d-flex justify-content-start social_icon">
-                                                              <span><i className="fa fa-facebook-square"></i></span>
-                                                              <span><i className="fa fa-google-plus-square"></i></span>
-                                                              <span><i className="fa fa-twitter-square"></i></span>
-                                                              <span><i className="fa fa-instagram"></i></span>
+                                                              <span><MDBIcon fab icon="facebook-square" /></span>
+                                                              <span><MDBIcon fab icon="instagram" /></span>
+                                                              <span><MDBIcon fab icon="google-plus-square" /></span>
+                                                              <span><MDBIcon fab icon="twitter-square" /></span>
                                                           </div>
                                                   </span>
                                           </div>
@@ -69,7 +71,7 @@ export default function DenseAppBar() {
             </Grid>
            <Grid>
              <div style={{padding:"0% 4%"}}>
-                    <small class="f6 db ">Copyright © 2016 <b class="ttu">SOME COMPANY Inc</b>., All Rights Reserved</small>
+                    <small class="f6 db ">Copyright © 2016 <b class="ttu">GENIE TREASURES Inc</b>., All Rights Reserved</small>
               </div>
            </Grid>
        

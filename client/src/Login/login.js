@@ -114,7 +114,7 @@ componentWillUnmount(){
   render(){
     return(
       <div>
-         <button className="btn btn-primary" style={{padding:"0px 20px"}} onClick={() => document.getElementById('id01').style.display='block'} color="inherit">Login</button>
+         <div style={{padding:"5px 0px 0px 0px ",color:"white"}} onClick={() => document.getElementById('id01').style.display='block'} color="inherit">LOGIN</div>
         <span id="login_id" onClick={() => this.handleLogin()}></span>
           {/* <!-- The Modal --> */}
           <div id="id01" className="modal">

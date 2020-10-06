@@ -11,7 +11,8 @@
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(227, 224, 243, 0.6); /* Black w/ opacity */
     padding: 10% 5%;
-   
+   text-transform: uppercase;
+
 
   }
   
@@ -185,12 +186,15 @@
   /* -webkit-box-shadow: 0 0 60px 0 rgba(255,255,255,0.3); */
   box-shadow: 0 30px 80px 0 rgba(0,0,0);
   text-align: center;
-  background-image: url('./Bgimg1.jpg');
+  background-image: linear-gradient(to bottom, #162447, #18294d, #1a2e53, #1b345a, #1d3960, #1f385e, #21375b, #223659, #222f4e, #212843, #1e2139, #1b1b2f);    
+  font: medium;
+  
 }
 
 #formFooter {
   background-color: #f6f6f6;
   border-top: 1px solid #dce8f1;
+  color: #0d0d0d;
   padding: 25px;
   text-align: center;
   -webkit-border-radius: 0 0 10px 10px;

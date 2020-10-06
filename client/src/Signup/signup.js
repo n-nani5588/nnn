@@ -50,9 +50,9 @@ import './signup.css';
     return(
       <div>
 
-         <button className="btn btn-primary"  size="small"  style={{padding:"0px 20px"}} 
+         <div  size="small"  style={{padding:"5px 0px 0px 10px",color:"white"}} 
            onClick={() => this.handleEnter()} 
-           color="inherit">Sign up</button>
+           color="inherit">SIGN UP</div>
        
           {/* <!-- The Modal --> */}
           <div id="id02" className="modalSignup">

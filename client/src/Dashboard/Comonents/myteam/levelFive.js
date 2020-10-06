@@ -230,9 +230,9 @@ class LevelFive extends React.Component {
              
              
               {/* </Grid> */}
-              <Box pt={4}>
+              {/* <Box pt={4}>
                 <Copyright />
-              </Box>
+              </Box> */}
 
             </div>
         )

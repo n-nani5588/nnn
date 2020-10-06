@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
 MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBIcon, MDBBox } from "mdbreact";
 import { BrowserRouter as Router } from 'react-router-dom';
+import './newNav.css'
 
 class NavbarPage extends Component {
 
@@ -20,22 +21,14 @@ toggleCollapse = () => {
 render() {
   return (
     <Router>
-      <MDBNavbar color="indigo"  dark expand="md">
-        <MDBNavbarBrand>
+      <MDBNavbar fixed="top" scrolling transparent  dark className="Navbar_New" light expand="md">
+        <MDBNavbarBrand className="Nav_brand">
           <strong className="white-text">GENIEE TREASURES</strong>
         </MDBNavbarBrand>
         <MDBNavbarToggler onClick={this.toggleCollapse} />
-        <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
+        <MDBCollapse id="navbarCollapse3" className={this.state.isOpen?"navbarCollapse3":""} isOpen={this.state.isOpen} navbar>
           <MDBNavbarNav left>
-            <MDBNavItem >
-              <MDBNavLink to="#" onClick={() => this.props.onClick1()}>Home</MDBNavLink>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBNavLink to="#" onClick={() => this.props.onClick2()}>About</MDBNavLink>
-            </MDBNavItem>
-            <MDBNavItem>
-              <MDBNavLink to="#" onClick={() => this.props.onClick3()}>Bussiness plan</MDBNavLink>
-            </MDBNavItem>
+           
        
             <MDBNavItem>
               {/* <MDBDropdown>
@@ -51,13 +44,25 @@ render() {
               </MDBDropdown> */}
             </MDBNavItem>
           </MDBNavbarNav>
-          <MDBNavbarNav right>
-          <MDBNavItem>
-              <MDBBox mt="1" justifyContent="center" alignContent="center">{this.props.Signup}</MDBBox>
+          <MDBNavbarNav className="nAV_nAV" right>
+          
+         
+            <MDBNavItem className="Nav_Item">
+              <MDBNavLink to="#" onClick={() => this.props.onClick1()}>HOME</MDBNavLink>
             </MDBNavItem>
-            <MDBNavItem>
+            <MDBNavItem className="Nav_Item">
+              <MDBNavLink to="#" onClick={() => this.props.onClick2()}>ABOUT</MDBNavLink>
+            </MDBNavItem>
+            <MDBNavItem className="Nav_Item">
+              <MDBNavLink to="#" onClick={() => this.props.onClick3()}>BUSSINESS PLAN</MDBNavLink>
+            </MDBNavItem>
+            <MDBNavItem className="Nav_Item">
               <MDBBox mt="1" justifyContent="center" alignContent="center">{this.props.Login}</MDBBox>
-
+            </MDBNavItem>
+            <MDBNavItem className="Nav_Item">
+           
+              <MDBBox mt="1" justifyContent="center" alignContent="center">{this.props.Signup}</MDBBox>
+            
             </MDBNavItem>
        {/* <MDBNavItem>
               <MDBDropdown>

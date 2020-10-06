@@ -23,3 +23,9 @@
     text-align: center;
    
   }
+
+  .Bussiness_Page{
+    background-image: linear-gradient(to bottom, #162447, #18294d, #1a2e53, #1b345a, #1d3960, #1f385e, #21375b, #223659, #222f4e, #212843, #1e2139, #1b1b2f);  
+    
+    padding: 100px 0px 100px 0px;
+  }

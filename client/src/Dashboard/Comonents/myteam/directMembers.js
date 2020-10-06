@@ -204,9 +204,9 @@ class DirectMembers extends React.Component {
                 </Paper>
               </Grid>
             {/* </Grid> */}
-            <Box pt={4}>
+            {/* <Box pt={4}>
               <Copyright />
-            </Box>
+            </Box> */}
           </Container> 
         
       </div>

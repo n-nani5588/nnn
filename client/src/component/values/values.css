@@ -1,6 +1,5 @@
 .about{
 	cursor: pointer;
-	background-color: white;
 	color: #5E5E5E;
     padding: 7%;
 }
@@ -10,7 +9,8 @@
 }
 .about h2 {
     opacity: 1;
-    margin:20px;
+	margin:20px;
+	color: yellowgreen;
     letter-spacing: 6px;
     font-size: medium;
 }
@@ -24,7 +24,7 @@
 	font-size: 40px;
 	color: #FFFFFF;
 	opacity: 0.9;
-	background-color:#006B94;
+	background-color:#00bf72;
 	/* border: 2px solid #4C0822; */
 
 	-webkit-transition:all .5s ease;
@@ -52,8 +52,13 @@
 	transform: scale(1.1,1.1) ;
 }
 .about .lead{
-	color:#474554;
+	color: #FFFFFF;
     font-size: 12px;
     margin: 20px;
-	font-weight: bold;
+	font-weight: lighter;
+}
+
+.Values_IN{
+	color: white;
+    background-color: #1B1B2F;
 }

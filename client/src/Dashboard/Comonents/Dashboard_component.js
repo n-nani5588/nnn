@@ -23,7 +23,7 @@ function Copyright() {
       <Typography variant="body2" color="white" align="center">
         {'Copyright © '}
         <Link color="inherit" href="#">
-          Your Website
+          GENIE TREASURES
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}

@@ -6,6 +6,8 @@ import Corousel from './Corousel';
 import Aboutus from '../Aboutus';
 import Values from '../values/values'
 import Divider from '@material-ui/core/Divider';
+import { MDBAnimation,MDBBtn , MDBIcon } from "mdbreact";
+
 import './home.css';
 
 export default class Home extends React.Component{
@@ -19,21 +21,48 @@ export default class Home extends React.Component{
             <div >
                 
              <Grid conatiner>
-               {/* <Grid item>
+               <Grid container item >
                    
-                     <div style={{height:"80px"}}>
+                     <div className="home_Main">
 
+                         <div  className="home_container">
+                             <Grid item xs={12} lg={5}>
+                              <div className="home_item">
+                              <MDBAnimation type="slideInLeft" duration="1s" delay="0s">
+                                   <h1>Welcome next level cryptocurrency token with faster transfer</h1>
+                              </MDBAnimation>
+                              <MDBAnimation type="slideInLeft" duration="1s" delay="0.5s">
+                                   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit sed eiusmod tempor incididunt labore dolore magna ipsum dolor sit amet consectetur.</p>
+                              </MDBAnimation>
+                              {/* <MDBAnimation type="slideInLeft" duration="1s" delay="1s">
+                                   <div style={{display:"flex",width:"100%"}}>
+                                    <MDBBtn rounded size="lg" color="info" >{this.props.Signup}<MDBIcon icon="user-plus" className="ml-2" /></MDBBtn>
+                                   </div>
+                              </MDBAnimation> */}
+                              </div>
+                              </Grid>
+                              <Grid item xs={12} lg={7} justify="center">                              
+                              <div className="home_item">
+                                  <div className="home_img">
+                                  <MDBAnimation type="jello" infinite duration="5s" delay="1s">
+                                  <img  height="90%" width="90%" src="https://www.amlexa.com/wp-content/themes/amlexa/assets/img/amlexa-blockchain.svg"></img>
+                                  </MDBAnimation>
+                                  </div>
+                              </div>
+                              </Grid>
+                         </div>
+                          
                      </div>
-                </Grid> */}
-                <Grid item >
+                </Grid>
+                {/* <Grid item >
                     {/* Displays Corousel component */}
-                     <div style={{width:"100%"}}>
+                   {/*  <div style={{width:"100%"}}>
                      <Corousel></Corousel>
                      </div>
                      <div style={{width:"100%",height:"20vh",backgroundColor:"#F2ECFF"}}>
                            
                      </div>
-                </Grid>
+                </Grid> */}
 
                 <Grid item>
                     {/* Displays   ABOUT component */}
@@ -44,7 +73,7 @@ export default class Home extends React.Component{
                   
                 </Grid>
 
-                <Divider></Divider>
+                {/* <Divider></Divider> */}
                 
                 {/* <Grid container iteam >
                     <div className="body">

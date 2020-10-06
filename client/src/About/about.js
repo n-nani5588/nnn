@@ -3,13 +3,22 @@ import Footer from '../component/footer'
 import { Grid } from "@material-ui/core";
 import './about.css';
 import Zoom from 'react-reveal/Zoom';
+import Corousel from '../component/Home/Corousel'
 
 export default class About extends React.Component{
     render(){
         return(
-          <div>
+         <div>   
+          <div className="abtqwe">  
+          <div >
               <Grid xs={12}>
               
+              <Grid item >
+                    {/* Displays Corousel component */}
+                    <div style={{width:"100%"}}>
+                     <Corousel></Corousel>
+                     </div>
+                </Grid>
                    <div className="background_img">
                    <Zoom>
                       <span style={{fontSize:"40px",fontWeight:"bold",letterSpacing:"4px"}}>
@@ -20,13 +29,14 @@ export default class About extends React.Component{
                       </span>
                  </Zoom>
                    </div>
+
                 
               </Grid>
              {/*       about us matter         */}
              <div >
                         
                         <Grid container>
-                        <div style={{width:"100%",padding:"5% 10%"}}
+                        <div style={{width:"100%",padding:"3% 10%"}}
                         >
 
                         <Grid xs={12} >
@@ -34,7 +44,7 @@ export default class About extends React.Component{
                         </Grid>
 
                         {/* <h2 style={{fontWeight:"bold"}}> HOW&nbsp; WE&nbsp; ARE </h2> */}
-                        <p style={{letterSpacing:"1px",fontWeight:"thin"}}>
+                        <p style={{letterSpacing:"2px",fontSize:"18px",textAlign:"justify",fontWeight:"bold",color:"white"}}>
                             GENIE TREASURES is a best experienced people's community 
                             where we build social platform and provides best opportunity 
                             to you and your career, if you just help enough people get what 
@@ -61,7 +71,10 @@ export default class About extends React.Component{
             </div>
 
    
-              <Footer></Footer>
+             
+          </div>
+          </div>
+          <Footer></Footer>
           </div>
         );
     }

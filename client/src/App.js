@@ -82,27 +82,7 @@ class App extends React.Component {
         <div style={{margin:"0px",padding:"0px",backgroundColor:"white"}}>
 
          {/* Header Div */}
-         {/* {!this.props._login && <div>  */}
-        {/* <Router>
-           <div> */}
-              {/* <Navbar></Navbar>   */}
-              {/* <Switch>
-                  <Route path="/Admin/c91eb3dc-1ad7-489a-9465-8f5b815b8d50" exact component={Admin}/>
-                  <Route path="/About"  component={About}/>
-                  <Route path="/Plan" component={Bussiness_plan}></Route> 
-                 <Route path="/Signup/:username" exact component={Signup}/>
-              </Switch>
-           </div>  
-     </Router>  */}
-      {/*  </div> } */}
-        {/* {!this.state.login && <Navbar 
-            onClick1={(e) =>  this.setState({ render: <Home></Home>})}
-            onClick2={(e) => this.setState({ render: <About></About>})}
-            onClick3={(e) => this.setState({ render: <Bussiness_plan></Bussiness_plan>})}
-            Signup={ <Signup ></Signup>}
-            Login={ <Login ></Login>}
-         
-        ></Navbar>} */}
+       
          {!this.state.login &&    <NavbarPage 
             onClick1={(e) =>  this.setState({ render: <Home></Home>})}
             onClick2={(e) => this.setState({ render: <About></About>})}
@@ -117,7 +97,7 @@ class App extends React.Component {
             {/* =========================================================================== */}
 
           <ErrorBoundry>
-        {!this.state.login &&   <div style={{width:"100%",marginTop:"6%"}}></div> }
+        {/* {!this.state.login &&   <div style={{width:"100%"}}></div> } */}
             {this.state.render}
           </ErrorBoundry>
          {/* {this.props._login && <div> <Dashboard></Dashboard></div> }  */}

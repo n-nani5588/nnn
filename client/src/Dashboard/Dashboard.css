@@ -113,7 +113,7 @@
   
   .Side_Nav_Scroll_Control{
     width: 100%;
-    height: 70vh;
+    height: 71vh;
     text-transform: uppercase;
     overflow-y: scroll;
 
@@ -162,14 +162,14 @@
     width:100%;
     line-height: 60px;
     text-decoration: none;
-    padding-left: 20%;
+    padding: 0% 5% 0% 18%;
     box-sizing: border-box;
     transition: 0.5s;
     transition-property: background;
     cursor: pointer;
   }
 
-  .bodder_left_1 {
+  /* .bodder_left_1 {
     border-left :8px solid #ffe400 ;
    
   }
@@ -187,7 +187,7 @@
   }
   .bodder_left_6 {
     border-left :8px solid green ;
-  }
+  } */
 
   /* .div_tag1:hover {
     background: #ffe400;

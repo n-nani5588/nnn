@@ -177,7 +177,8 @@ padding: 0px;
 /* -webkit-box-shadow: 0 0 60px 0 rgba(255,255,255,0.3); */
 box-shadow: 0 30px 80px 0 rgba(0,0,0);
 text-align: center;
-background-image: url('./Bgimg1.jpg');
+background-image: linear-gradient(to bottom, #162447, #18294d, #1a2e53, #1b345a, #1d3960, #1f385e, #21375b, #223659, #222f4e, #212843, #1e2139, #1b1b2f); 
+text-transform: uppercase;
 background-color: #006B94;
 }
 

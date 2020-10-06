@@ -476,7 +476,7 @@ try{
                      placeholder="referal name"
                      ></input> */}
 
-                     <div className="fadeIn fourth" style={{width:"100%",justifyContent:"center",color:"white"}}>*spaces are not allowed</div>
+                     <div className="fadeIn fourth" style={{width:"100%",justifyContent:"center",fontSize:"small",color:"white"}}>*spaces are not allowed</div>
                     
                     <button 
                     type="submit" 

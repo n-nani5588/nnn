@@ -64,7 +64,7 @@ class ForgotPassword extends React.Component {
 
                         {/* <!-- Icon --> */}
                         <div className="fadeIn first">
-                        <h2>Forgot Password</h2>
+                        <h3 style={{marginTop:"20px"}}>forgot password</h3>
                         </div>
 
                       {/* <!-- Login Form --> */}

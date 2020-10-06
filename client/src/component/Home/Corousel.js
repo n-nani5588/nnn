@@ -11,11 +11,14 @@ class Corousel extends Component {
                     <img src={process.env.PUBLIC_URL + '/images/cimg3.png'}  />
                 </div> */}
                 <div>
-                    <img src={process.env.PUBLIC_URL + '/images/cimg2.jpg'} />
+                    <img src={process.env.PUBLIC_URL + '/images/banner1.jpeg'} />
                    
                 </div>
                 <div >
-                    <img src={process.env.PUBLIC_URL + '/images/cimg1.jpg'}/>
+                    <img src={process.env.PUBLIC_URL + '/images/banner2.jpeg'}/>
+                </div>
+                <div >
+                    <img src={process.env.PUBLIC_URL + '/images/banner3.jpeg'}/>
                 </div>
             </Carousel>
         );

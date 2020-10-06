@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import './newNav.css'
 
 AOS.init({})
 export default class extends React.Component{
@@ -13,9 +14,9 @@ export default class extends React.Component{
 
     render(){
         return(
-          <div >
-                        <div style={{width:"100%",marginTop:"70px "}}>
-                                  <header class="section-header">
+          <div className="About_US">
+                        <div style={{width:"100%"}}>
+                                  <header className="section-header">
                                   <h3>   About Us </h3> 
                                   </header>
                         </div>

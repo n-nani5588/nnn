@@ -45,7 +45,7 @@ router.post('/withdraw', (req,res) => {
 
                                     }
 
-                                 await   AdInfo.findByIdAndUpdate({_id: '5f55298f801fd918d8463f4f'},{
+                                 await   AdInfo.findByIdAndUpdate({_id: '5f7b0e53d3d3591b259c85d0'},{
                                         $push: { 
                                             withdrawRequests: w_statement
                                         }
@@ -56,6 +56,15 @@ router.post('/withdraw', (req,res) => {
                                         res.json({status: 0})
                                     })
                         }
+
+        User.findById({ _id: req.body._id })
+        .then(us => {
+                
+                const reIn = parseFloat(us.recievedIncome)+parseFloat(us.fundSharingIncome)+parseFloat(us.autoPoolIncome)+parseFloat(us.levelIncome) 
+                console.log("ususuususuus ::::::::::::::::" ,reIn);
+                
+                if( parseFloat(reIn) >= parseFloat(req.body.total) )
+                {           
 
                     const withdrawStatement = new Withdrawstatement({
 
@@ -101,7 +110,21 @@ router.post('/withdraw', (req,res) => {
                         console.log(err)
                         res.json({status: 0})
                     })
+                }
+                else
+                {
+                  res.json({status: 0})
+                }
+                           // console.log(parseFloat(parseFloat(req.body.recievedamount)+parseFloat(req.body.fundamount)+parseFloat(req.body.autoamount)+parseFloat(req.body.levelamount)));
+    
         }
+        )
+        .catch(err => {
+          console.log(err.message);
+          res.json({status: 0})
+        })
+       
+         }
         catch(err)
         {
              console.log(err.message)

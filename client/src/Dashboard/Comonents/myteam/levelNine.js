@@ -22,8 +22,8 @@ const classes = makeStyles((theme) => ({
       overflow: 'auto',
       flexDirection: 'column',
     },
-   
-  
+
+
   }));
 
   function Copyright() {
@@ -48,17 +48,17 @@ const classes = makeStyles((theme) => ({
       {
         label: 'user Id',
         field: 'userId',
-        
+
       },
       {
         label: 'Name',
         field: 'Name',
-        
+
       },
       {
         label: 'Email',
         field: 'Mail',
-        
+
       },
       {
         label: 'Joining date',
@@ -68,7 +68,7 @@ const classes = makeStyles((theme) => ({
       {
         label: 'Status',
         field: 'status',
-        
+
       }
     ],
     rows:[]
@@ -82,7 +82,7 @@ class LevelNine extends React.Component {
           data1:{},
           Loading : false
         }
-         
+
       }
 
 
@@ -94,7 +94,7 @@ class LevelNine extends React.Component {
 
         const userdata = JSON.parse(sessionStorage.getItem('USER_DETAILS'));
         console.log(this.props.data);
-    try{            
+    try{
                   if(this.props.data.length > 0){
                               await Axios.post('/api/users/getLevelArrayDetails',
                               {
@@ -107,14 +107,14 @@ class LevelNine extends React.Component {
                                         {
                                           this.createTable(res.data.users);
                                             console.log(data);
-                                            
+
                                         }
                                         else
                                         {
                                           this.setState({Loading : false ,data1 : data})
                                         }
-                                        
-                              
+
+
                             }).catch(err => {
 
                                         console.log( "  ");
@@ -123,7 +123,7 @@ class LevelNine extends React.Component {
                                           Loading: false
                                         })
                             })
-                } 
+                }
                 else
                 {
                             this.setState({
@@ -141,7 +141,7 @@ class LevelNine extends React.Component {
                 })
         }
 
-              
+
     }
 
     createTable = (members)=> {
@@ -158,7 +158,7 @@ class LevelNine extends React.Component {
               Date: new Date(Direct.joiningDate).toLocaleDateString(),
               status: Direct.Active === "true"?"Active":"Inactive"
             }
-    
+
              data.rows.push(obj);
     } )
     }
@@ -185,8 +185,8 @@ class LevelNine extends React.Component {
                   <Paper className={classes.paper} elevate={3}>
                    <div style={{padding:"3%"}}>
                   <React.Fragment>
-        
-  
+
+
                   {this.state.Loading ? (
                       <div style={{
                         width:"100%",
@@ -210,13 +210,13 @@ class LevelNine extends React.Component {
                       noBottomColumns
                       responsiveSm
                       responsiveMd
-                      
+
                       data={this.state.data1}
                       />
-                      
+
                   }
                       {/* <div className={classes.seeMore}>
-                      
+
                           <Link color="primary" href="#" >
                           See more orders
                           </Link>
@@ -225,12 +225,12 @@ class LevelNine extends React.Component {
                   </div>
                   </Paper>
                 </Grid>
-             
-             
+
+
               {/* </Grid> */}
-              <Box pt={4}>
+              {/* <Box pt={4}>
                 <Copyright />
-              </Box>
+              </Box> */}
 
             </div>
         )
